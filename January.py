@@ -1,3 +1,6 @@
+import heapq
+
+
 class Solution:
     # 509
     def fib(self, n: int) -> int:
@@ -24,6 +27,20 @@ class Solution:
                 res[-1][1] = i
         return res
 
+    # 239
+    def maxSlidingWindow(self, nums: [int], k: int) -> [int]:
+        # 利用优先队列
+        n = len(nums)
+        q = [(-nums[i], i) for i in range(k)]
+        heapq.heapify(q)
+        res = [-q[0][0]]
+        for i in range(k, n):
+            heapq.heappush(q, (-nums[i], i))
+            while q[0][1] <= i-k:
+                heapq.heappop(q)
+            res.append(-q[0][0])
+        return res
+
 
 s = Solution()
-print(s.largeGroupPositions("acd"))
+print(s.maxSlidingWindow([1, 3, -1, 2, 2, 2, 2, - 3, 5, 3, 6, 7], 3))
