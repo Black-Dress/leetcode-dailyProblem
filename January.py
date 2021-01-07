@@ -1,4 +1,5 @@
 import heapq
+from collections import defaultdict
 
 
 class Solution:
@@ -41,6 +42,48 @@ class Solution:
             res.append(-q[0][0])
         return res
 
+    # 399
+    def calcEquation(self, equations: [[str]], values: [float], queries: [[str]]) -> [float]:
+        # 初始化equations
+        graph = defaultdict(int)
+        arrary = set()
+        for i in range(len(equations)):
+            a, b = equations[i]
+            graph[(a, b)] = values[i]
+            graph[(b, a)] = 1/values[i]
+            arrary.add(a)
+            arrary.add(b)
+        for i in arrary:
+            for j in arrary:
+                for k in arrary:
+                    if graph[(j, i)] and graph[(i, k)]:
+                        graph[(j, k)] = graph[(j, i)] * graph[(i, k)]
+        res = list()
+        for x, y in queries:
+            if graph[(x, y)]:
+                res.append(graph[(x, y)])
+            else:
+                res.append(-1)
+        return res
+
+    # 547
+    def findCircleNum(self, isConnected: [[int]]) -> int:
+        # 利用floyd算法将间接到达的节点变为直接到达
+        arrary = [i for i in range(len(isConnected))]
+        for i in arrary:
+            for j in arrary:
+                for k in arrary:
+                    if isConnected[j][i] and isConnected[i][k]:
+                        isConnected[j][k], isConnected[k][j] = 1, 1
+        visit = [0 for i in range(len(isConnected))]
+        res = 0
+        for i in range(len(isConnected)):
+            if visit[i]:
+                continue
+            for j in range(len(isConnected[i])):
+                visit[j] = 1 if isConnected[i][j] == 1 else visit[j]
+            res += 1
+        return res
+
 
 s = Solution()
-print(s.maxSlidingWindow([1, 3, -1, 2, 2, 2, 2, - 3, 5, 3, 6, 7], 3))
