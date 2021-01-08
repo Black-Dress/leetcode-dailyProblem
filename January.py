@@ -85,5 +85,24 @@ class Solution:
             res += 1
         return res
 
+    # 189 旋转数组
+    def rotate(self, nums: [int], k: int) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        n = len(nums)
+        k = k % n
+        if n == 0 or k == 0:
+            return
+        temp, count = [nums[i] for i in range(k)], 0
+        for i in range(k, n):
+            temp[count % k], nums[i] = nums[i], temp[count % k]
+            count += 1
+        for i in range(k):
+            temp[count % k], nums[i] = nums[i], temp[count % k]
+            count += 1
+        print(nums)
+
 
 s = Solution()
+s.rotate([1, 2], 4)
