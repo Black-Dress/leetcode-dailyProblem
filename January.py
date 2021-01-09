@@ -103,6 +103,30 @@ class Solution:
             count += 1
         print(nums)
 
+    # 123 买卖股票的最佳时机三
+    def maxProfit(self, prices: [int]) -> int:
+        if not prices:
+            return 0
+        n = len(prices)
+        # dp[i][j] 第i天，第j状态所持有的金钱数量
+        # 每一天总共有5个状态
+        # 不操作，第一次买入，第一次卖出，第二次买入，第二次卖出
+        dp = [[0]*5 for i in range(n)]
+        # 初始化dp数组
+        # 第0天的所有买入的操作都会让钱变少
+        for i in range(1, 5, 2):
+            dp[0][i] = -prices[0]
+        # 填表
+        for i in range(1, n):
+            # 两次交易
+            dp[i][0] = dp[i-1][0]
+            for j in range(1, 5, 2):
+                # 第j次买入 = max(不买，昨天最后一次买出的剩余金额-今天卖入的开销)
+                dp[i][j] = max(dp[i-1][j], dp[i-1][j-1]-prices[i])
+                # 第j次卖出 = max(不卖，昨天最后一次买入的股票的负债+今天卖出的价格)
+                dp[i][j+1] = max(dp[i-1][j+1], dp[i-1][j]+prices[i])
+        return max(dp[-1])
+
 
 s = Solution()
-s.rotate([1, 2], 4)
+print(s.maxProfit([3, 3, 5, 0, 0, 3, 1, 4]))
