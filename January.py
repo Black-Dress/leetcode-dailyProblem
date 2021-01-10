@@ -127,6 +127,21 @@ class Solution:
                 dp[i][j+1] = max(dp[i-1][j+1], dp[i-1][j]+prices[i])
         return max(dp[-1])
 
+    # 228. 汇总区间
+    def summaryRanges(self, nums: [int]) -> [str]:
+        n = 0
+        res = []
+        while n < len(nums):
+            if n+1 < len(nums) and nums[n]+1 == nums[n+1]:
+                m = n
+                while n+1 < len(nums) and nums[n]+1 == nums[n+1]:
+                    n += 1
+                res.append("{}->{}".format(nums[m], nums[n]))
+            else:
+                res.append(str(nums[n]))
+            n += 1
+        return res
+
 
 s = Solution()
-print(s.maxProfit([3, 3, 5, 0, 0, 3, 1, 4]))
+print(s.summaryRanges([0, 1, 2, 4, 5, 7]))
