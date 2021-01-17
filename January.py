@@ -2,6 +2,30 @@ import heapq
 from collections import defaultdict
 
 
+# 并查集
+class ufset:
+    def __init__(self, n: int):
+        self.parent = [i for i in range(n)]
+        # 按秩合并所需要的数组
+        # rank = [0 for i in range(n)]
+
+    def find(self, x) -> int:
+        root = x
+        while self.parent[root] != root:
+            root = self.parent[root]
+        # 路径压缩,将x所在的那一条树枝上所有的节点都连到根
+        while x != root:
+            origin = self.parent[x]
+            self.parent[x] = root
+            x = origin
+        return root
+
+    def merge(self, x, y):
+        root_x, root_y = self.find(x), self.find(y)
+        if root_x != root_y:
+            self.parent[root_x] = root_y
+
+
 class Solution:
     # 509
     def fib(self, n: int) -> int:
@@ -142,6 +166,42 @@ class Solution:
             n += 1
         return res
 
+    # 1202. 交换字符串中的元素
+    def smallestStringWithSwaps(self, s: str, pairs: [[int]]) -> str:
+        uf = ufset(len(s))
+        for x, y in pairs:
+            uf.merge(x, y)
+        res = defaultdict(list)
+        for i in range(len(s)):
+            res[uf.find(i)].append(i)
+        s = list(s)
+        for i in res.values():
+            string = sorted([s[j] for j in i])
+            for j in range(len(i)):
+                s[i[j]] = string[j]
+        return "".join(s)
+
+    # 1232.缀点成线
+    def checkStraightLine(self, coordinates: [[int]]) -> bool:
+        angle = cur = temp = 0
+        for i in range(1, len(coordinates)):
+            if coordinates[i][0] == coordinates[i-1][0]:
+                # tan(180) = 0
+                temp = 0
+            elif coordinates[i][1] == coordinates[i-1][1]:
+                # tan(90) = 无穷
+                temp = -1
+            else:
+                temp = (coordinates[i][1]-coordinates[i-1][1])/(coordinates[i][0]-coordinates[i-1][0])
+            if i < 2:
+                angle = temp
+            else:
+                cur = temp
+                if cur != angle:
+                    return False
+        return True
+
 
 s = Solution()
-print(s.summaryRanges([0, 1, 2, 4, 5, 7]))
+print(s.smallestStringWithSwaps("wiftyfgoqfohnzelum", [[3, 2], [6, 2], [9, 11], [2, 3], [5, 4], [2, 2], [
+      4, 3], [9, 3], [10, 0], [4, 16], [5, 8], [14, 5], [4, 16], [17, 1], [9, 7], [12, 9], [1, 17], [16, 7]]))
