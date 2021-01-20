@@ -1,5 +1,6 @@
 import heapq
 from collections import defaultdict
+import sys
 
 
 # 并查集
@@ -21,6 +22,30 @@ class ufset:
         return root
 
     def merge(self, x, y):
+        root_x, root_y = self.find(x), self.find(y)
+        if root_x != root_y:
+            self.parent[root_x] = root_y
+
+
+class ufset_721:
+    def __init__(self, accounts: [[str]]):
+        self.parent = dict()
+        for i in accounts:
+            for j in range(1, len(i)):
+                self.parent[i[j]] = i[j]
+
+    def find(self, account: str) -> str:
+        root = account
+        while root != self.parent[root]:
+            root = self.parent[root]
+        # 路径压缩
+        while account != root:
+            origin = self.parent[account]
+            self.parent[account] = root
+            account = origin
+        return root
+
+    def merge(self, x: str, y: str):
         root_x, root_y = self.find(x), self.find(y)
         if root_x != root_y:
             self.parent[root_x] = root_y
@@ -201,7 +226,65 @@ class Solution:
                     return False
         return True
 
+    # 721. 账户合并
+    def accountsMerge(self, accounts: [[str]]) -> [[str]]:
+        # 合并账户，通过并查集合并
+        uf = ufset_721(accounts)
+        index = defaultdict()
+        # 记录没有邮箱的名字
+        name = list()
+        res = []
+        temp = defaultdict(list)
+
+        for account in accounts:
+            if len(account) > 1:
+                index[account[1]] = account[0]
+            else:
+                name.append([account[0]])
+            for i in range(2, len(account)):
+                index[account[i]] = account[0]
+                uf.merge(account[1], account[i])
+
+        for k in uf.parent.keys():
+            temp[uf.find(k)].append(k)
+        for k, v in temp.items():
+            res.append([])
+            if index.get(k):
+                res[-1].append(index[k])
+            res[-1].extend(sorted(v))
+        res.extend(name)
+        return res
+
+    # 1584. 连接所有点的最小费用
+    def minCostConnectPoints(self, points: [[int]]) -> int:
+        n = len(points)
+        path = [0]
+        dis = [sys.maxsize for i in range(n)]
+        dis[0] = -1
+        res = 0
+
+        def updateDistance(i: int):
+            for j in range(n):
+                if dis[j] > 0:
+                    dis[j] = min(dis[j], abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1]))
+
+        updateDistance(0)
+        while len(path) < n:
+            minindex = [sys.maxsize, 0]
+            for i in range(n):
+                if dis[i] > 0:
+                    minindex = minindex if minindex[0] < dis[i]else [dis[i], i]
+            res += minindex[0]
+            dis[minindex[1]] = -1
+            updateDistance(minindex[1])
+            path.append(minindex[1])
+        return res
+
+    # 628. 三个数的最大乘积
+    def maximumProduct(self, nums: [int]) -> int:
+        nums = sorted(nums, reverse=True)
+        return nums[0]*nums[1]*nums[2]
+
 
 s = Solution()
-print(s.smallestStringWithSwaps("wiftyfgoqfohnzelum", [[3, 2], [6, 2], [9, 11], [2, 3], [5, 4], [2, 2], [
-      4, 3], [9, 3], [10, 0], [4, 16], [5, 8], [14, 5], [4, 16], [17, 1], [9, 7], [12, 9], [1, 17], [16, 7]]))
+print(s.maximumProduct([1, 2, 3, 4]))
