@@ -283,8 +283,17 @@ class Solution:
     # 628. 三个数的最大乘积
     def maximumProduct(self, nums: [int]) -> int:
         nums = sorted(nums, reverse=True)
-        return nums[0]*nums[1]*nums[2]
+        res = 0
+        a, b = nums[0]*nums[1], nums[-1]*nums[-2]
+        if nums[0] <= 0:
+            return a*nums[2]
+        if nums[2] >= 0:
+            res = max(a*nums[2], b*nums[0])
+        else:
+            res = b*nums[0]
+        return res
 
 
 s = Solution()
-print(s.maximumProduct([1, 2, 3, 4]))
+print(s.maximumProduct([3, 4, 0, 0, -1, -5]
+                       ))
