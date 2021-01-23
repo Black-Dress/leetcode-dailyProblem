@@ -293,7 +293,27 @@ class Solution:
             res = b*nums[0]
         return res
 
+    # 1489. 找到最小生成树里的关键边和伪关键边
+    def findCriticalAndPseudoCriticalEdges(self, n: int, edges: [[int]]) -> [[int]]:
+        pass
+
+    # 1319. 连通网络的操作次数
+    def makeConnected(self, n: int, connections: [[int]]) -> int:
+        # 利用并查集获得联通图
+        uf = ufset(n)
+        backSelect, parentNode = 0, dict()
+        for connection in connections:
+            if uf.find(connection[0]) != uf.find(connection[1]):
+                # 若两个节点不在同一个区间，合并
+                uf.merge(connection[0], connection[1])
+            else:
+                backSelect += 1
+        for i in range(n):
+            parent = uf.find(i)
+            if parentNode.get(parent) is None:
+                parentNode[parent] = 1
+        return len(parentNode)-1 if len(parentNode)-1 <= backSelect else -1
+
 
 s = Solution()
-print(s.maximumProduct([3, 4, 0, 0, -1, -5]
-                       ))
+print(s.makeConnected(6, [[0, 1], [0, 1], [2, 1], [4, 5], [3, 4]]))
