@@ -314,6 +314,94 @@ class Solution:
                 parentNode[parent] = 1
         return len(parentNode)-1 if len(parentNode)-1 <= backSelect else -1
 
+    # 674. 最长连续递增序列
+    def findLengthOfLCIS(self, nums: [int]) -> int:
+        if len(nums) == 0:
+            return 0
+        res = [1]
+        for i in range(1, len(nums)):
+            if nums[i] > nums[i-1]:
+                res[-1] += 1
+            else:
+                res.append(1)
+        return max(res)
+
+    # 959. 由斜杠划分区域
+    def regionsBySlashes(self, grid: [str]) -> int:
+        grid = [list(i) for i in grid]
+        n = len(grid)
+        uf = ufset(n*n*4)
+        # 每一格的编号
+        #       i+0
+        # i+1            i+3
+        #
+        #       i+2
+        for i in range(n):
+            for j in range(n):
+                index = (i*n+j)*4
+                # 和右边的进行合并
+                if j < n-1:
+                    right = index+4
+                    uf.merge(index+3, right+1)
+                # 和下边合并
+                if i < n-1:
+                    bottom = index+n*4
+                    uf.merge(index+2, bottom+0)
+                if grid[i][j] == '/':
+                    uf.merge(index+0, index+1)
+                    uf.merge(index+3, index+2)
+                elif grid[i][j] == '\\':
+                    uf.merge(index+0, index+3)
+                    uf.merge(index+1, index+2)
+                else:
+                    uf.merge(index+0, index+3)
+                    uf.merge(index+3, index+2)
+                    uf.merge(index+2, index+1)
+        res = set()
+        for i in range(n*n*4):
+            res.add(uf.find(i))
+        return len(res)
+
+    # 1579. 保证图可完全遍历
+    def maxNumEdgesToRemove(self, n: int, edges: [[int]]) -> int:
+        edges = sorted(edges, key=lambda x: x[0], reverse=True)
+        ufA, ufB = ufset(n+1), ufset(n+1)
+        resA, resB = [], []
+        temp1, temp2 = set(), set()
+        # 得到刪除的邊，以及創建聯通圖
+        for i in range(len(edges)):
+            edge = edges[i]
+            if edge[0] == 1:
+                if ufA.find(edge[1]) != ufA.find(edge[2]):
+                    ufA.merge(edge[1], edge[2])
+                else:
+                    resA.append(i)
+            elif edge[0] == 2:
+                if ufB.find(edge[1]) != ufB.find(edge[2]):
+                    ufB.merge(edge[1], edge[2])
+                else:
+                    resB.append(i)
+            else:
+                if ufA.find(edge[1]) != ufA.find(edge[2]) and ufB.find(edge[1]) != ufB.find(edge[2]):
+                    ufA.merge(edge[1], edge[2])
+                    ufB.merge(edge[1], edge[2])
+                else:
+                    resA.append(i)
+                    resB.append(i)
+        # 判断是否是联通图
+        for i in range(1, n+1):
+            temp1.add(ufA.find(i))
+            temp2.add(ufB.find(i))
+        # 得出结果
+        if len(temp1) > 1 or len(temp2) > 1:
+            res = -1
+        else:
+            if len(resB) != 0:
+                resA.extend(resB)
+            res = len(set(resA))
+        return res
+
 
 s = Solution()
-print(s.makeConnected(6, [[0, 1], [0, 1], [2, 1], [4, 5], [3, 4]]))
+print(s.maxNumEdgesToRemove(13, [[1, 1, 2], [2, 1, 3], [3, 2, 4], [3, 2, 5], [1, 2, 6], [3, 6, 7], [3, 7, 8], [3, 6, 9], [3, 4, 10], [2, 3, 11], [1, 5, 12], [3, 3, 13], [2, 1, 10], [2, 6, 11], [3, 5, 13], [1, 9, 12], [1, 6, 8], [3, 6, 13], [2, 1, 4], [1, 1, 13], [2, 9, 10], [2, 1, 6], [2, 10, 13], [2, 2, 9], [3, 4, 12], [2, 4, 7], [1, 1, 10], [1, 3, 7], [1, 7, 11], [3, 3, 12], [2, 4, 8], [3, 8, 9], [1, 9, 13], [2, 4, 10], [1, 6, 9], [3, 10, 13], [1, 7, 10], [1, 1, 11], [2, 4, 9], [3, 5, 11], [3, 2, 6], [2, 1, 5], [2, 5, 11], [2, 1, 7], [2, 3, 8], [2, 8, 9], [3, 4, 13], [3, 3, 8], [3, 3, 11], [2, 9, 11], [3, 1, 8], [2, 1, 8], [3, 8, 13], [2, 10, 11], [3, 1, 5], [1, 10, 11], [1, 7, 12], [2, 3, 5], [3, 1, 13], [2, 4, 11], [2, 3, 9], [2, 6, 9], [
+      2, 1, 13], [3, 1, 12], [2, 7, 8], [2, 5, 6], [3, 1, 9], [1, 5, 10], [3, 2, 13], [2, 3, 6], [2, 2, 10], [3, 4, 11], [1, 4, 13], [3, 5, 10], [1, 4, 10], [1, 1, 8], [3, 3, 4], [2, 4, 6], [2, 7, 11], [2, 7, 10], [2, 3, 12], [3, 7, 11], [3, 9, 10], [2, 11, 13], [1, 1, 12], [2, 10, 12], [1, 7, 13], [1, 4, 11], [2, 4, 5], [1, 3, 10], [2, 12, 13], [3, 3, 10], [1, 6, 12], [3, 6, 10], [1, 3, 4], [2, 7, 9], [1, 3, 11], [2, 2, 8], [1, 2, 8], [1, 11, 13], [1, 2, 13], [2, 2, 6], [1, 4, 6], [1, 6, 11], [3, 1, 2], [1, 1, 3], [2, 11, 12], [3, 2, 11], [1, 9, 10], [2, 6, 12], [3, 1, 7], [1, 4, 9], [1, 10, 12], [2, 6, 13], [2, 2, 12], [2, 1, 11], [2, 5, 9], [1, 3, 8], [1, 7, 8], [1, 2, 12], [1, 5, 11], [2, 7, 12], [3, 1, 11], [3, 9, 12], [3, 2, 9], [3, 10, 11]]))
