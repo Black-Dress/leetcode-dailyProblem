@@ -1,9 +1,11 @@
 import heapq
 from collections import defaultdict
 import sys
-
+from queue import PriorityQueue
 
 # 并查集
+
+
 class ufset:
     def __init__(self, n: int):
         self.parent = [i for i in range(n)]
@@ -415,7 +417,45 @@ class Solution:
                 break
         return res
 
+    # 1631. 最小体力消耗路径
+    def minimumEffortPath(self, heights: [[int]]) -> int:
+        # node中 [差值，i，j]
+        node = PriorityQueue()
+        orientationI, orientationJ = [1, -1, 0, 0], [0, 0, 1, -1]
+        n, m = len(heights), len(heights[0])
+        vist = [[0 for j in range(m)] for i in range(n)]
+        vist[0][0] = 1
+        i = j = res = 0
+        while i != n-1 or j != m-1:
+            # 得到下一个可移动节点的权值，并且记录下一个节点是path中的哪一个位置
+            for k in range(4):
+                x, y = i+orientationI[k], j+orientationJ[k]
+                if x >= 0 and x < n and y >= 0 and y < m and vist[x][y] == 0:
+                    node.put([abs(heights[i][j]-heights[x][y]), x, y])
+            temp = node.get()
+            res = max(temp[0], res)
+            i, j = temp[1], temp[2]
+            vist[i][j] = 1
+        return res
+
+    # 424. 替换后的最长重复字符
+    def characterReplacement(self, s: str, k: int) -> int:
+        num = [0]*26
+        n = len(s)
+        left = right = maxn = 0
+        while right < n:
+            index = ord(s[right])-ord('A')
+            num[index] += 1
+            maxn = max(maxn, num[index])
+            if right-left+1-maxn > k:
+                num[ord(s[left])-ord('A')] -= 1
+                left += 1
+            right += 1
+        return right-left
+
 
 s = Solution()
-print(s.pivotIndex([-1, -1, -1, 0, 1, 1]
-                   ))
+print(s.characterReplacement(
+    "ABAACDEFG", 1
+
+))
