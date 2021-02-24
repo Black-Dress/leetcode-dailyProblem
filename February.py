@@ -25,6 +25,20 @@ class Solution:
             res = max(res, temp)
         return res/k
 
+    # 832. 翻转图像
+    def flipAndInvertImage(self, A: [[int]]) -> [[int]]:
+        for cur in A:
+            i, j = 0, len(cur)-1
+            while(i < j):
+                cur[i], cur[j] = cur[j], cur[i]
+                cur[i] ^= 1
+                cur[j] ^= 1
+                i += 1
+                j -= 1
+            if i == j:
+                cur[i] ^= 1
+        return A
+
 
 s = Solution()
-print(s.findMaxAverage([0, 4, 0, 3, 2], 1))
+print(s.flipAndInvertImage([[1, 1, 0], [1, 0, 1], [0, 0, 0]]))
