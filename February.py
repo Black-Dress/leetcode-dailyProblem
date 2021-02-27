@@ -39,6 +39,15 @@ class Solution:
                 cur[i] ^= 1
         return A
 
+    # 395. 至少有K个重复字符的最长子串
+    def longestSubstring(self, s: str, k: int) -> int:
+        if not s:
+            return 0
+        for i in set(s):
+            if s.count(i) < k:
+                return max(self.longestSubstring(t, k) for t in s.split(i))
+        return len(s)
+
 
 s = Solution()
-print(s.flipAndInvertImage([[1, 1, 0], [1, 0, 1], [0, 0, 0]]))
+print(s.longestSubstring("ababbc", 2))
