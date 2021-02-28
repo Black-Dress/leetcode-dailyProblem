@@ -48,6 +48,23 @@ class Solution:
                 return max(self.longestSubstring(t, k) for t in s.split(i))
         return len(s)
 
+    # 896. 单调数列
+    def isMonotonic(self, A: [int]) -> bool:
+        i = 1
+        while i < len(A) and A[i]-A[i-1] == 0:
+            i += 1
+        if i >= len(A):
+            return True
+        flag = (A[i]-A[i-1] > 0)
+        while i < len(A):
+            if A[i]-A[i-1] == 0:
+                i += 1
+                continue
+            if (A[i]-A[i-1] > 0) != flag:
+                return False
+            i += 1
+        return True
+
 
 s = Solution()
-print(s.longestSubstring("ababbc", 2))
+print(s.isMonotonic([1, 2, 3]))
