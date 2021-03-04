@@ -1,3 +1,6 @@
+import bisect
+
+
 class NumMatrix:
 
     def __init__(self, matrix: [[int]]):
@@ -50,6 +53,24 @@ class Solution:
                 res[i] = res[i//2]
         return res
 
+    # 354. 俄罗斯套娃信封问题
+    def maxEnvelopes(self, envelopes: [[int]]) -> int:
+        if not envelopes:
+            return 0
+
+        n = len(envelopes)
+        envelopes.sort(key=lambda x: (x[0], -x[1]))
+
+        f = [envelopes[0][1]]
+        for i in range(1, n):
+            if (num := envelopes[i][1]) > f[-1]:
+                f.append(num)
+            else:
+                index = bisect.bisect_left(f, num)
+                f[index] = num
+
+        return len(f)
+
 
 s = Solution()
-print(s.countBits(5))
+print(s.maxEnvelopes([[6, 10], [11, 14], [6, 1], [16, 14], [13, 2]]))
