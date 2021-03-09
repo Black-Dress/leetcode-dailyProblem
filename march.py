@@ -71,6 +71,54 @@ class Solution:
 
         return len(f)
 
+    # 503. 下一个更大元素 II
+    def nextGreaterElements(self, nums: [int]) -> [int]:
+        if nums is None or len(nums) == 0:
+            return[]
+        n = len(nums)
+        res, stack = [-1]*n, [(nums[0], 0)]
+        index = 0
+        for i in range(1, 2*n):
+            index = (index+1) % n
+            while len(stack) != 0 and nums[index] > stack[-1][0]:
+                res[stack[-1][1]] = nums[index]
+                stack.pop()
+            else:
+                stack.append((nums[index], index))
+        return res
+
+    # 132.分割回文串II
+    def minCut(self, s: str) -> int:
+        n = len(s)
+        # g[i][j] 表示[i~j]是否是回文
+        g = [[True]*n for i in range(n)]
+
+        # 回文预处理，在O(1)时间内判断是否是回文
+        for i in range(n-1, -1, -1):
+            for j in range(i+1, n,):
+                g[i][j] = g[i+1][j-1] and (s[i] == s[j])
+        # dp[i]代表前i个最小分割数
+        dp = [n] * n
+        for i in range(n):
+            if(g[0][i]):
+                dp[i] = 0
+            else:
+                for j in range(i):
+                    # 已经判断了0～i，且还需要判断 i～i所以j+1
+                    if g[j+1][i] is True:
+                        dp[i] = min(dp[i], dp[j]+1)
+        return dp[n-1]
+
+    # 1047. 删除字符串中的所有相邻重复项
+    def removeDuplicates(self, S: str) -> str:
+        stack = []
+        for i in range(len(S)):
+            if(len(stack) == 0 or S[i] != stack[-1]):
+                stack.append(S[i])
+                continue
+            stack.pop()
+        return ''.join(stack)
+
 
 s = Solution()
-print(s.maxEnvelopes([[6, 10], [11, 14], [6, 1], [16, 14], [13, 2]]))
+print(s.removeDuplicates("a"))
