@@ -119,6 +119,26 @@ class Solution:
             stack.pop()
         return ''.join(stack)
 
+    # 227. 基本计算器 II
+    def calculate(self, s: str) -> int:
+        num, cur = [], 0
+        pre = '+'
+        for i in range(len(s)):
+            if s[i].isdigit():
+                cur = cur*10+int(s[i])
+            if i == len(s)-1 or s[i] in '+-*/':
+                if pre == '+':
+                    num.append(cur)
+                elif pre == '-':
+                    num.append(-cur)
+                elif pre == '*':
+                    num.append(num.pop()*cur)
+                else:
+                    num.append(int(num.pop()/cur))
+                pre = s[i]
+                cur = 0
+        return sum(num)
+
 
 s = Solution()
-print(s.removeDuplicates("a"))
+print(s.calculate(" 1 +2*3*3 /3 -2"))
