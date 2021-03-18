@@ -1,5 +1,13 @@
 import bisect
 
+# Definition for singly-linked list.
+
+
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
 
 class NumMatrix:
 
@@ -139,6 +147,36 @@ class Solution:
                 cur = 0
         return sum(num)
 
+    # 92. 反转链表 II
+    def reverseBetween(self, head: ListNode, left: int, right: int) -> ListNode:
+        stack = []
+        index = ListNode(0, head)
+        for i in range(0, left-1):
+            index = index.next
+        i = left
+        while i <= right and index.next is not None:
+            stack.append(index.next)
+            index.next = index.next.next
+            i += 1
+        res = index
+        while len(stack) != 0:
+            temp = stack.pop()
+            temp.next = index.next
+            index.next = temp
+            index = index.next
+
+        return res.next if left <= 1 else head
+
 
 s = Solution()
-print(s.calculate(" 1 +2*3*3 /3 -2"))
+
+head = ListNode(1)
+index = head
+for i in range(2, 6):
+    index.next = ListNode(i)
+    index = index.next
+
+index = s.reverseBetween(head, 2, 3)
+while index is not None:
+    print(index.val)
+    index = index.next
