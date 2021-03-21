@@ -167,16 +167,34 @@ class Solution:
 
         return res.next if left <= 1 else head
 
+    # 73 矩阵置零
+    def setZeroes(self, matrix: [[int]]) -> None:
+        def set(matrix: [[int]], i: int, j: int):
+            for k in range(len(matrix[i])):
+                matrix[i][k] = None if matrix[i][k] != 0 else 0
+            for k in range(len(matrix)):
+                matrix[k][j] = None if matrix[k][j] != 0 else 0
+        n, m = len(matrix), len(matrix[0])
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j] == 0:
+                    set(matrix, i, j)
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j] is None:
+                    matrix[i][j] = 0
+
 
 s = Solution()
 
-head = ListNode(1)
-index = head
-for i in range(2, 6):
-    index.next = ListNode(i)
-    index = index.next
+# head = ListNode(1)
+# index = head
+# for i in range(2, 6):
+#     index.next = ListNode(i)
+#     index = index.next
 
-index = s.reverseBetween(head, 2, 3)
-while index is not None:
-    print(index.val)
-    index = index.next
+# index = s.reverseBetween(head, 2, 3)
+# while index is not None:
+#     print(index.val)
+#     index = index.next
+s.setZeroes([[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]])
