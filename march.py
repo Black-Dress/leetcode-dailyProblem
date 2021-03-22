@@ -184,6 +184,14 @@ class Solution:
                 if matrix[i][j] is None:
                     matrix[i][j] = 0
 
+    # 1 的位数
+    def hammingWeight(self, n: int) -> int:
+        res = 0
+        while n != 0:
+            n &= (n-1)
+            res += 1
+        return res
+
 
 s = Solution()
 
@@ -197,4 +205,5 @@ s = Solution()
 # while index is not None:
 #     print(index.val)
 #     index = index.next
-s.setZeroes([[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]])
+# s.setZeroes([[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]])
+print(s.hammingWeight(11111111111111111111111111111101))
