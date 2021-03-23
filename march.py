@@ -37,6 +37,54 @@ class NumMatrix:
         # param_1 = obj.sumRegion(row1,col1,row2,col2)
 
 
+class NestedInteger:
+    def __init__(self):
+        self.integer = -1
+        self.integerList = [NestedInteger]
+        self.isInt = False
+
+    def isInteger(self) -> bool:
+        return self.isInt
+        """
+        @return True if this NestedInteger holds a single integer, rather than a nested list.
+        """
+
+    def getInteger(self) -> int:
+        return self.integer
+        """
+        @return the single integer that this NestedInteger holds, if it holds a single integer
+        Return None if this NestedInteger holds a nested list
+        """
+
+    def getList(self) -> []:
+        return self.integerList
+        """
+        @return the nested list that this NestedInteger holds, if it holds a nested list
+        Return None if this NestedInteger holds a single integer
+        """
+
+
+class NestedIterator:
+
+    def __init__(self, nestedList: [NestedInteger]):
+        nestedList.reverse()
+        self.stack = nestedList
+
+    def next(self) -> int:
+        item = self.stack.pop()
+        return item.getInteger()
+
+    def hasNext(self) -> bool:
+        if len(self.stack) == 0:
+            return False
+        # 跳过所有空的数组
+        while len(self.stack) and not self.stack[-1].isInteger():
+            item = self.stack.pop()
+            item.getList().reverse()
+            self.stack.extend(item.getList())
+        return len(self.stack) != 0
+
+
 class Solution:
     # 338. 比特位计数
     def countBits(self, num: int) -> [int]:
@@ -206,4 +254,32 @@ s = Solution()
 #     print(index.val)
 #     index = index.next
 # s.setZeroes([[0, 1, 2, 0], [3, 4, 5, 2], [1, 3, 1, 5]])
-print(s.hammingWeight(11111111111111111111111111111101))
+# print(s.hammingWeight(11111111111111111111111111111101))
+
+
+p = NestedInteger()
+p.isInt = True
+p.integer = 1
+q = NestedInteger()
+q.isInt = True
+q.integer = 2
+
+a = NestedInteger()
+a.integerList = [p, q]
+
+b = NestedInteger()
+b.isInt = True
+b.integer = 1
+
+c = NestedInteger()
+c.integerList = [q, p]
+
+d = NestedInteger()
+d.integerList = []
+
+e = NestedInteger()
+e.integerList = [d]
+
+iterator = NestedIterator([d, d, e, a])
+while iterator.hasNext():
+    print(iterator.next())
