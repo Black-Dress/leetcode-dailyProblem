@@ -240,9 +240,31 @@ class Solution:
             res += 1
         return res
 
+    # 132模式
+    def find132pattern(self, nums: [int]) -> bool:
+        n = len(nums)
+        if n < 3:
+            return False
+        # dp记录第0～i最小的数和离i最近的最大的数的位置
+        dp = [[i, i] for i in range(n)]
+        for i in range(1, n):
+            dp[i][0] = dp[i][0] if nums[dp[i][0]] < nums[dp[i-1][0]] else dp[i-1][0]
+            if nums[i] < nums[i-1]:
+                dp[i][1] = i-1
+            else:
+                j = i-1
+                while nums[dp[j][1]] < nums[i]:
+                    j -= 1
+                dp[i][1] = dp[j][1]
+            # nums[i] 要小于之前的比他大的值，并且要大于最大值之前的最小值
+            if nums[i] < nums[dp[i][1]] and nums[i] > nums[dp[dp[i][1]][0]]:
+                return True
+
+        return False
+
 
 s = Solution()
-
+print(s.find132pattern([3, 2, 1, 4, 2]))
 # head = ListNode(1)
 # index = head
 # for i in range(2, 6):
@@ -257,29 +279,29 @@ s = Solution()
 # print(s.hammingWeight(11111111111111111111111111111101))
 
 
-p = NestedInteger()
-p.isInt = True
-p.integer = 1
-q = NestedInteger()
-q.isInt = True
-q.integer = 2
+# p = NestedInteger()
+# p.isInt = True
+# p.integer = 1
+# q = NestedInteger()
+# q.isInt = True
+# q.integer = 2
 
-a = NestedInteger()
-a.integerList = [p, q]
+# a = NestedInteger()
+# a.integerList = [p, q]
 
-b = NestedInteger()
-b.isInt = True
-b.integer = 1
+# b = NestedInteger()
+# b.isInt = True
+# b.integer = 1
 
-c = NestedInteger()
-c.integerList = [q, p]
+# c = NestedInteger()
+# c.integerList = [q, p]
 
-d = NestedInteger()
-d.integerList = []
+# d = NestedInteger()
+# d.integerList = []
 
-e = NestedInteger()
-e.integerList = [d]
+# e = NestedInteger()
+# e.integerList = [d]
 
-iterator = NestedIterator([d, d, e, a])
-while iterator.hasNext():
-    print(iterator.next())
+# iterator = NestedIterator([d, d, e, a])
+# while iterator.hasNext():
+#     print(iterator.next())
