@@ -273,6 +273,32 @@ class Solution:
                 index = index.next
         return res.next
 
+    # 61. 旋转链表
+    def rotateRight(self, head: ListNode, k: int) -> ListNode:
+        if(head is None or k == 0):
+            return head
+        n, index = 0, head
+        # 获得链表长度
+        while index is not None:
+            index = index.next
+            n += 1
+        k, begin = k % n, head
+        if k == 0:
+            return head
+        # index 移动到起点
+        for i in range(n-k):
+            begin = begin.next
+        f, r = head, begin
+        # r 移动到可以拼接的位置
+        while r.next is not None:
+            r = r.next
+        while f != begin:
+            r.next = f
+            f = f.next
+            r = r.next
+        r.next = None
+        return begin
+
 
 def createListNode(nums: [int]) -> ListNode:
     res = ListNode()
@@ -283,8 +309,16 @@ def createListNode(nums: [int]) -> ListNode:
     return res.next
 
 
+def sout(head: ListNode) -> []:
+    res = []
+    while head is not None:
+        res.append(head.val)
+        head = head.next
+    return res
+
+
 s = Solution()
-print(s.deleteDuplicates(createListNode([1, 2, 3, 3, 3, 4, 4, 5, 6, 7, 7])))
+print(sout(s.rotateRight(createListNode([1, 2, 3, 4, 5]), 3)))
 # [1,4,0,-1,-2,-3,-1,-2]
 # [3,5,0,3,4]
 # head = ListNode(1)
