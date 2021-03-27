@@ -1,5 +1,4 @@
 import bisect
-
 # Definition for singly-linked list.
 
 
@@ -259,12 +258,35 @@ class Solution:
             # nums[i] 要小于之前的比他大的值，并且要大于最大值之前的最小值
             if nums[i] < nums[dp[i][1]] and nums[i] > nums[dp[dp[i][1]][0]]:
                 return True
-
         return False
+
+    # 82. 删除排序链表中的重复元素
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        buckt, index = [0 for i in range(200)], ListNode()
+        while head is not None:
+            buckt[head.val+100] += 1
+            head = head.next
+        res = index
+        for i in range(200):
+            if buckt[i] == 1:
+                index.next = ListNode(i-100)
+                index = index.next
+        return res.next
+
+
+def createListNode(nums: [int]) -> ListNode:
+    res = ListNode()
+    index = res
+    for i in range(len(nums)):
+        index.next = ListNode(nums[i])
+        index = index.next
+    return res.next
 
 
 s = Solution()
-print(s.find132pattern([3, 2, 1, 4, 2]))
+print(s.deleteDuplicates(createListNode([1, 2, 3, 3, 3, 4, 4, 5, 6, 7, 7])))
+# [1,4,0,-1,-2,-3,-1,-2]
+# [3,5,0,3,4]
 # head = ListNode(1)
 # index = head
 # for i in range(2, 6):
