@@ -299,6 +299,50 @@ class Solution:
         r.next = None
         return begin
 
+    # 74. 搜索二维矩阵
+    def searchMatrix(self, matrix: [[int]], target: int) -> bool:
+        def vertical(target, matrix, left: int, right: int) -> int:
+            mid = (left+right)//2
+            if left > right or mid > m:
+                return mid
+            if target > matrix[mid][0]:
+                return vertical(target, matrix, mid+1, right)
+            elif target == matrix[mid][0]:
+                return mid
+            else:
+                return vertical(target, matrix, left, mid-1)
+
+        def horizon(target, matrix, left, right, index: int) -> bool:
+            mid = (left+right)//2
+            if left > right or mid > n:
+                return False
+            if target > matrix[index][mid]:
+                return horizon(target, matrix, mid+1, right, index)
+            elif target == matrix[index][mid]:
+                return True
+            else:
+                return horizon(target, matrix, left, mid-1, index)
+        # 先纵向搜索，然后横向搜索
+        m, n = len(matrix), len(matrix[0])
+        index = vertical(target, matrix, 0, m-1)
+        return horizon(target, matrix, 0, n-1, index)
+
+    # 90. 子集 II
+    def subsetsWithDup(self, nums: [int]) -> [[int]]:
+        res, n = [[]], len(nums)
+        nums.sort()
+
+        def dfs(index: int, cur: []):
+            if cur not in res:
+                res.append(cur)
+            for i in range(index, n):
+                if i > index and nums[i] == nums[i-1]:
+                    continue
+                dfs(i+1, [nums[i]]+cur)
+
+        dfs(0, [])
+        return res
+
 
 def createListNode(nums: [int]) -> ListNode:
     res = ListNode()
@@ -318,7 +362,8 @@ def sout(head: ListNode) -> []:
 
 
 s = Solution()
-print(sout(s.rotateRight(createListNode([1, 2, 3, 4, 5]), 3)))
+print(s.subsetsWithDup([1, 1, 2, 1]))
+# print(sout(s.rotateRight(createListNode([1, 2, 3, 4, 5]), 3)))
 # [1,4,0,-1,-2,-3,-1,-2]
 # [3,5,0,3,4]
 # head = ListNode(1)
