@@ -27,6 +27,17 @@ class Solution:
             stack1.insert(0, caculator(a, b, stack2[i]))
         return stack1.pop()
 
+    # 80. 删除有序数组中的重复项 II
+    def removeDuplicates(self, nums: [int]) -> int:
+        count, i = 1, 1
+        while i < len(nums):
+            count = count+1 if nums[i] == nums[i-1] else 1
+            if count > 2:
+                nums.pop(i)
+                i -= 1
+            i += 1
+        return len(nums)
+
 
 s = Solution()
-print(s.clumsy(1))
+print(s.removeDuplicates([0, 0, 1, 1, 1, 1, 2, 3, 3]))
