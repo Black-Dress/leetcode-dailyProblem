@@ -38,6 +38,29 @@ class Solution:
             i += 1
         return len(nums)
 
+    # 81. 搜索旋转排序数组 II
+    def search(self, nums: [int], target: int) -> bool:
+        def binary_search(nums: list, target: int, l: int, r: int) -> bool:
+            if l > r:
+                return False
+            mid = (l+r)//2
+            if target < nums[mid]:
+                return binary_search(nums, target, l, mid-1)
+            elif nums[mid] == target:
+                return True
+            else:
+                return binary_search(nums, target, mid+1, r)
+        index, n = 0, len(nums)
+        for i in range(1, n):
+            if nums[i] < nums[i-1]:
+                index = i
+                break
+        if target >= nums[0]:
+            return binary_search(nums, target, 0, index-1 if index > 0 else n-1)
+        return binary_search(nums, target, index if index > 0 else 0, n-1)
+
 
 s = Solution()
-print(s.removeDuplicates([0, 0, 1, 1, 1, 1, 2, 3, 3]))
+# nums = [1, 2, 3, 4, 5, 6]
+# print(bisect.bisect(nums, 5, 0, 3))
+print(s.search([1, 2], 3))
