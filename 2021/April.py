@@ -59,8 +59,22 @@ class Solution:
             return binary_search(nums, target, 0, index-1 if index > 0 else n-1)
         return binary_search(nums, target, index if index > 0 else 0, n-1)
 
+    # 153. 寻找旋转排序数组中的最小值
+    def findMin(self, nums: [int]) -> int:
+        l, r = 0, len(nums)-1
+        while l < r:
+            if nums[l] <= nums[r]:
+                return nums[l]
+            else:
+                mid = (l+r) >> 1
+                if nums[mid] > nums[r]:
+                    l = mid+1
+                else:
+                    r = mid
+        return nums[l]
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.search([1, 2], 3))
+print(s.findMin([1, 2]))
