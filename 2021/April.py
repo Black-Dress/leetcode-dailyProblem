@@ -75,10 +75,19 @@ class Solution:
 
     # 154. 寻找旋转排序数组中的最小值 II
     def findMin2(self, nums: [int]) -> int:
-        pass
+        L, R = 0, len(nums)-1
+        while L < R:
+            mid = (L+R) >> 1
+            if nums[mid] > nums[R]:
+                L = mid+1
+            elif nums[mid] < nums[R]:
+                R = mid
+            else:
+                R -= 1
+        return nums[L]
 
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.findMin([1, 2]))
+print(s.findMin2([1]))
