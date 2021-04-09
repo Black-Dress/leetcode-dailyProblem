@@ -40,12 +40,12 @@ class Solution:
 
     # 81. 搜索旋转排序数组 II
     def search(self, nums: [int], target: int) -> bool:
-        def binary_search(nums: list, target: int, l: int, r: int) -> bool:
-            if l > r:
+        def binary_search(nums: list, target: int, L: int, r: int) -> bool:
+            if L > r:
                 return False
-            mid = (l+r)//2
+            mid = (L+r)//2
             if target < nums[mid]:
-                return binary_search(nums, target, l, mid-1)
+                return binary_search(nums, target, L, mid-1)
             elif nums[mid] == target:
                 return True
             else:
@@ -61,17 +61,21 @@ class Solution:
 
     # 153. 寻找旋转排序数组中的最小值
     def findMin(self, nums: [int]) -> int:
-        l, r = 0, len(nums)-1
-        while l < r:
-            if nums[l] <= nums[r]:
-                return nums[l]
+        L, r = 0, len(nums)-1
+        while L < r:
+            if nums[L] <= nums[r]:
+                return nums[L]
             else:
-                mid = (l+r) >> 1
+                mid = (L+r) >> 1
                 if nums[mid] > nums[r]:
-                    l = mid+1
+                    L = mid+1
                 else:
                     r = mid
-        return nums[l]
+        return nums[L]
+
+    # 154. 寻找旋转排序数组中的最小值 II
+    def findMin2(self, nums: [int]) -> int:
+        pass
 
 
 s = Solution()
