@@ -1,3 +1,7 @@
+import functools
+from typing import List
+
+
 class Solution:
     # 1006. 笨阶乘
     def clumsy(self, N: int) -> int:
@@ -28,7 +32,7 @@ class Solution:
         return stack1.pop()
 
     # 80. 删除有序数组中的重复项 II
-    def removeDuplicates(self, nums: [int]) -> int:
+    def removeDuplicates(self, nums: List[int]) -> int:
         count, i = 1, 1
         while i < len(nums):
             count = count+1 if nums[i] == nums[i-1] else 1
@@ -39,7 +43,7 @@ class Solution:
         return len(nums)
 
     # 81. 搜索旋转排序数组 II
-    def search(self, nums: [int], target: int) -> bool:
+    def search(self, nums: List[int], target: int) -> bool:
         def binary_search(nums: list, target: int, L: int, r: int) -> bool:
             if L > r:
                 return False
@@ -60,7 +64,7 @@ class Solution:
         return binary_search(nums, target, index if index > 0 else 0, n-1)
 
     # 153. 寻找旋转排序数组中的最小值
-    def findMin(self, nums: [int]) -> int:
+    def findMin(self, nums: List[int]) -> int:
         L, r = 0, len(nums)-1
         while L < r:
             if nums[L] <= nums[r]:
@@ -74,7 +78,7 @@ class Solution:
         return nums[L]
 
     # 154. 寻找旋转排序数组中的最小值 II
-    def findMin2(self, nums: [int]) -> int:
+    def findMin2(self, nums: List[int]) -> int:
         L, R = 0, len(nums)-1
         while L < R:
             mid = (L+R) >> 1
@@ -86,8 +90,14 @@ class Solution:
                 R -= 1
         return nums[L]
 
+    # 179 最大数
+    def largestNumber(self, nums: List[int]) -> str:
+        nums.sort(key=functools.cmp_to_key(lambda x, y: 1 if str(x)+str(y) < str(y)+str(y) else -1))
+        res = "".join(list(map(str, nums)))
+        return "0" if res.startswith("0") else res
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.findMin2([1]))
+print(s.largestNumber([0, 0]))
