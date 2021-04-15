@@ -2,6 +2,13 @@ import functools
 from typing import List
 
 
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
 class Solution:
     # 1006. 笨阶乘
     def clumsy(self, N: int) -> int:
@@ -95,6 +102,25 @@ class Solution:
         nums.sort(key=functools.cmp_to_key(lambda x, y: 1 if str(x)+str(y) < str(y)+str(y) else -1))
         res = "".join(list(map(str, nums)))
         return "0" if res.startswith("0") else res
+
+    # 783. 二叉搜索树节点最小距离
+    def minDiffInBST(self, root: TreeNode) -> int:
+        minVal = 100000
+
+        def DFS(root: TreeNode, pre: int):
+            nonlocal minVal
+            if root is None:
+                return
+            DFS(root=root.left, pre=pre)
+
+            if pre != -1:
+                minVal = min(minVal, root.val-pre)
+            pre = root.val
+
+            DFS(root=root.right, pre=pre)
+
+        DFS(root=root, pre=-1)
+        return minVal
 
 
 s = Solution()

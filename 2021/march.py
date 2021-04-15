@@ -1,4 +1,5 @@
 import bisect
+from typing import List
 # Definition for singly-linked list.
 
 
@@ -10,7 +11,7 @@ class ListNode:
 
 class NumMatrix:
 
-    def __init__(self, matrix: [[int]]):
+    def __init__(self, matrix: List[List[int]]):
         if len(matrix) == 0 or len(matrix[0]) == 0:
             return
         self.row = len(matrix)
@@ -55,7 +56,7 @@ class NestedInteger:
         Return None if this NestedInteger holds a nested list
         """
 
-    def getList(self) -> []:
+    def getList(self) -> List[NestedInteger]:
         return self.integerList
         """
         @return the nested list that this NestedInteger holds, if it holds a nested list
@@ -65,7 +66,7 @@ class NestedInteger:
 
 class NestedIterator:
 
-    def __init__(self, nestedList: [NestedInteger]):
+    def __init__(self, nestedList: List[NestedInteger]):
         nestedList.reverse()
         self.stack = nestedList
 
@@ -86,7 +87,7 @@ class NestedIterator:
 
 class Solution:
     # 338. 比特位计数
-    def countBits(self, num: int) -> [int]:
+    def countBits(self, num: int) -> List[int]:
         # def getNum(n: int):
         #     count = 0
         #     while (n):
@@ -109,7 +110,7 @@ class Solution:
         return res
 
     # 354. 俄罗斯套娃信封问题
-    def maxEnvelopes(self, envelopes: [[int]]) -> int:
+    def maxEnvelopes(self, envelopes: List[List[int]]) -> int:
         if not envelopes:
             return 0
 
@@ -127,7 +128,7 @@ class Solution:
         return len(f)
 
     # 503. 下一个更大元素 II
-    def nextGreaterElements(self, nums: [int]) -> [int]:
+    def nextGreaterElements(self, nums: List[int]) -> List[int]:
         if nums is None or len(nums) == 0:
             return[]
         n = len(nums)
@@ -215,8 +216,8 @@ class Solution:
         return res.next if left <= 1 else head
 
     # 73 矩阵置零
-    def setZeroes(self, matrix: [[int]]) -> None:
-        def set(matrix: [[int]], i: int, j: int):
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        def set(matrix: List[List[int]], i: int, j: int):
             for k in range(len(matrix[i])):
                 matrix[i][k] = None if matrix[i][k] != 0 else 0
             for k in range(len(matrix)):
@@ -240,7 +241,7 @@ class Solution:
         return res
 
     # 132模式
-    def find132pattern(self, nums: [int]) -> bool:
+    def find132pattern(self, nums: List[int]) -> bool:
         n = len(nums)
         if n < 3:
             return False
@@ -300,7 +301,7 @@ class Solution:
         return begin
 
     # 74. 搜索二维矩阵
-    def searchMatrix(self, matrix: [[int]], target: int) -> bool:
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         def vertical(target, matrix, left: int, right: int) -> int:
             mid = (left+right)//2
             if left > right or mid > m:
@@ -328,11 +329,11 @@ class Solution:
         return horizon(target, matrix, 0, n-1, index)
 
     # 90. 子集 II
-    def subsetsWithDup(self, nums: [int]) -> [[int]]:
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
         res, n = [[]], len(nums)
         nums.sort()
 
-        def dfs(index: int, cur: []):
+        def dfs(index: int, cur: List[int]):
             if cur not in res:
                 res.append(cur)
             for i in range(index, n):
@@ -344,7 +345,7 @@ class Solution:
         return res
 
 
-def createListNode(nums: [int]) -> ListNode:
+def createListNode(nums: List[int]) -> ListNode:
     res = ListNode()
     index = res
     for i in range(len(nums)):
@@ -353,7 +354,7 @@ def createListNode(nums: [int]) -> ListNode:
     return res.next
 
 
-def sout(head: ListNode) -> []:
+def sout(head: ListNode) -> List[ListNode]:
     res = []
     while head is not None:
         res.append(head.val)
