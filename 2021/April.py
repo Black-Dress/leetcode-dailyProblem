@@ -122,8 +122,31 @@ class Solution:
         DFS(root=root, pre=-1)
         return minVal
 
+    # 213. 打家劫舍 II
+    def rob(self, nums: List[int]) -> int:
+        # dp 表示到第i家能够得到的最大现金 最后一家和第一家不能同时抢
+        # 针对与第i家 有两种状态：抢，不抢
+        # dp[i] = max(dp[i-1],dp[i-2]+nums[i])
+        n = len(nums)
+        dp1, dp2 = [nums[i] for i in range(n)], [nums[i] for i in range(n)]
+        if n == 1:
+            return nums[0]
+        if n == 2:
+            return max(nums[0], nums[-1])
+        # 第一个不选
+        for i in range(2, n):
+            dp1[i] = max(dp1[i], dp1[i-1])
+            if i >= 3:
+                dp1[i] = max(dp1[i-1], dp1[i-2]+nums[i])
+        # 最后一个不选
+        dp2[1] = max(dp2[0], dp2[1])
+        for i in range(2, n-1):
+            dp2[i] = max(dp2[i-1], dp2[i-2]+nums[i])
+
+        return max(dp1[-1], dp2[-2])
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.largestNumber([0, 0]))
+print(s.rob([4, 1, 2, 7, 5, 3, 1]))
