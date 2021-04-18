@@ -39,7 +39,7 @@ class Solution:
         return stack1.pop()
 
     # 80. 删除有序数组中的重复项 II
-    def removeDuplicates(self, nums: List[int]) -> int:
+    def removeDuplicates2(self, nums: List[int]) -> int:
         count, i = 1, 1
         while i < len(nums):
             count = count+1 if nums[i] == nums[i-1] else 1
@@ -145,8 +145,18 @@ class Solution:
 
         return max(dp1[-1], dp2[-2])
 
+    # 26 删除有序数组中的重复项
+    def removeDuplicates(self, nums: List[int]) -> int:
+        i = 1
+        while i < len(nums):
+            if nums[i] == nums[i-1]:
+                nums.pop(i)
+            else:
+                i += 1
+        return len(nums)
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.rob([4, 1, 2, 7, 5, 3, 1]))
+print(s.removeDuplicates([0, 0, 1, 1, 1, 2, 2, 3, 3, 4]))
