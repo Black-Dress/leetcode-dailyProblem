@@ -155,8 +155,35 @@ class Solution:
                 i += 1
         return len(nums)
 
+    # 28 实现str()
+    def strStr(self, haystack: str, needle: str) -> int:
+        def kmp_getNext(origin: str) -> list:
+            res = [0 for i in range(origin.__len__())]
+            k, res[0] = -1, -1
+            for i in range(1, origin.__len__()):
+                while k > -1 and origin[k+1] != origin[i]:
+                    k = res[k]
+                if origin[i] == origin[k+1]:
+                    k += 1
+                res[i] = k
+            return res
+
+        if needle.__len__() == 0:
+            return 0
+        next, k = kmp_getNext(needle), -1
+        res = 1
+        for i in range(haystack.__len__()):
+            while k > -1 and needle[k+1] != haystack[i]:
+                k = next[k]
+            if needle[k+1] == haystack[i]:
+                k += 1
+            if k+1 >= needle.__len__():
+                res = i - needle.__len__()+1
+                break
+        return res if k+1 >= needle.__len__() else -1
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.removeDuplicates([0, 0, 1, 1, 1, 2, 2, 3, 3, 4]))
+print(s.strStr("hello", "ll"))
