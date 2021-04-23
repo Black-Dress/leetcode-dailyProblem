@@ -182,8 +182,21 @@ class Solution:
                 break
         return res if k+1 >= needle.__len__() else -1
 
+    # 368.最大整除法
+    def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
+        # 第i个位置能够得到的最大值
+        nums.sort()
+        dp, res = [[nums[i]] for i in range(nums.__len__())], 0
+        for i in range(1, nums.__len__()):
+            for j in range(0, i):
+                if nums[i] % dp[j][0] == 0 and nums[i] % dp[j][-1] == 0:
+                    dp[i] = dp[j] + [nums[i]] if dp[i].__len__() < len(dp[j]+[nums[i]])else dp[i]
+            if dp[res].__len__() < dp[i].__len__():
+                res = i
+        return dp[res]
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.strStr("hello", "ll"))
+print(s.largestDivisibleSubset([343, 49, 8, 4, 2, 1]))
