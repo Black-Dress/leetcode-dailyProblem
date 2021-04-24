@@ -195,8 +195,17 @@ class Solution:
                 res = i
         return dp[res]
 
+    # 377.组合总数
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        dp = [1]+[0]*target
+        for i in range(1, target+1):
+            for num in nums:
+                if num <= i:
+                    dp[i] += dp[i-num]
+        return dp[target]
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.largestDivisibleSubset([343, 49, 8, 4, 2, 1]))
+print(s.combinationSum4([4, 2, 1], 32))
