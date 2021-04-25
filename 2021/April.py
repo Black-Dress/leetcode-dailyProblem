@@ -204,8 +204,30 @@ class Solution:
                     dp[i] += dp[i-num]
         return dp[target]
 
+    # 897.递增顺序搜索树
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        res = TreeNode()
+        index = res
+
+        def inOrder(root: TreeNode):
+            nonlocal index
+            if root is None:
+                return
+            inOrder(root=root.left)
+            index.right = TreeNode(root.val)
+            index = index.right
+            inOrder(root=root.right)
+
+        inOrder(root=root)
+        return res.right
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-print(s.combinationSum4([4, 2, 1], 32))
+a = TreeNode(2)
+b = TreeNode(1)
+c = TreeNode(3)
+a.left = b
+a.right = c
+print(s.increasingBST(a))
