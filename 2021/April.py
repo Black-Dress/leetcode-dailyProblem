@@ -221,6 +221,26 @@ class Solution:
         inOrder(root=root)
         return res.right
 
+    # 1011. 在 D 天内送达包裹的能力
+    def shipWithinDays(self, weights: List[int], D: int) -> int:
+        def count(target: int, weights: List[int]) -> int:
+            d, cur = 1, 0
+            for i in weights:
+                cur += i
+                if cur > target:
+                    d += 1
+                    cur = i
+            return d
+        l, r = max(weights), sum(weights)
+        while l < r:
+            mid = (l+r) >> 1
+            days = count(mid, weights)
+            if days > D:
+                l = mid+1
+            else:
+                r = mid
+        return l
+
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
@@ -230,4 +250,4 @@ b = TreeNode(1)
 c = TreeNode(3)
 a.left = b
 a.right = c
-print(s.increasingBST(a))
+print(s.shipWithinDays([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 5))
