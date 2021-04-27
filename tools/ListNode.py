@@ -7,6 +7,19 @@ class TreeNode:
         self.left = left
         self.right = right
 
+    @staticmethod
+    def createTreeNode(list: List[int]):
+        root = TreeNode(list[0])
+        cur = [root]
+        for i in range(1, list.__len__(), 2):
+            index = cur.pop()
+            if index is None:
+                continue
+            index.left = TreeNode(list[i]) if list[i] is not None else None
+            index.right = TreeNode(list[i+1]) if list[i+1] is not None else None
+            cur.extend([index.left, index.right])
+        return root
 
-def createTreeNode(self, list: List[int]) -> TreeNode:
-    return None
+
+if __name__ == '__main__':
+    pass

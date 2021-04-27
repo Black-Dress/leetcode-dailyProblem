@@ -1,12 +1,6 @@
 import functools
+from tools.ListNode import TreeNode
 from typing import List
-
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
 
 
 class Solution:
@@ -231,23 +225,30 @@ class Solution:
                     d += 1
                     cur = i
             return d
-        l, r = max(weights), sum(weights)
-        while l < r:
-            mid = (l+r) >> 1
+        L, r = max(weights), sum(weights)
+        while L < r:
+            mid = (L+r) >> 1
             days = count(mid, weights)
             if days > D:
-                l = mid+1
+                L = mid+1
             else:
                 r = mid
-        return l
+        return L
+
+    # 938.二叉搜索树的范围和
+    def rangeSumBST(self, root: TreeNode, low: int, high: int) -> int:
+        if not root:
+            return 0
+        if root.val > high:
+            return self.rangeSumBST(root.left, low, high)
+        if root.val < low:
+            return self.rangeSumBST(root.right, low, high)
+        return root.val + self.rangeSumBST(root.left, low, high) + self.rangeSumBST(root.right, low, high)
 
 
 s = Solution()
 # nums = [1, 2, 3, 4, 5, 6]
 # print(bisect.bisect(nums, 5, 0, 3))
-a = TreeNode(2)
-b = TreeNode(1)
-c = TreeNode(3)
-a.left = b
-a.right = c
-print(s.shipWithinDays([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 5))
+
+root = TreeNode.createTreeNode([10, 5, 15, 3, 7, None, 18])
+print(s.rangeSumBST(root, 7, 15))
