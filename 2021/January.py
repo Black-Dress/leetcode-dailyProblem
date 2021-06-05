@@ -2,6 +2,7 @@ import heapq
 from collections import defaultdict
 import sys
 from queue import PriorityQueue
+from typing import List
 
 # 并查集
 
@@ -30,7 +31,7 @@ class ufset:
 
 
 class ufset_721:
-    def __init__(self, accounts: [[str]]):
+    def __init__(self, accounts: List[List[str]]):
         self.parent = dict()
         for i in accounts:
             for j in range(1, len(i)):
@@ -65,7 +66,7 @@ class Solution:
         return res[-1]
 
     # 830
-    def largeGroupPositions(self, s: str) -> [[int]]:
+    def largeGroupPositions(self, s: str) -> List[List[int]]:
         res = list()
         index = 1
         for i in range(1, len(s)):
@@ -80,7 +81,7 @@ class Solution:
         return res
 
     # 239
-    def maxSlidingWindow(self, nums: [int], k: int) -> [int]:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         # 利用优先队列
         n = len(nums)
         q = [(-nums[i], i) for i in range(k)]
@@ -94,7 +95,7 @@ class Solution:
         return res
 
     # 399
-    def calcEquation(self, equations: [[str]], values: [float], queries: [[str]]) -> [float]:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
         # 初始化equations
         graph = defaultdict(int)
         arrary = set()
@@ -118,7 +119,7 @@ class Solution:
         return res
 
     # 547
-    def findCircleNum(self, isConnected: [[int]]) -> int:
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
         # 利用floyd算法将间接到达的节点变为直接到达
         arrary = [i for i in range(len(isConnected))]
         for i in arrary:
@@ -137,7 +138,7 @@ class Solution:
         return res
 
     # 189 旋转数组
-    def rotate(self, nums: [int], k: int) -> None:
+    def rotate(self, nums: List[int], k: int) -> None:
         """
         Do not return anything, modify nums in-place instead.
         """
@@ -155,7 +156,7 @@ class Solution:
         print(nums)
 
     # 123 买卖股票的最佳时机三
-    def maxProfit(self, prices: [int]) -> int:
+    def maxProfit(self, prices: List[int]) -> int:
         if not prices:
             return 0
         n = len(prices)
@@ -179,7 +180,7 @@ class Solution:
         return max(dp[-1])
 
     # 228. 汇总区间
-    def summaryRanges(self, nums: [int]) -> [str]:
+    def summaryRanges(self, nums: List[int]) -> List[str]:
         n = 0
         res = []
         while n < len(nums):
@@ -194,7 +195,7 @@ class Solution:
         return res
 
     # 1202. 交换字符串中的元素
-    def smallestStringWithSwaps(self, s: str, pairs: [[int]]) -> str:
+    def smallestStringWithSwaps(self, s: str, pairs: List[List[int]]) -> str:
         uf = ufset(len(s))
         for x, y in pairs:
             uf.merge(x, y)
@@ -209,7 +210,7 @@ class Solution:
         return "".join(s)
 
     # 1232.缀点成线
-    def checkStraightLine(self, coordinates: [[int]]) -> bool:
+    def checkStraightLine(self, coordinates: List[List[int]]) -> bool:
         angle = cur = temp = 0
         for i in range(1, len(coordinates)):
             if coordinates[i][0] == coordinates[i-1][0]:
@@ -229,7 +230,7 @@ class Solution:
         return True
 
     # 721. 账户合并
-    def accountsMerge(self, accounts: [[str]]) -> [[str]]:
+    def accountsMerge(self, accounts: List[List[str]]) -> List[List[str]]:
         # 合并账户，通过并查集合并
         uf = ufset_721(accounts)
         index = defaultdict()
@@ -258,7 +259,7 @@ class Solution:
         return res
 
     # 1584. 连接所有点的最小费用
-    def minCostConnectPoints(self, points: [[int]]) -> int:
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
         n = len(points)
         path = [0]
         dis = [sys.maxsize for i in range(n)]
@@ -283,7 +284,7 @@ class Solution:
         return res
 
     # 628. 三个数的最大乘积
-    def maximumProduct(self, nums: [int]) -> int:
+    def maximumProduct(self, nums: List[int]) -> int:
         nums = sorted(nums, reverse=True)
         res = 0
         a, b = nums[0]*nums[1], nums[-1]*nums[-2]
@@ -296,11 +297,11 @@ class Solution:
         return res
 
     # 1489. 找到最小生成树里的关键边和伪关键边
-    def findCriticalAndPseudoCriticalEdges(self, n: int, edges: [[int]]) -> [[int]]:
+    def findCriticalAndPseudoCriticalEdges(self, n: int, edges: List[List[int]]) -> List[List[int]]:
         pass
 
     # 1319. 连通网络的操作次数
-    def makeConnected(self, n: int, connections: [[int]]) -> int:
+    def makeConnected(self, n: int, connections: List[List[int]]) -> int:
         # 利用并查集获得联通图
         uf = ufset(n)
         backSelect, parentNode = 0, dict()
@@ -317,7 +318,7 @@ class Solution:
         return len(parentNode)-1 if len(parentNode)-1 <= backSelect else -1
 
     # 674. 最长连续递增序列
-    def findLengthOfLCIS(self, nums: [int]) -> int:
+    def findLengthOfLCIS(self, nums: List[int]) -> int:
         if len(nums) == 0:
             return 0
         res = [1]
@@ -329,7 +330,7 @@ class Solution:
         return max(res)
 
     # 959. 由斜杠划分区域
-    def regionsBySlashes(self, grid: [str]) -> int:
+    def regionsBySlashes(self, grid: List[str]) -> int:
         grid = [list(i) for i in grid]
         n = len(grid)
         uf = ufset(n*n*4)
@@ -365,7 +366,7 @@ class Solution:
         return len(res)
 
     # 1579. 保证图可完全遍历
-    def maxNumEdgesToRemove(self, n: int, edges: [[int]]) -> int:
+    def maxNumEdgesToRemove(self, n: int, edges: List[List[int]]) -> int:
         edges = sorted(edges, key=lambda x: x[0], reverse=True)
         ufA, ufB = ufset(n+1), ufset(n+1)
         resA, resB = [], []
@@ -404,7 +405,7 @@ class Solution:
         return res
 
     # 724. 寻找数组的中心索引
-    def pivotIndex(self, nums: [int]) -> int:
+    def pivotIndex(self, nums: List[int]) -> int:
         n = len(nums)
         if n == 0:
             return -1
@@ -418,7 +419,7 @@ class Solution:
         return res
 
     # 1631. 最小体力消耗路径
-    def minimumEffortPath(self, heights: [[int]]) -> int:
+    def minimumEffortPath(self, heights: List[List[int]]) -> int:
         # node中 [差值，i，j]
         node = PriorityQueue()
         orientationI, orientationJ = [1, -1, 0, 0], [0, 0, 1, -1]
