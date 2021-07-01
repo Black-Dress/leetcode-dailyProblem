@@ -1,0 +1,9 @@
+{
+	"python.formatting.provider": "autopep8",
+	"editor.formatOnSave": true,
+	"jupyter.jupyterServerType": "local",
+	"python.formatting.autopep8Args": [
+		"--max-line-length=200",
+		"--aggressive",
+	]
+}
