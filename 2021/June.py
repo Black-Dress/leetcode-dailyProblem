@@ -38,9 +38,10 @@ class Solution:
             headB = headB.next
         return None
     # 203. 移除链表元素
+
     def removeElements(self, head: ListNode, val: int) -> ListNode:
         newHead = ListNode(-1)
-        pre,index = newHead,head
+        pre, index = newHead, head
         pre.next = index
         while index is not None:
             if index.val == val:
@@ -49,6 +50,8 @@ class Solution:
                 pre = pre.next
             index = index.next
         return newHead.next
+
+
 if __name__ == '__main__':
     s = Solution()
     headA = ListNode.createListNode([4, 1, 8, 4, 5])
