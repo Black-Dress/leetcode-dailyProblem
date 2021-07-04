@@ -1,5 +1,5 @@
 import collections
-from typing import Collection, List
+from typing import Collection, Counter, List
 
 
 class Solution:
@@ -37,6 +37,37 @@ class Solution:
         self.LCP07_DFS(edges, 0, 0, k, n, res)
         return res[0]
 
+    # 1833. 雪糕的最大数量
+    def maxIceCream(self, costs: List[int], coins: int) -> int:
+        costs.sort()
+        res, sum = 0, 0
+        for i in range(costs.__len__()):
+            sum += costs[i]
+            res += 1
+            if sum > coins:
+                res -= 1
+        return res
+
+    # 451. 根据字符出现频率排序
+    def frequencySort(self, s: str) -> str:
+        c = Counter(s)
+        sortedList = sorted(c.items(), key=lambda item: item[1], reverse=True)
+        res = [k for k, v in sortedList for i in range(v)]
+        return "".join(res)
+
+    # 645. 错误的集合
+    def findErrorNums(self, nums: List[int]) -> List[int]:
+        bucket = [-1 for i in range(nums.__len__() + 1)]
+        a, b = 0, 0
+        for i in nums:
+            bucket[i] += 1
+        for i in range(1, bucket.__len__()):
+            if bucket[i] == 1:
+                a = i
+            if bucket[i] == -1:
+                b = i
+        return [a, b]
+
 
 s = Solution()
-print(s.numWays(5, [[0, 2], [2, 1], [3, 4], [2, 3], [1, 4], [2, 0], [0, 4]], 3))
+print(s.findErrorNums([1, 2, 2, 4]))
