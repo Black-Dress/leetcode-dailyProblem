@@ -1,4 +1,5 @@
 import collections
+from sys import modules
 from typing import Collection, Counter, List
 
 
@@ -68,6 +69,20 @@ class Solution:
                 b = i
         return [a, b]
 
+    # 1711. 大餐计数
+    def countPairs(self, deliciousness: List[int]) -> int:
+        mod = 1000000007
+        table = collections.defaultdict(int)
+        maxNum, res = max(deliciousness), 0
+        for i in deliciousness:
+            j = 1
+            while j <= maxNum * 2:
+                res += table.get(j) if table.get(j) is not None else 0
+                res %= mod
+                j <<= 1
+            table[i] += 1
+        return res
+
 
 s = Solution()
-print(s.findErrorNums([1, 2, 2, 4]))
+print(s.countPairs([149, 107, 1, 63, 0, 1, 6867, 1325, 5611, 2581, 39, 89, 46, 18, 12, 20, 22, 234]))
