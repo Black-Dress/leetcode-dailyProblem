@@ -54,6 +54,16 @@ class Solution:
         res -= maxgap
         return res % (10**9+7)
 
+    # 1846. 减小和重新排列数组后的最大元素
+    def maximumElementAfterDecrementingAndRearranging(self, arr: List[int]) -> int:
+        arr.sort()
+        arr[0] = 1
+        n, maxval = arr.__len__(), 1
+        for i in range(1, n):
+            arr[i] = arr[i-1]+1 if abs(arr[i]-arr[i-1]) > 1 else arr[i]
+            maxval = max(maxval, arr[i])
+        return maxval
+
 
 s = Solution()
-print(s.minAbsoluteSumDiff([1, 10, 4, 4, 2, 7],  [9, 3, 5, 1, 7, 4]))
+print(s.maximumElementAfterDecrementingAndRearranging([2, 2, 1, 2, 1]))

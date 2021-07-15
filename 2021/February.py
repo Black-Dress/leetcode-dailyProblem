@@ -1,9 +1,10 @@
 import bisect
+from typing import List
 
 
 class Solution:
     # 480 滑动窗口中位数
-    def medianSlidingWindow(self, nums: [int], k: int) -> [float]:
+    def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
         def median(a): return (a[(len(a)-1)//2] + a[len(a)//2]) / 2
         a = sorted(nums[:k])
         res = [median(a)]
@@ -15,7 +16,7 @@ class Solution:
         return res
 
     # 643 子数组最大平均数 I
-    def findMaxAverage(self, nums: [int], k: int) -> float:
+    def findMaxAverage(self, nums: List[int], k: int) -> float:
         cur = [nums[i] for i in range(k)]
         temp = res = sum(cur)
         for i in nums[k:]:
@@ -26,7 +27,7 @@ class Solution:
         return res/k
 
     # 832. 翻转图像
-    def flipAndInvertImage(self, A: [[int]]) -> [[int]]:
+    def flipAndInvertImage(self, A: List[List[int]]) -> List[List[int]]:
         for cur in A:
             i, j = 0, len(cur)-1
             while(i < j):
@@ -49,7 +50,7 @@ class Solution:
         return len(s)
 
     # 896. 单调数列
-    def isMonotonic(self, A: [int]) -> bool:
+    def isMonotonic(self, A: List[int]) -> bool:
         i = 1
         while i < len(A) and A[i]-A[i-1] == 0:
             i += 1

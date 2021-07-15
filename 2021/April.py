@@ -1,5 +1,5 @@
 import functools
-from tools.ListNode import TreeNode
+from Modules.NodeHealper import TreeNode
 from typing import List
 
 
