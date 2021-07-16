@@ -1,6 +1,6 @@
 import collections
 from typing import Collection, Counter, List
-from sys import maxsize
+from sys import breakpointhook, maxsize
 import bisect
 
 
@@ -131,6 +131,16 @@ class Solution:
             maxval = max(maxval, arr[i])
         return maxval
 
+    # 剑指 Offer 53 - I. 在排序数组中查找数字 I
+    def search(self, nums: List[int], target: int) -> int:
+        index = bisect.bisect_left(nums, target)
+        res = 0
+        for i in range(index, nums.__len__()):
+            res += 1 if nums[i] == target else 0
+            if nums[i] != target:
+                break
+        return res
+
 
 s = Solution()
-print(s.findErrorNums([1, 2, 2, 4]))
+print(s.search([5, 7, 7, 8, 8, 10], 5))
