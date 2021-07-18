@@ -83,6 +83,30 @@ class Solution:
             table[i] += 1
         return res
 
+    # 剑指 Offer 42. 连续子数组的最大和
+    def maxSubArray(self, nums: List[int]) -> int:
+        minval, cur = 0, nums[0]
+        res = nums[0]
+        for i in range(1, nums.__len__()):
+            minval = min(minval, cur)
+            cur += nums[i]
+            res = max(cur - minval, res)
+        return res
+
+    # 面试题 10.02. 变位词组
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        table = dict()
+        res = []
+        for s in strs:
+            sorted_str = "".join(sorted(list(s)))
+            if table.get(sorted_str):
+                table[sorted_str].append(s)
+            else:
+                table[sorted_str] = [s]
+        for k, v in table.items():
+            res.append(v)
+        return res
+
 
 s = Solution()
-print(s.countPairs([149, 107, 1, 63, 0, 1, 6867, 1325, 5611, 2581, 39, 89, 46, 18, 12, 20, 22, 234]))
+print(s.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
