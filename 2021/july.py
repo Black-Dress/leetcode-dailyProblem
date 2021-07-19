@@ -179,6 +179,20 @@ class Solution:
             res.append(v)
         return res
 
+    # 1838. 最高频元素的频数
+    def maxFrequency(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        left, right, pre_sum, res = 0, 1, 0, 1
+        while right < len(nums):
+            pre_sum += (right-left)*(nums[right]-nums[right-1])
+            if k >= pre_sum:
+                res = right-left+1
+            else:
+                left += 1
+                pre_sum -= nums[right]-nums[left-1]
+            right += 1
+        return res
+
 
 s = Solution()
-print(s.search([5, 7, 7, 8, 8, 10], 5))
+print(s.maxFrequency([1, 2, 4], 5))
