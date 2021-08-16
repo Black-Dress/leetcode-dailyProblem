@@ -1,6 +1,6 @@
 from collections import defaultdict
 import collections
-from typing import Collection
+from typing import Collection, List
 
 
 class Solution:
@@ -26,6 +26,20 @@ class Solution:
         self.status_576[key] = res
         return res
 
+    # 526. 优美的排列
+    def countArrangement(self, n: int) -> int:
+        def dfs_526(cur: List[int]) -> int:
+            if cur.__len__() == n:
+                return 1
+            res = 0
+            for i in range(1, n+1):
+                if cur.count(i) == 0 and (i % (cur.__len__()+1) == 0 or (cur.__len__()+1) % i == 0):
+                    cur.append(i)
+                    res += dfs_526(cur)
+                    cur.pop()
+            return res
+        return dfs_526([])
+
 
 s = Solution()
-print(s.findPaths(2, 2, 2, 0, 0))
+print(s.countArrangement(2))
