@@ -40,6 +40,34 @@ class Solution:
             return res
         return dfs_526([])
 
+    # 551. 学生出勤记录 I
+    def checkRecord(self, s: str) -> bool:
+        sl = list(s)
+        a, l = 0, 0
+        for i in range(0, sl.__len__()):
+            if sl[i] == 'A':
+                a += 1
+            if sl[i] == 'L':
+                if i > 0 and sl[i-1] == 'L':
+                    l += 1
+                else:
+                    l = 1
+            if a >= 2 or l >= 3:
+                return False
+        return True
+
+    # 剑指 Offer II 119. 最长连续序列
+    def longestConsecutive(self, nums: List[int]) -> int:
+        table, res = set(nums), 0
+        for num in nums:
+            if num-1 not in table:
+                next, cnt = num+1, 1
+                while next in table:
+                    next += 1
+                    cnt += 1
+                res = max(res, cnt)
+        return res
+
 
 s = Solution()
 print(s.countArrangement(2))
