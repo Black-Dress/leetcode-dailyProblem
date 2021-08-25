@@ -68,6 +68,18 @@ class Solution:
                 res = max(res, cnt)
         return res
 
+    # 787. K 站中转内最便宜的航班
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        maxcnt = 1000000*n
+        dp = [[maxcnt]*n for i in range(k+2)]
+        dp[0][src] = 0
+        for t in range(k+2):
+            for j, i, price in flights:
+                dp[t][i] = min(dp[t][i], dp[t-1][j]+price)
+        res = min(dp[t][dst] for t in range(k+2))
+        return -1 if res == maxcnt else res
+
 
 s = Solution()
-print(s.countArrangement(2))
+print(s.findCheapestPrice(10, [[3, 4, 4], [2, 5, 6], [4, 7, 10], [9, 6, 5], [7, 4, 4], [6, 2, 10], [6, 8, 6], [7, 9, 4], [1, 5, 4], [1, 0, 4], [9, 7, 3], [
+      7, 0, 5], [6, 5, 8], [1, 7, 6], [4, 0, 9], [5, 9, 1], [8, 7, 3], [1, 2, 6], [4, 1, 5], [5, 2, 4], [1, 9, 1], [7, 8, 10], [0, 4, 2], [7, 2, 8]], 6, 0, 7))
