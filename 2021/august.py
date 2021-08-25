@@ -79,7 +79,27 @@ class Solution:
         res = min(dp[t][dst] for t in range(k+2))
         return -1 if res == maxcnt else res
 
+    # 797. 所有可能的路径
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        n = len(graph)
+        vist, res = [0 for _ in range(n)], []
+        vist[0] = 1
+
+        def DFS_797(vist: List[int], index: int, cur: List[int]):
+            if index == n-1:
+                res.append([_ for _ in cur])
+                return
+            for i in graph[index]:
+                if vist[i] == 0:
+                    vist[i] = 1
+                    cur.append(i)
+                    DFS_797(vist, i, cur)
+                    vist[i] = 0
+                    cur.pop()
+
+        DFS_797(vist, 0, [0])
+        return res
+
 
 s = Solution()
-print(s.findCheapestPrice(10, [[3, 4, 4], [2, 5, 6], [4, 7, 10], [9, 6, 5], [7, 4, 4], [6, 2, 10], [6, 8, 6], [7, 9, 4], [1, 5, 4], [1, 0, 4], [9, 7, 3], [
-      7, 0, 5], [6, 5, 8], [1, 7, 6], [4, 0, 9], [5, 9, 1], [8, 7, 3], [1, 2, 6], [4, 1, 5], [5, 2, 4], [1, 9, 1], [7, 8, 10], [0, 4, 2], [7, 2, 8]], 6, 0, 7))
+print(s.allPathsSourceTarget([[1, 3], [2], [3], []]))
