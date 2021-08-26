@@ -100,6 +100,24 @@ class Solution:
         DFS_797(vist, 0, [0])
         return res
 
+    # 881. 救生艇
+    def numRescueBoats(self, people: List[int], limit: int) -> int:
+        def match(table: dict, cnt: int):
+            while cnt > 0:
+                if table.get(cnt) and table.get(cnt) > 0:
+                    table[cnt] -= 1
+                    break
+                cnt -= 1
+        table, res = dict(), 0
+        for i in people:
+            table[i] = table[i]+1 if table.get(i) else 1
+        for i in people:
+            if table[i] != 0:
+                table[i] -= 1
+                match(table, limit-i)
+                res += 1
+        return res
+
 
 s = Solution()
-print(s.allPathsSourceTarget([[1, 3], [2], [3], []]))
+print(s.numRescueBoats([2, 1], 3))
