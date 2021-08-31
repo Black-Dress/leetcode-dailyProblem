@@ -118,6 +118,16 @@ class Solution:
                 res += 1
         return res
 
+    # 1109. 航班预订统计
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        res = [0]*n
+        for first, last, val in bookings:
+            res[first] += val
+            if last < n:
+                res[last] -= val
+        for i in range(1, n):
+            res[i] += res[i-1]
+
 
 s = Solution()
-print(s.numRescueBoats([2, 1], 3))
+print(s.corpFlightBookings([[1, 1, 10], [2, 3, 20], [2, 4, 25]], 5))
