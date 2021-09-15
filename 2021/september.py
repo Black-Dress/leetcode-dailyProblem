@@ -43,6 +43,18 @@ class Solution:
                 return i
         return ""
 
+    # 162. 寻找峰值
+    # 你必须实现时间复杂度为 O(log n) 的算法来解决此问题。
+    def findPeakElement(self, nums: List[int]) -> int:
+        l, r = 0, nums.__len__()-1
+        while l < r:
+            mid = (l+r) >> 2
+            if nums[mid] < nums[mid+1]:
+                l = mid+1
+            else:
+                r = mid
+        return l
+
 
 s = Solution()
 print(s.findLongestWord("abcdefgc", ["acc", "acbcc", "accc", "abc"]))
