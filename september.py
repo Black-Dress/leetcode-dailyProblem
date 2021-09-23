@@ -79,7 +79,15 @@ class Solution:
             mod -= 1
         return res
 
+    # 326. 3的幂
+    def isPowerOfThree(self, n: int) -> bool:
+        if n == 1:
+            return True
+        if n < 1:
+            return False
+        return self.isPowerOfThree(n / 3)
+
 
 s = Solution()
 head = ListNode.createListNode([_ for _ in range(3)])
-print(s.splitListToParts(head, 5))
+print(s.isPowerOfThree(0))
