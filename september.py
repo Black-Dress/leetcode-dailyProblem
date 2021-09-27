@@ -4,6 +4,20 @@ from typing import Collection, List
 from NodeHelper.ListNode import ListNode
 
 
+class Node:
+    def __init__(self, val, prev, next, child):
+        self.val = val
+        self.prev = prev
+        self.next = next
+        self.child = child
+
+    def __init__(self, val):
+        self.val = val
+        self.prev = None
+        self.next = None
+        self.child = None
+
+
 class Solution:
     # 回旋镖的数量，找到两个点的中点
     # 暴力法
@@ -87,7 +101,37 @@ class Solution:
             return False
         return self.isPowerOfThree(n / 3)
 
+    # 430. 扁平化多级双向链表
+    def flatten(self, head: 'Node') -> 'Node':
+        def DFS(index: 'Node') -> Node:
+            while index is not None and (index.next is not None or index.child is not None):
+                next = index.next
+                if index.child is not None:
+                    index.next = index.child
+                    index.child.prev = index
+                    child = index.child
+                    index.child = None
+                    index = DFS(child)
+                index.next = next
+                if next is None:
+                    return index
+                next.prev = index
+                index = index.next
+            return index
+        res = DFS(head)
+        while res is not None and res.prev is not None:
+            res = res.prev
+        return res
+
 
 s = Solution()
-head = ListNode.createListNode([_ for _ in range(3)])
-print(s.isPowerOfThree(0))
+a = Node(1)
+b = Node(2)
+c = Node(3)
+d = Node(4)
+a.next = b
+b.next = c
+c.child = d
+b.prev = a
+c.prev = b
+print(s.flatten(None))
