@@ -1,7 +1,9 @@
+import collections
 import math
 from collections import defaultdict
 from typing import Collection, List
 from NodeHelper.ListNode import ListNode
+from NodeHelper.TreeNode import TreeNode
 
 
 class Node:
@@ -122,6 +124,27 @@ class Solution:
         while res is not None and res.prev is not None:
             res = res.prev
         return res
+
+    # 437. 路径总和 III
+    def pathSum(self, root: TreeNode, targetSum: int) -> int:
+        prefix = collections.defaultdict(int)
+        prefix[0] = 1
+
+        def DFS(root: TreeNode, cur: int) -> int:
+            if root is None:
+                return 0
+            res = 0
+            cur += root.val
+            res += prefix[cur - targetSum]
+
+            prefix[cur] += 1
+            res += DFS(root.left, cur)
+            res += DFS(root.right, cur)
+            prefix[cur] -= 1
+
+            return res
+
+        return DFS(root, 0)
 
 
 s = Solution()
