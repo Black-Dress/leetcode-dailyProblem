@@ -146,15 +146,28 @@ class Solution:
 
         return DFS(root, 0)
 
+    # 223. 矩形面积
+    def computeArea(self, ax1: int, ay1: int, ax2: int, ay2: int, bx1: int, by1: int, bx2: int, by2: int) -> int:
+        # 优先计算交叉的面积
+        cx1, cy1, cx2, cy2 = 0, 0, 0, 0
+        # x
+        if ax1 <= bx1 <= ax2:
+            cx1 = bx1
+            cx2 = bx2 if bx2 <= ax2 else ax2
+        if bx1 <= ax1 <= bx2:
+            cx1 = ax1
+            cx2 = ax2 if ax2 <= bx2 else bx2
+        # y
+        if ay1 <= by1 <= ay2:
+            cy1 = by1
+            cy2 = by2 if by2 <= ay2 else ay2
+        if by1 <= ay1 <= by2:
+            cy1 = ay1
+            cy2 = ay2 if ay2 <= by2 else by2
+
+        a, b, c = (ax2 - ax1) * (ay2 - ay1), (bx2 - bx1) * (by2 - by1), (cx2 - cx1) * (cy2 - cy1)
+        return a + b - c
+
 
 s = Solution()
-a = Node(1)
-b = Node(2)
-c = Node(3)
-d = Node(4)
-a.next = b
-b.next = c
-c.child = d
-b.prev = a
-c.prev = b
-print(s.flatten(None))
+print(s.computeArea(-2, -2, 2, 2, 2, 2, 4, 4))
