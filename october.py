@@ -49,6 +49,22 @@ class Solution:
             unit //= 1000
         return res.strip()
 
+    # 29. 两数相除
+    def divide(self, dividend: int, divisor: int) -> int:
+        INT_MIN, INT_MAX = -2**31, 2**31 - 1
+        res, sign = 0, 1 if (divisor > 0 and dividend > 0) or (divisor < 0 and dividend < 0) else -1
+        if dividend == INT_MIN and divisor == -1:
+            return INT_MAX
+        dividend, divisor = abs(dividend), abs(divisor)
+        while dividend >= divisor:
+            temp, cnt = divisor, 1
+            while (temp << 1) <= dividend:
+                temp <<= 1
+                cnt <<= 1
+            dividend -= temp
+            res += cnt
+        return res if sign == 1 else -res
+
 
 s = Solution()
-print(s.numberToWords(12345))
+print(s.divide(10, 1))
