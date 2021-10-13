@@ -65,6 +65,20 @@ class Solution:
             res += cnt
         return res if sign == 1 else -res
 
+    # 412. Fizz Buzz
+    def fizzBuzz(self, n: int) -> List[str]:
+        res = []
+        for i in range(1, n + 1):
+            if i % 3 == 0 and i % 5 == 0:
+                res.append("FizzBuzz")
+            if i % 3 == 0 and i % 5 != 0:
+                res.append("Fizz")
+            if i % 3 != 0 and i % 5 == 0:
+                res.append("Buzz")
+            if i % 3 != 0 and i % 5 != 0:
+                res.append(str(i))
+        return res
+
 
 s = Solution()
-print(s.divide(10, 1))
+print(s.fizzBuzz(15))
