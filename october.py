@@ -79,6 +79,22 @@ class Solution:
                 res.append(str(i))
         return res
 
+    # 剑指 Offer II 069. 山峰数组的顶部
+    def peakIndexInMountainArray(self, arr: List[int]) -> int:
+        # 算法复杂度要求log(n) -> 二分查找顶端元素
+        # 题目中存在的条件：
+        # if i < res : arr[i] > arr[i-1]
+        # if i >= res : arr[i] > arr[i+1]
+        l, r, res = 1, arr.__len__() - 2, 0
+        while l <= r:
+            mid = (l + r) // 2
+            if arr[mid] > arr[mid + 1]:
+                res = mid
+                r = mid - 1
+            else:
+                l = mid + 1
+        return res
+
 
 s = Solution()
 print(s.fizzBuzz(15))
