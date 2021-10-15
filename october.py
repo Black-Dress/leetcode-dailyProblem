@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Collection, List, no_type_check
+from typing import Collection, Counter, List, no_type_check
 
 
 class Solution:
@@ -95,6 +95,21 @@ class Solution:
                 l = mid + 1
         return res
 
+    # 38. 外观数列
+    def countAndSay(self, n: int) -> str:
+        if n == 1:
+            return "1"
+        s = self.countAndSay(n - 1)
+        cnt, res = 1, ""
+        for i in range(1, s.__len__()):
+            if s[i] != s[i - 1]:
+                res += str(cnt) + s[i - 1]
+                cnt = 1
+            else:
+                cnt += 1
+        res += str(cnt) + s[s.__len__() - 1]
+        return res
+
 
 s = Solution()
-print(s.fizzBuzz(15))
+print(s.countAndSay(1))
