@@ -110,6 +110,17 @@ class Solution:
         res += str(cnt) + s[s.__len__() - 1]
         return res
 
+    # 453. 最小操作次数使数组元素相等
+    def minMoves(self, nums: List[int]) -> int:
+        # 思路1：蛮力法
+        # 可以每一次的行动让最小的n-1个数加一，直到所有的数字都相等
+        # 思路2：数学
+        # 因为n-1个数字加1等效于 1个数字减1 ，所以只要让所有的数字都等于那个最小值就行了
+        minNum, res = min(nums), 0
+        for i in nums:
+            res += i - minNum
+        return res
+
 
 s = Solution()
 print(s.countAndSay(1))
