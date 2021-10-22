@@ -121,6 +121,48 @@ class Solution:
             res += i - minNum
         return res
 
+    # 229. 求众数 II
+    def majorityElement(self, nums: List[int]) -> List[int]:
+        # 求大于三分之一的元素，那么答案就只有[0,2] 个
+        # 摩尔投票从 n/2 推广到 n/3
+        # n/3 的情况下结果最多两个，所以过程中记录两个元素，并且统计两个元素的票数，抵消的时候两个都抵消
+        element1, element2 = 0, 0
+        vote1, vote2 = 0, 0
+        cnt1, cnt2 = 0, 0
+        res = []
+        # 摩尔投票
+        for num in nums:
+            # 优先统计计数情况，而不是变动情况，不然会出现element1和element2相同
+            if vote1 > 0 and num == element1:
+                vote1 += 1
+                continue
+            if vote2 > 0 and num == element2:
+                vote2 += 1
+                continue
+            if vote1 == 0:
+                element1 = num
+                vote1 += 1
+                continue
+            if vote2 == 0:
+                element2 = num
+                vote2 += 1
+                continue
+            if num != element2 and num != element1:
+                vote2 -= 1
+                vote1 -= 1
+        # 统计结果，至少要统计那些有票的元素
+        for num in nums:
+            if vote1 > 0 and element1 == num:
+                cnt1 += 1
+            if vote2 > 0 and element2 == num:
+                cnt2 += 1
+        # 统计那些有票数的元素，以及票数是否达标
+        if vote1 > 0 and cnt1 > nums.__len__() / 3:
+            res.append(element1)
+        if vote2 > 0 and cnt2 > nums.__len__() / 3:
+            res.append(element2)
+        return res
+
 
 s = Solution()
-print(s.countAndSay(1))
+print(s.majorityElement([2, 1, 1, 3, 1, 4, 5, 6]))
