@@ -1,4 +1,5 @@
 from collections import defaultdict
+import collections
 from typing import Collection, Counter, List, no_type_check
 
 
@@ -163,6 +164,20 @@ class Solution:
             res.append(element2)
         return res
 
+    # 496. 下一个更大元素 I
+    def nextGreaterElement(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        stack, table = [nums2[0]], collections.defaultdict(int)
+        res = list()
+        for i in nums2[1:]:
+            while stack.__len__() > 0 and i > stack[-1]:
+                table[stack[-1]] = i
+                stack.pop()
+            stack.append(i)
+        for i in nums1:
+            target = -1 if table.get(i) is None else table[i]
+            res.append(target)
+        return res
+
 
 s = Solution()
-print(s.majorityElement([2, 1, 1, 3, 1, 4, 5, 6]))
+print(s.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
