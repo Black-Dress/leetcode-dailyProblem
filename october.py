@@ -1,6 +1,6 @@
 from collections import defaultdict
 import collections
-from typing import Collection, Counter, List, no_type_check
+from typing import Collection, Counter, List, Tuple, no_type_check
 
 
 class Solution:
@@ -178,6 +178,19 @@ class Solution:
             res.append(target)
         return res
 
+    # 869. 重新排序得到 2 的幂
+    def reorderedPowerOf2(self, n: int) -> bool:
+        # 因为题目的范围在  [0,10^9]
+        def countDigit(n: int) -> Tuple[int]:
+            res = [0] * 10
+            while n:
+                res[n % 10] += 1
+                n //= 10
+            return tuple(res)
+        # 得到所有可能的2的幂次
+        table = {countDigit(1 << i) for i in range(30)}
+        return countDigit(n) in table
+
 
 s = Solution()
-print(s.nextGreaterElement([4, 1, 2], [1, 3, 4, 2]))
+print(s.reorderedPowerOf2(1))
