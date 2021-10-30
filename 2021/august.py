@@ -11,7 +11,7 @@ class Solution:
     # 576
     def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
         # 普通dfs 超时，需要记忆状态
-        mod = 10**9+7
+        mod = 10**9 + 7
         direction = [(0, 1), (0, -1), (-1, 0), (1, 0)]
         if startColumn < 0 or startColumn == n or startRow < 0 or startRow == m:
             return 1
@@ -19,11 +19,11 @@ class Solution:
             return 0
         res = 0
         # 状态压缩
-        key = startRow*2500 + startColumn*50 + maxMove
+        key = startRow * 2500 + startColumn * 50 + maxMove
         if(self.status_576.get(key)):
             return self.status_576[key]
         for dx, dy in direction:
-            res = (res + self.findPaths(m, n, maxMove-1, startRow+dx, startColumn+dy)) % mod
+            res = (res + self.findPaths(m, n, maxMove - 1, startRow + dx, startColumn + dy)) % mod
         self.status_576[key] = res
         return res
 
@@ -33,8 +33,8 @@ class Solution:
             if cur.__len__() == n:
                 return 1
             res = 0
-            for i in range(1, n+1):
-                if cur.count(i) == 0 and (i % (cur.__len__()+1) == 0 or (cur.__len__()+1) % i == 0):
+            for i in range(1, n + 1):
+                if cur.count(i) == 0 and (i % (cur.__len__() + 1) == 0 or (cur.__len__() + 1) % i == 0):
                     cur.append(i)
                     res += dfs_526(cur)
                     cur.pop()
@@ -49,7 +49,7 @@ class Solution:
             if sl[i] == 'A':
                 a += 1
             if sl[i] == 'L':
-                if i > 0 and sl[i-1] == 'L':
+                if i > 0 and sl[i - 1] == 'L':
                     l += 1
                 else:
                     l = 1
@@ -61,8 +61,8 @@ class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
         table, res = set(nums), 0
         for num in nums:
-            if num-1 not in table:
-                next, cnt = num+1, 1
+            if num - 1 not in table:
+                next, cnt = num + 1, 1
                 while next in table:
                     next += 1
                     cnt += 1
@@ -72,23 +72,23 @@ class Solution:
     # 552. 学生出勤记录 II
     # 未完成
     def checkRecord2(self, n: int) -> int:
-        mod = 10**9+7
-        maxL = n//3*2+n % 3
+        mod = 10**9 + 7
+        maxL = n // 3 * 2 + n % 3
         # 计算只有a和p的情况或者没有a
-        res = 1+n
-        for i in range(1, maxL+1):
+        res = 1 + n
+        for i in range(1, maxL + 1):
             # 从maxl中选出i个位置用来替换成L
             a = scipy.special.comb(maxL, i) % mod
             # 将 一个 p 替换成 a 和不替换的情况数量
-            b = n-i+1
+            b = n - i + 1
             # 计算总数
-            res += (a*b) % mod
+            res += (a * b) % mod
         return res
 
     # 345. 反转字符串中的元音字母
     def reverseVowels(self, s: str) -> str:
         target = list(s)
-        L, R = 0, target.__len__()-1
+        L, R = 0, target.__len__() - 1
         vowels = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
         while L < R:
             while L < R and vowels.count(target[L]) == 0:
@@ -104,3 +104,66 @@ class Solution:
 
 s = Solution()
 print(s.reverseVowels("hello"))
+   # 787. K 站中转内最便宜的航班
+   def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        maxcnt = 1000000 * n
+        dp = [[maxcnt] * n for i in range(k + 2)]
+        dp[0][src] = 0
+        for t in range(k + 2):
+            for j, i, price in flights:
+                dp[t][i] = min(dp[t][i], dp[t - 1][j] + price)
+        res = min(dp[t][dst] for t in range(k + 2))
+        return -1 if res == maxcnt else res
+
+    # 797. 所有可能的路径
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        n = len(graph)
+        vist, res = [0 for _ in range(n)], []
+        vist[0] = 1
+
+        def DFS_797(vist: List[int], index: int, cur: List[int]):
+            if index == n -1:
+                res.append([_ for _ in cur])
+                return
+            for i in graph[index]:
+                if vist[i] == 0:
+                    vist[i] = 1
+                    cur.append(i)
+                    DFS_797(vist, i, cur)
+                    vist[i] = 0
+                    cur.pop()
+
+        DFS_797(vist, 0, [0])
+        return res
+
+    # 881. 救生艇
+    def numRescueBoats(self, people: List[int], limit: int) -> int:
+        def match(table: dict, cnt: int):
+            while cnt > 0:
+                if table.get(cnt) and table.get(cnt) > 0:
+                    table[cnt] -= 1
+                    break
+                cnt -= 1
+        table, res = dict(), 0
+        for i in people:
+            table[i] = table[i] +1 if table.get(i) else 1
+        for i in people:
+            if table[i] != 0:
+                table[i] -= 1
+                match(table, limit -i)
+                res += 1
+        return res
+
+    # 1109. 航班预订统计
+    def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
+        res = [0] *n
+        for first, last, val in bookings:
+            res[first] += val
+            if last < n:
+                res[last] -= val
+        for i in range(1, n):
+            res[i] += res[i -1]
+
+
+s = Solution()
+print(s.corpFlightBookings([[1, 1, 10], [2, 3, 20], [2, 4, 25]], 5))

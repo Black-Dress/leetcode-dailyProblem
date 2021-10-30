@@ -1,5 +1,5 @@
 from typing import List
-from Modules.NodeHealper import ListNode
+from NodeHelper.ListNode import ListNode
 # class ListNode:
 #     def __init__(self, x):
 #         self.val = x
@@ -22,7 +22,7 @@ class Solution:
         for i in range(nums.__len__()):
             count += 1 if nums[i] == 1 else -1
             if map.get(count) is not None:
-                res = max(i-map[count], res)
+                res = max(i - map[count], res)
             else:
                 map[count] = i
         return res

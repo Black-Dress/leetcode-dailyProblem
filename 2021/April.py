@@ -1,5 +1,5 @@
 import functools
-from Modules.NodeHealper import TreeNode
+from NodeHelper.TreeNode import TreeNode
 from typing import List
 
 
@@ -8,19 +8,19 @@ class Solution:
     def clumsy(self, N: int) -> int:
         def caculator(a: int, b: int, oper: str) -> int:
             if oper == "*":
-                return a*b
+                return a * b
             elif oper == "/":
-                return a//b
+                return a // b
             elif oper == "+":
-                return a+b
+                return a + b
             elif oper == "-":
-                return a-b
+                return a - b
             else:
                 return 0
         operator = ["*", "/", "+", "-"]
         stack1, stack2 = [N], []
         index = 0
-        for i in range(N-1, 0, -1):
+        for i in range(N - 1, 0, -1):
             if operator[index % 4] == "*" or operator[index % 4] == "/":
                 stack1.append(caculator(stack1.pop(), i, operator[index % 4]))
             else:
@@ -36,7 +36,7 @@ class Solution:
     def removeDuplicates2(self, nums: List[int]) -> int:
         count, i = 1, 1
         while i < len(nums):
-            count = count+1 if nums[i] == nums[i-1] else 1
+            count = count + 1 if nums[i] == nums[i - 1] else 1
             if count > 2:
                 nums.pop(i)
                 i -= 1
@@ -48,43 +48,43 @@ class Solution:
         def binary_search(nums: list, target: int, L: int, r: int) -> bool:
             if L > r:
                 return False
-            mid = (L+r)//2
+            mid = (L + r) // 2
             if target < nums[mid]:
-                return binary_search(nums, target, L, mid-1)
+                return binary_search(nums, target, L, mid - 1)
             elif nums[mid] == target:
                 return True
             else:
-                return binary_search(nums, target, mid+1, r)
+                return binary_search(nums, target, mid + 1, r)
         index, n = 0, len(nums)
         for i in range(1, n):
-            if nums[i] < nums[i-1]:
+            if nums[i] < nums[i - 1]:
                 index = i
                 break
         if target >= nums[0]:
-            return binary_search(nums, target, 0, index-1 if index > 0 else n-1)
-        return binary_search(nums, target, index if index > 0 else 0, n-1)
+            return binary_search(nums, target, 0, index - 1 if index > 0 else n - 1)
+        return binary_search(nums, target, index if index > 0 else 0, n - 1)
 
     # 153. 寻找旋转排序数组中的最小值
     def findMin(self, nums: List[int]) -> int:
-        L, r = 0, len(nums)-1
+        L, r = 0, len(nums) - 1
         while L < r:
             if nums[L] <= nums[r]:
                 return nums[L]
             else:
-                mid = (L+r) >> 1
+                mid = (L + r) >> 1
                 if nums[mid] > nums[r]:
-                    L = mid+1
+                    L = mid + 1
                 else:
                     r = mid
         return nums[L]
 
     # 154. 寻找旋转排序数组中的最小值 II
     def findMin2(self, nums: List[int]) -> int:
-        L, R = 0, len(nums)-1
+        L, R = 0, len(nums) - 1
         while L < R:
-            mid = (L+R) >> 1
+            mid = (L + R) >> 1
             if nums[mid] > nums[R]:
-                L = mid+1
+                L = mid + 1
             elif nums[mid] < nums[R]:
                 R = mid
             else:
@@ -93,7 +93,7 @@ class Solution:
 
     # 179 最大数
     def largestNumber(self, nums: List[int]) -> str:
-        nums.sort(key=functools.cmp_to_key(lambda x, y: 1 if str(x)+str(y) < str(y)+str(y) else -1))
+        nums.sort(key=functools.cmp_to_key(lambda x, y: 1 if str(x) + str(y) < str(y) + str(y) else -1))
         res = "".join(list(map(str, nums)))
         return "0" if res.startswith("0") else res
 
@@ -108,7 +108,7 @@ class Solution:
             DFS(root=root.left, pre=pre)
 
             if pre != -1:
-                minVal = min(minVal, root.val-pre)
+                minVal = min(minVal, root.val - pre)
             pre = root.val
 
             DFS(root=root.right, pre=pre)
@@ -129,13 +129,13 @@ class Solution:
             return max(nums[0], nums[-1])
         # 第一个不选
         for i in range(2, n):
-            dp1[i] = max(dp1[i], dp1[i-1])
+            dp1[i] = max(dp1[i], dp1[i - 1])
             if i >= 3:
-                dp1[i] = max(dp1[i-1], dp1[i-2]+nums[i])
+                dp1[i] = max(dp1[i - 1], dp1[i - 2] + nums[i])
         # 最后一个不选
         dp2[1] = max(dp2[0], dp2[1])
-        for i in range(2, n-1):
-            dp2[i] = max(dp2[i-1], dp2[i-2]+nums[i])
+        for i in range(2, n - 1):
+            dp2[i] = max(dp2[i - 1], dp2[i - 2] + nums[i])
 
         return max(dp1[-1], dp2[-2])
 
@@ -143,7 +143,7 @@ class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
         i = 1
         while i < len(nums):
-            if nums[i] == nums[i-1]:
+            if nums[i] == nums[i - 1]:
                 nums.pop(i)
             else:
                 i += 1
@@ -155,9 +155,9 @@ class Solution:
             res = [0 for i in range(origin.__len__())]
             k, res[0] = -1, -1
             for i in range(1, origin.__len__()):
-                while k > -1 and origin[k+1] != origin[i]:
+                while k > -1 and origin[k + 1] != origin[i]:
                     k = res[k]
-                if origin[i] == origin[k+1]:
+                if origin[i] == origin[k + 1]:
                     k += 1
                 res[i] = k
             return res
@@ -167,14 +167,14 @@ class Solution:
         next, k = kmp_getNext(needle), -1
         res = 1
         for i in range(haystack.__len__()):
-            while k > -1 and needle[k+1] != haystack[i]:
+            while k > -1 and needle[k + 1] != haystack[i]:
                 k = next[k]
-            if needle[k+1] == haystack[i]:
+            if needle[k + 1] == haystack[i]:
                 k += 1
-            if k+1 >= needle.__len__():
-                res = i - needle.__len__()+1
+            if k + 1 >= needle.__len__():
+                res = i - needle.__len__() + 1
                 break
-        return res if k+1 >= needle.__len__() else -1
+        return res if k + 1 >= needle.__len__() else -1
 
     # 368.最大整除法
     def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
@@ -184,18 +184,18 @@ class Solution:
         for i in range(1, nums.__len__()):
             for j in range(0, i):
                 if nums[i] % dp[j][0] == 0 and nums[i] % dp[j][-1] == 0:
-                    dp[i] = dp[j] + [nums[i]] if dp[i].__len__() < len(dp[j]+[nums[i]])else dp[i]
+                    dp[i] = dp[j] + [nums[i]] if dp[i].__len__() < len(dp[j] + [nums[i]])else dp[i]
             if dp[res].__len__() < dp[i].__len__():
                 res = i
         return dp[res]
 
     # 377.组合总数
     def combinationSum4(self, nums: List[int], target: int) -> int:
-        dp = [1]+[0]*target
-        for i in range(1, target+1):
+        dp = [1] + [0] * target
+        for i in range(1, target + 1):
             for num in nums:
                 if num <= i:
-                    dp[i] += dp[i-num]
+                    dp[i] += dp[i - num]
         return dp[target]
 
     # 897.递增顺序搜索树
@@ -227,10 +227,10 @@ class Solution:
             return d
         L, r = max(weights), sum(weights)
         while L < r:
-            mid = (L+r) >> 1
+            mid = (L + r) >> 1
             days = count(mid, weights)
             if days > D:
-                L = mid+1
+                L = mid + 1
             else:
                 r = mid
         return L
