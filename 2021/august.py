@@ -101,11 +101,8 @@ class Solution:
                 R -= 1
         return "".join(target)
 
-
-s = Solution()
-print(s.reverseVowels("hello"))
-   # 787. K 站中转内最便宜的航班
-   def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+    # 787. K 站中转内最便宜的航班
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
         maxcnt = 1000000 * n
         dp = [[maxcnt] * n for i in range(k + 2)]
         dp[0][src] = 0
@@ -122,7 +119,7 @@ print(s.reverseVowels("hello"))
         vist[0] = 1
 
         def DFS_797(vist: List[int], index: int, cur: List[int]):
-            if index == n -1:
+            if index == n - 1:
                 res.append([_ for _ in cur])
                 return
             for i in graph[index]:
@@ -146,23 +143,23 @@ print(s.reverseVowels("hello"))
                 cnt -= 1
         table, res = dict(), 0
         for i in people:
-            table[i] = table[i] +1 if table.get(i) else 1
+            table[i] = table[i] + 1 if table.get(i) else 1
         for i in people:
             if table[i] != 0:
                 table[i] -= 1
-                match(table, limit -i)
+                match(table, limit - i)
                 res += 1
         return res
 
     # 1109. 航班预订统计
     def corpFlightBookings(self, bookings: List[List[int]], n: int) -> List[int]:
-        res = [0] *n
+        res = [0] * n
         for first, last, val in bookings:
             res[first] += val
             if last < n:
                 res[last] -= val
         for i in range(1, n):
-            res[i] += res[i -1]
+            res[i] += res[i - 1]
 
 
 s = Solution()
