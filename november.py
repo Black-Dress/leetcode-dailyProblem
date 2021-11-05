@@ -1,3 +1,4 @@
+import collections
 from typing import Collection, List
 
 
@@ -27,3 +28,25 @@ class Solution:
             else:
                 return True
         return False
+
+    # 1218. 最长定差子序列
+    def longestSubsequence(self, arr: List[int], difference: int) -> int:
+        # dp[i] 表示 （0，i）的最长定差子序列的长度
+        # 使用 map 记录 arr[i] 在 dp 中靠右的位置
+        # dp, n = [1] * arr.__len__(), len(arr)
+        # table = collections.defaultdict(int)
+        # for i in range(n):
+        #     if table.get(arr[i] - difference) is not None:
+        #         j = table[arr[i] - difference]
+        #         dp[i] = dp[j] + 1
+        #     table[arr[i]] = i
+        # return max(dp)
+        dp = collections.defaultdict(int)
+        for v in arr:
+            # defaultdict 不存在的时候返回0
+            dp[v] = dp[v - difference] + 1
+        return max(dp.values())
+
+
+s = Solution()
+print(s.longestSubsequence([1, 2, 3, 4], 1))
