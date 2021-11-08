@@ -47,6 +47,28 @@ class Solution:
             dp[v] = dp[v - difference] + 1
         return max(dp.values())
 
+    # 299. 猜数字游戏
+    def getHint(self, secret: str, guess: str) -> str:
+        # 如何找到 数值相同但是位置不同的数字
+        bulls, cows = 0, 0
+        table = collections.defaultdict(list)
+        n = len(secret)
+        isbull = [0] * n
+        for i in range(n):
+            table[secret[i]].append(i)
+        # 更新bulls
+        for i in range(n):
+            if secret[i] == guess[i]:
+                bulls += 1
+                table[secret[i]].pop()
+                isbull[i] = 1
+        for i in range(n):
+            if table[guess[i]].__len__() != 0 and isbull[i] == 0:
+                cows += 1
+                table[guess[i]].pop()
+
+        return str(bulls) + "A" + str(cows) + "B"
+
 
 s = Solution()
-print(s.longestSubsequence([1, 2, 3, 4], 1))
+print(s.getHint("1122", "1222"))
