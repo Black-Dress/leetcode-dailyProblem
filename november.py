@@ -69,6 +69,18 @@ class Solution:
 
         return str(bulls) + "A" + str(cows) + "B"
 
+    # 495. 提莫攻击
+    def findPoisonedDuration(self, timeSeries: List[int], duration: int) -> int:
+        begin, end = timeSeries[0], timeSeries[0] + duration
+        res = 0
+        for time in timeSeries[1:]:
+            if time > end:
+                res += end - begin
+                begin, end = time, time + duration
+            else:
+                end = max(end, time + duration)
+        return res + end - begin
+
 
 s = Solution()
-print(s.getHint("1122", "1222"))
+print(s.findPoisonedDuration([1], 2))
