@@ -81,6 +81,18 @@ class Solution:
                 end = max(end, time + duration)
         return res + end - begin
 
+    # 375. 猜数字大小 II
+    def getMoneyAmount(self, n: int) -> int:
+        # dp 状态转移方程
+        # 从[i,j]猜测一个k，需要考虑最坏的情况 所以max
+        # 但是需要最优解所以在k的循环中时提取最小解
+        # dp[i][j] = k+max(dp[i][k-1],dp[k+1][j])
+        dp = [[0] * (n + 1) for i in range(n + 1)]
+        for i in range(n - 1, 0, -1):
+            for j in range(i + 1, n + 1, 1):
+                dp[i][j] = min(k + max(dp[i][k - 1], dp[k + 1][j]) for k in range(i, j))
+        return dp[1][n]
+
 
 s = Solution()
 print(s.findPoisonedDuration([1], 2))
