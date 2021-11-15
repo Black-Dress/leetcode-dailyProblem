@@ -1,5 +1,6 @@
 import collections
 from typing import Collection, List
+from math import sqrt
 
 
 class Solution:
@@ -93,6 +94,27 @@ class Solution:
                 dp[i][j] = min(k + max(dp[i][k - 1], dp[k + 1][j]) for k in range(i, j))
         return dp[1][n]
 
+    # 319. 灯泡开关
+    def bulbSwitch(self, n: int) -> int:
+        # 分解质因数
+        # 超时
+        # def func(num: int) -> int:
+        #     cnt, res = collections.defaultdict(int), 1
+        #     for i in range(2, num + 1):
+        #         while num != 0 and num % i == 0:
+        #             cnt[i] += 1
+        #             num /= i
+        #     for k, v in cnt.items():
+        #         res *= (v + 1)
+        #     return res
+        # res = 0
+        # for i in range(1, n + 1):
+        #     if func(i) % 2 != 0:
+        #         res += 1
+        # return res
+        # 正解
+        return int(sqrt(n + 0.5))
+
 
 s = Solution()
-print(s.findPoisonedDuration([1], 2))
+print(s.bulbSwitch(3))
