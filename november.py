@@ -1,6 +1,7 @@
 import collections
 from typing import Collection, List
 from math import sqrt
+from functools import reduce
 
 
 class Solution:
@@ -115,6 +116,17 @@ class Solution:
         # 正解
         return int(sqrt(n + 0.5))
 
+    # 318. 最大单词长度乘积
+    def maxProduct(self, words: List[str]) -> int:
+        # reduce(lambda,iterable,initial)
+        # a 是累计值,b 是迭代值
+        mask, res = [reduce(lambda a, b: a | (1 << (ord(b) - ord('a'))), i, 0) for i in words], 0
+        for a in range(words.__len__()):
+            for b in range(a + 1, words.__len__()):
+                if(mask[a] & mask[b] == 0):
+                    res = max(res, words[a].__len__() * words[b].__len__())
+        return res
+
 
 s = Solution()
-print(s.bulbSwitch(3))
+print(s.maxProduct(["a", "ab", "abc", "d", "cd", "bcd", "abcd"]))
