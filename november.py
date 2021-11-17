@@ -116,17 +116,28 @@ class Solution:
         # 正解
         return int(sqrt(n + 0.5))
 
-    # 318. 最大单词长度乘积
-    def maxProduct(self, words: List[str]) -> int:
-        # reduce(lambda,iterable,initial)
-        # a 是累计值,b 是迭代值
-        mask, res = [reduce(lambda a, b: a | (1 << (ord(b) - ord('a'))), i, 0) for i in words], 0
-        for a in range(words.__len__()):
-            for b in range(a + 1, words.__len__()):
-                if(mask[a] & mask[b] == 0):
-                    res = max(res, words[a].__len__() * words[b].__len__())
+    # # 318. 最大单词长度乘积
+    # def maxProduct(self, words: List[str]) -> int:
+    #     # reduce(lambda,iterable,initial)
+    #     # a 是累计值,b 是迭代值
+    #     mask, res = [reduce(lambda a, b: a | (1 << (ord(b) - ord('a'))), i, 0) for i in words], 0
+    #     for a in range(words.__len__()):
+    #         for b in range(a + 1, words.__len__()):
+    #             if(mask[a] & mask[b] == 0):
+    #                 res = max(res, words[a].__len__() * words[b].__len__())
+    #     return res
+
+    # 152. 乘积最大子数组
+    def maxProduct(self, nums: List[int]) -> int:
+        # dp[i][0] 表示0~i的最大值
+        # dp[i][1] 表示0~i的最小值
+        dp, res = [[i, i] for i in nums], nums[0]
+        for i in range(1, len(nums)):
+            dp[i][0] = max(dp[i - 1][0] * nums[i], dp[i - 1][1] * nums[i], nums[i])
+            dp[i][1] = min(dp[i - 1][0] * nums[i], dp[i - 1][1] * nums[i], nums[i])
+            res = max(res, dp[i][0])
         return res
 
 
 s = Solution()
-print(s.maxProduct(["a", "ab", "abc", "d", "cd", "bcd", "abcd"]))
+print(s.maxProduct([2, 0, 1]))
