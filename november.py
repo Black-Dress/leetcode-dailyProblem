@@ -2,6 +2,7 @@ import collections
 from typing import Collection, List
 from math import sqrt
 from functools import reduce
+from NodeHelper.TreeNode import TreeNode
 
 
 class Solution:
@@ -138,6 +139,21 @@ class Solution:
             res = max(res, dp[i][0])
         return res
 
+    # 563. 二叉树的坡度
+    def findTilt(self, root: TreeNode) -> int:
+        res = 0
+
+        def solve(root: TreeNode) -> int:
+            nonlocal res
+            if root is None:
+                return 0
+            l, r = solve(root.left), solve(root.right)
+            res += abs(l - r)
+            return l + r + root.val
+        solve(root)
+        return res
+
 
 s = Solution()
-print(s.maxProduct([2, 0, 1]))
+t = TreeNode.createTreeNode([21, 7, 14, 1, 1, 2, 2, 3, 3])
+print(s.findTilt(t))
