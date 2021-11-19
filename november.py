@@ -153,7 +153,18 @@ class Solution:
         solve(root)
         return res
 
+    # 397. 整数替换
+    def integerReplacement(self, n: int) -> int:
+        res = 0
+        while n != 1:
+            if n & 1 != 0:
+                n += 1 if (n >> 1) & 1 != 0 and n != 3 else -1
+            else:
+                n >>= 1
+            res += 1
+        return res
+
 
 s = Solution()
 t = TreeNode.createTreeNode([21, 7, 14, 1, 1, 2, 2, 3, 3])
-print(s.findTilt(t))
+print(s.integerReplacement(3))
