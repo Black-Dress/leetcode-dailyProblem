@@ -5,6 +5,12 @@ from functools import reduce
 from NodeHelper.TreeNode import TreeNode
 
 
+class Node:
+    def __init__(self, val=None, children=None):
+        self.val = val
+        self.children = children
+
+
 class Solution:
     # 575. 分糖果
     def distributeCandies(self, candyType: List[int]) -> int:
@@ -164,7 +170,18 @@ class Solution:
             res += 1
         return res
 
+    # 559. N 叉树的最大深度
+    def maxDepth(self, root: Node) -> int:
+        if root.children is None:
+            return 1
+        return max(self.maxDepth(child) for child in root.children) + 1
+
 
 s = Solution()
-t = TreeNode.createTreeNode([21, 7, 14, 1, 1, 2, 2, 3, 3])
-print(s.integerReplacement(3))
+t = Node(1, None)
+a = [Node(i, None) for i in range(2, 5)]
+b = [Node(i, None) for i in [5, 6]]
+t.children = a
+a[1].children = b
+
+print(s.maxDepth(t))
