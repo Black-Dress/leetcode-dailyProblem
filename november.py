@@ -176,6 +176,15 @@ class Solution:
             return 1
         return max(self.maxDepth(child) for child in root.children) + 1
 
+    # 859. 亲密字符串
+    def buddyStrings(self, s: str, goal: str) -> bool:
+        if len(s) != len(goal):
+            return False
+        if s == goal and len(set(s)) < len(goal):
+            return True
+        dif = [(a, b) for a, b in zip(s, goal) if a != b]
+        return len(dif) == 2 and dif[0] == dif[1][::-1]
+
 
 s = Solution()
 t = Node(1, None)
