@@ -1,7 +1,8 @@
 import collections
-from typing import Collection, List
-from math import sqrt
 from functools import reduce
+from math import sqrt
+from typing import Collection, List
+
 from NodeHelper.TreeNode import TreeNode
 
 
@@ -185,6 +186,22 @@ class Solution:
         dif = [(a, b) for a, b in zip(s, goal) if a != b]
         return len(dif) == 2 and dif[0] == dif[1][::-1]
 
+    # 400. 第 N 位数字
+    def findNthDigit(self, n: int) -> int:
+        # 1-9 1*9*10^0
+        # 10-99 2*9*10^1
+        # 100-999 3*9*10^2
+        # 获得大致区间
+        cnt = 1
+        while cnt * 9 * pow(10, cnt - 1) < n:
+            cnt += 1
+        # index 为 n 在区间内是第几个数
+        index = n - sum([i * 9 * pow(10, i - 1) for i in range(1, cnt)])
+        # num 为 n 在区间内的起点数字
+        num = 1 * pow(10, cnt - 1) - 1 + index // cnt
+        # 返回余数
+        return int(str(num)[-1] if index % cnt == 0 else str(num + 1)[(index % cnt) - 1])
+
 
 s = Solution()
 t = Node(1, None)
@@ -193,4 +210,4 @@ b = [Node(i, None) for i in [5, 6]]
 t.children = a
 a[1].children = b
 
-print(s.maxDepth(t))
+print(s.findNthDigit(1000))
