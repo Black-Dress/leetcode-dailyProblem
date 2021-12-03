@@ -1,3 +1,7 @@
+from typing import List
+from queue import PriorityQueue
+
+
 class Solution:
     # 1446. 连续字符
     def maxPower(self, s: str) -> int:
@@ -10,6 +14,16 @@ class Solution:
             maxnum = max(cur, maxnum)
         return maxnum
 
+    # 1005. K 次取反后最大化的数组和
+    def largestSumAfterKNegations(self, nums: List[int], k: int) -> int:
+        minqueue = PriorityQueue()
+        for num in nums:
+            minqueue.put(num)
+        for i in range(k):
+            item = minqueue.get()
+            minqueue.put(-item)
+        return sum(minqueue.queue)
+
 
 s = Solution()
-print(s.maxPower("hooraaaaaaaaaaay"))
+print(s.largestSumAfterKNegations([2, -3, -1, 5, -4], 2))
