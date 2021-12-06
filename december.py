@@ -24,6 +24,14 @@ class Solution:
             minqueue.put(-item)
         return sum(minqueue.queue)
 
+    # 1816. 截断句子
+    def truncateSentence(self, s: str, k: int) -> str:
+        index = 0
+        while k != 0:
+            k -= 1 if s[index] == ' ' or index == len(s) - 1 else 0
+            index += 1
+        return s[:index].strip()
+
 
 s = Solution()
-print(s.largestSumAfterKNegations([2, -3, -1, 5, -4], 2))
+print(s.truncateSentence('hello a b', 2))
