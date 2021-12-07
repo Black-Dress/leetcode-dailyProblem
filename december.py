@@ -1,5 +1,5 @@
 from typing import List
-from queue import PriorityQueue
+from queue import PriorityQueue, Queue
 
 
 class Solution:
@@ -32,6 +32,32 @@ class Solution:
             index += 1
         return s[:index].strip()
 
+    # 1034. 边界着色
+    def colorBorder(self, grid: List[List[int]], row: int, col: int, color: int) -> List[List[int]]:
+        que, dx, dy = set(), [0, 0, 1, -1], [1, -1, 0, 0]
+        m, n, origin = len(grid), len(grid[0]), grid[row][col]
+        vist = [[0 for i in range(n)] for j in range(m)]
+        que.add((row, col))
+        vist[row][col] = 1
+        while len(que) != 0:
+            item = que.pop()
+            # 判断是否需要变更颜色
+            for i in range(4):
+                x, y = item[0] + dx[i], item[1] + dy[i]
+                # 在边界
+                if x >= m or x < 0 or y >= n or y < 0:
+                    grid[item[0]][item[1]] = color
+                else:
+                    # 在连通边界
+                    if grid[x][y] != origin and vist[x][y] == 0:
+                        grid[item[0]][item[1]] = color
+                    else:
+                        # 没有访问过，但是连通
+                        if vist[x][y] == 0:
+                            que.add((x, y))
+                        vist[x][y] = 1
+        return grid
+
 
 s = Solution()
-print(s.truncateSentence('hello a b', 2))
+print(s.colorBorder([[1, 1, 1, 0], [1, 1, 1, 0], [1, 1, 1, 0]], 1, 1, 2))
