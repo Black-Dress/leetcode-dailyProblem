@@ -58,6 +58,30 @@ class Solution:
                         vist[x][y] = 1
         return grid
 
+    # 689. 三个无重叠子数组的最大和
+    def maxSumOfThreeSubarrays(self, nums: List[int], k: int) -> List[int]:
+        # sum[i] 指 nums[i,k] 的和
+        # l[i] = k 表示 0~i 最大sum[k],0<k<i
+        # r[i] = k 表示 i~n-1 最大sum[k],i<k<n-1
+        # 枚举所有的 i 得到 max(sum[l[i-k]]+sum[i]+sum[r[i+k]])
+        # 只有比maxnum大的时候才更新res，就能够维护最小的字典序
+        # 需要利用滑动窗口计算和，不然会超时
+        sum_ = [sum(nums[i] for i in range(k))]
+        for i in range(1, len(nums) - k + 1):
+            sum_.append(sum_[-1] - nums[i - 1] + nums[i + k - 1])
+        l, r = [0 for i in range(len(sum_))], [len(nums) - k for i in range(len(sum_))]
+        for i in range(1, len(sum_)):
+            l[i] = i if sum_[i] > sum_[l[i - 1]] else l[i - 1]
+        for i in range(len(sum_) - 2, -1, -1):
+            r[i] = i if sum_[i] >= sum_[r[i + 1]] else r[i + 1]
+        maxnum, res = 0, []
+        for i in range(k, len(sum_) - k):
+            cur = sum_[i] + sum_[l[i - k]] + sum_[r[i + k]]
+            if cur > maxnum:
+                maxnum = cur
+                res = [l[i - k], i, r[i + k]]
+        return res
+
 
 s = Solution()
-print(s.colorBorder([[1, 1, 1, 0], [1, 1, 1, 0], [1, 1, 1, 0]], 1, 1, 2))
+print(s.maxSumOfThreeSubarrays([1, 2, 1, 2, 6, 7, 5, 1], 2))
