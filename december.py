@@ -94,6 +94,20 @@ class Solution:
                 res += min(row[i], col[j]) - grid[i][j]
         return res
 
+    # 198. 打家劫舍
+    def rob(self, nums: List[int]) -> int:
+        # dp[i][0] 表示 0—i 且 i 不选能够偷盗的最大金额
+        # dp[i][1]表示 0-i 且 i 选择能够偷盗的最大金额
+        # dp[i][0] = max(dp[i-1][1],dp[i-1][0])
+        # dp[i][1] = dp[i-1][0]+nums[i]
+        n = len(nums)
+        dp = [[0, 0] for i in range(n)]
+        dp[0][1] = nums[0]
+        for i in range(1, n):
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])
+            dp[i][1] = dp[i - 1][0] + nums[i]
+        return max(dp[n - 1][0], dp[n - 1][1])
+
 
 s = Solution()
-print(s.maxIncreaseKeepingSkyline([[3, 0, 8, 4], [2, 4, 5, 7], [9, 2, 6, 3], [0, 3, 1, 0]]))
+print(s.rob([100, 2, 3, 100, 1]))
