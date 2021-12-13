@@ -82,6 +82,18 @@ class Solution:
                 res = [l[i - k], i, r[i + k]]
         return res
 
+    # 807. 保持城市天际线
+    def maxIncreaseKeepingSkyline(self, grid: List[List[int]]) -> int:
+        n, res = len(grid), 0
+        row, col = [0 for i in range(n)], [0 for i in range(n)]
+        for i in range(n):
+            row[i] = max(grid[i])
+            col[i] = max(grid[j][i] for j in range(n))
+        for i in range(n):
+            for j in range(n):
+                res += min(row[i], col[j]) - grid[i][j]
+        return res
+
 
 s = Solution()
-print(s.maxSumOfThreeSubarrays([1, 2, 1, 2, 6, 7, 5, 1], 2))
+print(s.maxIncreaseKeepingSkyline([[3, 0, 8, 4], [2, 4, 5, 7], [9, 2, 6, 3], [0, 3, 1, 0]]))
