@@ -97,16 +97,23 @@ class Solution:
     # 198. 打家劫舍
     def rob(self, nums: List[int]) -> int:
         # dp[i][0] 表示 0—i 且 i 不选能够偷盗的最大金额
-        # dp[i][1]表示 0-i 且 i 选择能够偷盗的最大金额
+        # dp[i][1] 表示 0-i 且 i 选择能够偷盗的最大金额
         # dp[i][0] = max(dp[i-1][1],dp[i-1][0])
         # dp[i][1] = dp[i-1][0]+nums[i]
         n = len(nums)
-        dp = [[0, 0] for i in range(n)]
-        dp[0][1] = nums[0]
-        for i in range(1, n):
-            dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])
-            dp[i][1] = dp[i - 1][0] + nums[i]
-        return max(dp[n - 1][0], dp[n - 1][1])
+        # dp = [[0, 0] for i in range(n)]
+        # dp[0][1] = nums[0]
+        # for i in range(1, n):
+        #     dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])
+        #     dp[i][1] = dp[i - 1][0] + nums[i]
+        # return max(dp[n - 1][0], dp[n - 1][1])
+        if n == 1:
+            return nums[0]
+        dp = [0 for i in range(n)]
+        dp[0], dp[1] = nums[0], max(nums[0], nums[1])
+        for i in range(2, n):
+            dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
+        return dp[n - 1]
 
 
 s = Solution()
