@@ -1,5 +1,6 @@
 from typing import List
 from queue import PriorityQueue, Queue
+import heapq
 
 
 class Solution:
@@ -115,6 +116,23 @@ class Solution:
             dp[i] = max(dp[i - 2] + nums[i], dp[i - 1])
         return dp[n - 1]
 
+    # 630. 课程表 III
+    def scheduleCourse(self, courses: List[List[int]]) -> int:
+        # 贪心先关闭就先开始学习
+        # 如果某一个东西不能学习，判断结果中的持续时间最长的和当前课程进行比较，替换较小持续时长即可
+        # python 是小根堆
+        courses.sort(key=lambda x: x[1])
+        res, cur = [], 0
+        for d, l in courses:
+            if cur + d <= l:
+                cur += d
+                heapq.heappush(res, -d)
+            elif len(res) != 0 and res[0] < -d:
+                cur -= -res[0] - d
+                heapq.heappop(res)
+                heapq.heappush(res, -d)
+        return len(res)
+
 
 s = Solution()
-print(s.rob([100, 2, 3, 100, 1]))
+print(s.scheduleCourse([[1, 2], [2, 13], [10, 12], [20, 32]]))
