@@ -1,6 +1,7 @@
 from typing import List
 from queue import PriorityQueue, Queue
 import heapq
+import sys
 
 
 class Solution:
@@ -118,7 +119,7 @@ class Solution:
 
     # 630. 课程表 III
     def scheduleCourse(self, courses: List[List[int]]) -> int:
-        # 贪心先关闭就先开始学习
+        # 贪心：先关闭就先开始学习
         # 如果某一个东西不能学习，判断结果中的持续时间最长的和当前课程进行比较，替换较小持续时长即可
         # python 是小根堆
         courses.sort(key=lambda x: x[1])
@@ -133,6 +134,31 @@ class Solution:
                 heapq.heappush(res, -d)
         return len(res)
 
+    # 851. 喧闹和富有
+    def loudAndRich(self, richer: List[List[int]], quiet: List[int]) -> List[int]:
+        # 利用dict 存储【直接】比 person i 更有钱的人的下标，或者n*n的矩阵进行存储
+        # 最后遍历所有的人，在dict中进行深度遍历得到最小quite
+        n = len(quiet)
+        grid, res = [[0] * n for i in range(n)], [i for i in range(n)]
+        vist = [0] * n
+        for i, j in richer:
+            grid[j][i] = 1
+
+        # 深度优先遍历查询所有比index小的值,并且更新结果
+        def DFS(grid: List[List[int]], index: int, res: List[int]) -> int:
+            if vist[index] == 1:
+                return res[index]
+            for i in range(n):
+                if grid[index][i] != 0:
+                    var = DFS(grid, i, res)
+                    res[index] = var if quiet[var] < quiet[res[index]] else res[index]
+            vist[index] = 1
+            return res[index]
+
+        for i in range(n):
+            DFS(grid, i, res)
+        return res
+
 
 s = Solution()
-print(s.scheduleCourse([[1, 2], [2, 13], [10, 12], [20, 32]]))
+print(s.loudAndRich([], [0]))
