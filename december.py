@@ -1,4 +1,5 @@
-from typing import List
+import collections
+from typing import List, Set
 from queue import PriorityQueue, Queue
 import heapq
 import sys
@@ -159,6 +160,25 @@ class Solution:
             DFS(grid, i, res)
         return res
 
+    # 15. 三数之和
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        nums.sort()
+        res, n = list(), len(nums)
+        for i in range(n):
+            if i > 0 and nums[i] == nums[i - 1]:
+                continue
+            c = n - 1
+            for j in range(i + 1, n):
+                if j > i + 1 and nums[j] == nums[j - 1]:
+                    continue
+                if nums[i] + nums[j] + nums[c] > 0:
+                    c -= 1
+                if j >= c:
+                    break
+                if nums[i] + nums[j] + nums[c] == 0:
+                    res.append([nums[i], nums[j], nums[c]])
+        return res
+
 
 s = Solution()
-print(s.loudAndRich([], [0]))
+print(s.threeSum([1, -1, -1, 0]))
