@@ -171,7 +171,7 @@ class Solution:
             for j in range(i + 1, n):
                 if j > i + 1 and nums[j] == nums[j - 1]:
                     continue
-                if nums[i] + nums[j] + nums[c] > 0:
+                while j < c and nums[i] + nums[j] + nums[c] > 0:
                     c -= 1
                 if j >= c:
                     break
