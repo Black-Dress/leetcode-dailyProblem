@@ -179,6 +179,14 @@ class Solution:
                     res.append([nums[i], nums[j], nums[c]])
         return res
 
+    # 1518. 换酒问题
+    def numWaterBottles(self, numBottles: int, numExchange: int) -> int:
+        res = numBottles
+        while numBottles >= numExchange:
+            res += numBottles // numExchange
+            numBottles = numBottles % numExchange + numBottles // numExchange
+        return res
+
 
 s = Solution()
-print(s.threeSum([1, -1, -1, 0]))
+print(s.numWaterBottles(15, 4))
