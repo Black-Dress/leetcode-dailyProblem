@@ -187,6 +187,24 @@ class Solution:
             numBottles = numBottles % numExchange + numBottles // numExchange
         return res
 
+    # 419. 甲板上的战舰
+    def countBattleships(self, board: List[List[str]]) -> int:
+        # 按照从左到右 从上到下的顺序进行搜索，
+        # 若[i][j]=='X',判断左边和上边是否出现了X
+        # 若出现x，则bord[i]不是第一个点
+        # 若没有出现x 则 res++
+        m, n = len(board), len(board[0])
+        res = 0
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] == 'X':
+                    # 上
+                    f1 = True if i == 0 or board[i - 1][j] == '.' else False
+                    # 左
+                    f2 = True if j == 0 or board[i][j - 1] == '.' else False
+                    res += 1 if f1 and f2 else 0
+        return res
+
 
 s = Solution()
-print(s.numWaterBottles(15, 4))
+print(s.countBattleships([["X", ".", ".", "X"], [".", ".", ".", "X"], [".", "X", ".", "X"], [".", "X", ".", "."]]))
