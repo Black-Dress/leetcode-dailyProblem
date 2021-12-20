@@ -187,7 +187,7 @@ class Solution:
             numBottles = numBottles % numExchange + numBottles // numExchange
         return res
 
-    # 419. 甲板上的战舰
+        # 419. 甲板上的战舰
     def countBattleships(self, board: List[List[str]]) -> int:
         # 按照从左到右 从上到下的顺序进行搜索，
         # 若[i][j]=='X',判断左边和上边是否出现了X
@@ -205,6 +205,29 @@ class Solution:
                     res += 1 if f1 and f2 else 0
         return res
 
+    # 475. 供暖器
+    def findRadius(self, houses: List[int], heaters: List[int]) -> int:
+        # 针对于每一个house index 需要知道离它最近的两个加热器的位置 i j
+        # res = max(index-i,j-index,res)
+        # 问题在于如何得到离houses[i] 最近的两个加热器 -> 两个有序数组求 i 在另一个数组的位置
+        # 二分搜索：针对于houses[i] 查询其在 heaters 中的位置，取两个加热器距离的最小值
+
+        houses.sort()
+        heaters.sort()
+        res, pre = 0, heaters[0]
+        for house in houses:
+            if house <= pre:
+                res = max(res, pre - house)
+                continue
+            if len(heaters) > 0 and house <= heaters[0]:
+                res = max(res, min(abs(house - pre), heaters[0] - house))
+                continue
+            if len(heaters) > 0 and house > heaters[0]:
+                while(len(heaters) > 1 and house >= heaters[0]):
+                    pre = heaters.pop(0)
+                res = max(res, min(house - pre, abs(heaters[0] - house)))
+        return res
+
 
 s = Solution()
-print(s.countBattleships([["X", ".", ".", "X"], [".", ".", ".", "X"], [".", "X", ".", "X"], [".", "X", ".", "."]]))
+print(s.findRadius([1, 2, 3, 4], [0, 4]))
