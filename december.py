@@ -231,7 +231,7 @@ class Solution:
     # 686. 重复叠加字符串匹配
     def repeatedStringMatch(self, a: str, b: str) -> int:
         # 在b中对a进行筛选
-        # 若 len(a)>len(b) b就已经是字串了，在a中寻找b即可（双指针）
+        # 若 len(a)>len(b) b就已经是字串了，在a中寻找b即可（双指针）在a中找b 就是应用kmp即可
         # 若 len(a)<len(b) a需要重复几遍，直到长度比b大，然后再从a中找到b
         res, origin = 1, a
         if len(b) == 0:
