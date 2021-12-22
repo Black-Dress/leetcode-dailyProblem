@@ -228,6 +228,21 @@ class Solution:
                 res = max(res, min(house - pre, abs(heaters[0] - house)))
         return res
 
+    # 686. 重复叠加字符串匹配
+    def repeatedStringMatch(self, a: str, b: str) -> int:
+        # 在b中对a进行筛选
+        # 若 len(a)>len(b) b就已经是字串了，在a中寻找b即可（双指针）
+        # 若 len(a)<len(b) a需要重复几遍，直到长度比b大，然后再从a中找到b
+        res, origin = 1, a
+        if len(b) == 0:
+            return 0
+        while len(a) < len(b):
+            a += origin
+            res += 1
+        if a.find(b) != -1:
+            return res
+        return res + 1 if a.__add__(origin).find(b) != -1 else -1
+
 
 s = Solution()
-print(s.findRadius([1, 2, 3, 4], [0, 4]))
+print(s.repeatedStringMatch("abcd", "cdabcdab"))
