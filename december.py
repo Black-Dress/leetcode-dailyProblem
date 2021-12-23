@@ -243,6 +243,15 @@ class Solution:
             return res
         return res + 1 if a.__add__(origin).find(b) != -1 else -1
 
+    # 1044. 最长重复子串
+    def longestDupSubstring(self, s: str) -> str:
+        ans = ""
+        for i in range(len(s)):
+            # 这一步是在枚举 s[i:i+len(ans)+1] 在 s[i+1] 是否出现，并且继续循环增加
+            while s[i:i + len(ans) + 1] in s[i + 1:]:
+                ans = s[i:i + len(ans) + 1]
+        return ans
+
 
 s = Solution()
-print(s.repeatedStringMatch("abcd", "cdabcdab"))
+print(s.longestDupSubstring("banana"))
