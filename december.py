@@ -245,6 +245,8 @@ class Solution:
 
     # 1044. 最长重复子串
     def longestDupSubstring(self, s: str) -> str:
+        # 暴力方法 枚举所有可能存在的重复子串
+        # 二分 字符串hash
         ans = ""
         for i in range(len(s)):
             # 这一步是在枚举 s[i:i+len(ans)+1] 在 s[i+1] 是否出现，并且继续循环增加
