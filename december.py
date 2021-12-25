@@ -254,6 +254,28 @@ class Solution:
                 ans = s[i:i + len(ans) + 1]
         return ans
 
+    # 1705. 吃苹果的最大数目
+    def eatenApples(self, apples: List[int], days: List[int]) -> int:
+        # 利用优先队列存储所有苹果的过期时间和个数
+        # 在第i天找到离过期日期最近的苹果，并且减一
+        res, index, n = 0, 0, len(days)
+        que = []
+        while index < n or que.__len__() != 0:
+            # 添加苹果
+            if index < n:
+                heapq.heappush(que, [index + days[index] - 1, apples[index]])
+            # 移除过期苹果或者为0的苹果组
+            cur = heapq.heappop(que)
+            while que.__len__() != 0 and (cur[0] < index or cur[1] == 0):
+                cur = heapq.heappop(que)
+            # 吃没有过期的苹果
+            if cur[0] >= index and cur[1] > 0:
+                cur[1] -= 1
+                heapq.heappush(que, cur)
+                res += 1
+            index += 1
+        return res
+
 
 s = Solution()
-print(s.longestDupSubstring("banana"))
+print(s.eatenApples([3, 0, 0, 0, 0, 2], [3, 0, 0, 0, 0, 2]))
