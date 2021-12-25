@@ -16,6 +16,7 @@ class TreeNode:
             if index is None:
                 continue
             index.left = TreeNode(list[i]) if list[i] is not None else None
-            index.right = TreeNode(list[i + 1]) if list[i + 1] is not None else None
+            if i < list.__len__() - 1:
+                index.right = TreeNode(list[i + 1]) if list[i + 1] is not None else None
             cur.extend([index.left, index.right])
         return root

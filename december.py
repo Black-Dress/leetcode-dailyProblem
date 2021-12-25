@@ -1,8 +1,9 @@
 import collections
-from typing import List, Set
+from typing import List, Optional, Set
 from queue import PriorityQueue, Queue
 import heapq
 import sys
+from NodeHelper.TreeNode import TreeNode
 
 
 class Solution:
@@ -276,6 +277,33 @@ class Solution:
             index += 1
         return res
 
+    # 1609. 奇偶树
+    def isEvenOddTree(self, root: Optional[TreeNode]) -> bool:
+        level, que, size = 0, [root], 1
+        while que.__len__() != 0:
+            if size == 0:
+                size = que.__len__()
+                level += 1
+            else:
+                cur = que.pop(0)
+                size -= 1
+                # 第0层
+                if level == 0 and cur.val % 2 == 0:
+                    return False
+                # 偶数层
+                if level % 2 == 0 and (cur.val % 2 == 0 or (size >= 1 and cur.val >= que[0].val)):
+                    return False
+                # 奇数层
+                if level % 2 != 0 and (cur.val % 2 != 0 or (size >= 1 and cur.val <= que[0].val)):
+                    return False
+                # 添加下一层
+                if cur.left is not None:
+                    que.append(cur.left)
+                if cur.right is not None:
+                    que.append(cur.right)
+        return True
+
 
 s = Solution()
-print(s.eatenApples([3, 0, 0, 0, 0, 2], [3, 0, 0, 0, 0, 2]))
+root = TreeNode.createTreeNode([11, 18, 14, 3, 7, None, None, None, None, 18, None, 6])
+print(s.isEvenOddTree(root))
