@@ -303,7 +303,15 @@ class Solution:
                     que.append(cur.right)
         return True
 
+    # 1078. Bigram 分词
+    def findOcurrences(self, text: str, first: str, second: str) -> List[str]:
+        res, text = [], text.split(' ')
+        for i in range(len(text) - 2):
+            if text[i] == first and text[i + 1] == second:
+                res.append(text[i + 2])
+        return res
+
 
 s = Solution()
 root = TreeNode.createTreeNode([11, 18, 14, 3, 7, None, None, None, None, 18, None, 6])
-print(s.isEvenOddTree(root))
+print(s.findOcurrences("alice is a good girl she is a good student", "a", "good"))
