@@ -311,6 +311,20 @@ class Solution:
                 res.append(text[i + 2])
         return res
 
+    # 1995. 统计特殊四元组
+    def countQuadruplets(self, nums: List[int]) -> int:
+        res, cnt = 0, collections.Counter()
+        n = nums.__len__()
+        for b in range(n - 3, 0, -1):
+            # 统计 d-c 的值 , c 独指 b+1 位置
+            for d in range(b + 2, n, 1):
+                cnt[nums[d] - nums[b + 1]] += 1
+            # 枚举a
+            for a in range(0, b, 1):
+                if (total := nums[a] + nums[b]) in cnt:
+                    res += cnt[total]
+        return res
+
 
 s = Solution()
 root = TreeNode.createTreeNode([11, 18, 14, 3, 7, None, None, None, None, 18, None, 6])
