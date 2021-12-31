@@ -348,7 +348,24 @@ class Solution:
             i += 1
         return False if res == 1 else res == num
 
+    # 846. 一手顺子
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        n, cnt = len(hand), collections.defaultdict(int)
+        if n % groupSize != 0:
+            return False
+        for i in sorted(hand):
+            cnt[i] += 1
+        for k, v in cnt.items():
+            if v == 0:
+                continue
+            for i in range(1, groupSize):
+                if cnt.get(k + i) is None or cnt[k + i] < cnt[k]:
+                    return False
+                cnt[k + i] -= cnt[k]
+            cnt[k] = 0
+        return True
+
 
 s = Solution()
 root = TreeNode.createTreeNode([11, 18, 14, 3, 7, None, None, None, None, 18, None, 6])
-print(s.checkPerfectNumber(99999992))
+print(s.isNStraightHand([2, 1], 2))
