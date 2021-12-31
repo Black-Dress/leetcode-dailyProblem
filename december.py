@@ -325,7 +325,30 @@ class Solution:
                     res += cnt[total]
         return res
 
+    # 287.寻找重复数字
+    def findDuplicate(self, nums: List[int]) -> int:
+        pass
+
+    # 507. 完美数
+    def checkPerfectNumber(self, num: int) -> bool:
+        # res, end = 1, num
+        # i = 2
+        # while i * i < end:
+        #     if num % i == 0:
+        #         res += i + num / i if i * i < num else 0
+        #     i += 1
+        # return False if res == 1 else res == num
+        res, end = 1, num
+        i = 2
+        while i < end:
+            if num % i == 0:
+                res += i + num / i
+            # 重点在这一步 每一次都需要对上界进行减少
+            end = num / i
+            i += 1
+        return False if res == 1 else res == num
+
 
 s = Solution()
 root = TreeNode.createTreeNode([11, 18, 14, 3, 7, None, None, None, None, 18, None, 6])
-print(s.findOcurrences("alice is a good girl she is a good student", "a", "good"))
+print(s.checkPerfectNumber(99999992))
