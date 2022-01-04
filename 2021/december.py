@@ -356,7 +356,6 @@ class Solution:
         return res
 
     # 507. 完美数
-
     def checkPerfectNumber(self, num: int) -> bool:
         # res, end = 1, num
         # i = 2
