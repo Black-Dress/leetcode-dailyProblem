@@ -329,14 +329,31 @@ class Solution:
     def findDuplicate(self, nums: List[int]) -> int:
         # 将nums 转换成链表，next 指针就是nums[i]的值
         # 问题就可以转换成链表判环，若存在环，则利用快慢指针就可以得到结果
-        s, f = nums[0], nums[nums[0]]
-        while s != f:
-            s, f = nums[s], nums[nums[f]]
-        s = 0
-        while s != f:
-            s = nums[s]
-            f = nums[f]
-        return s
+        # s, f = nums[0], nums[nums[0]]
+        # while s != f:
+        #     s, f = nums[s], nums[nums[f]]
+        # s = 0
+        # while s != f:
+        #     s = nums[s]
+        #     f = nums[f]
+        # return s
+        # 双指针
+        # 0~mid 的数字进行计数，
+        # 若没有重复数字，则大小在 0~mid之间的数字的数量就是为mid+1。
+        # 存在重复的数字,则大小在0~mid之间的数字 i 的数量可能就会小于等于 i
+        # 若nums[i]<mid 则代表
+        l, r, res = 0, len(nums) - 1, 0
+        while l <= r:
+            mid = (l + r) >> 1
+            cnt = 0
+            for i in range(len(nums)):
+                cnt += 1 if nums[i] <= mid else 0
+            if cnt <= mid:
+                l = mid + 1
+            else:
+                r = mid - 1
+                res = mid
+        return res
 
     # 507. 完美数
 
