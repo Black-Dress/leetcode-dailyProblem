@@ -327,9 +327,19 @@ class Solution:
 
     # 287.寻找重复数字
     def findDuplicate(self, nums: List[int]) -> int:
-        pass
+        # 将nums 转换成链表，next 指针就是nums[i]的值
+        # 问题就可以转换成链表判环，若存在环，则利用快慢指针就可以得到结果
+        s, f = nums[0], nums[nums[0]]
+        while s != f:
+            s, f = nums[s], nums[nums[f]]
+        s = 0
+        while s != f:
+            s = nums[s]
+            f = nums[f]
+        return s
 
     # 507. 完美数
+
     def checkPerfectNumber(self, num: int) -> bool:
         # res, end = 1, num
         # i = 2
