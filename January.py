@@ -88,9 +88,31 @@ class Solution:
                     l = mid + 1
         return -1
 
+    # 39. 组合总和
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        # cur 第一个位置存储和
+        def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
+            for i in range(index, len(candidates)):
+                if cur[0] == target:
+                    res.append(cur[1:].copy())
+                    return
+                if cur[0] < target:
+                    cur[0] += candidates[i]
+                    cur.append(candidates[i])
+                    DFS(candiates, target, i, cur, res)
+                    cur[0] -= candidates[i]
+                    cur.pop()
+                if cur[0] > target:
+                    return
+
+        candidates.sort()
+        res = []
+        DFS(candidates, target, 0, [0], res)
+        return res
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.search([3, 1], 0))
+print(s.combinationSum([1], 2))
