@@ -1,6 +1,6 @@
 import collections
 from typing import List, Optional, Set
-from queue import PriorityQueue, Queue
+from queue import Empty, PriorityQueue, Queue
 import heapq
 import sys
 from NodeHelper.TreeNode import TreeNode
@@ -392,7 +392,46 @@ class Solution:
             cnt[k] = 0
         return True
 
+    # 32. 最长有效括号
+    def longestValidParentheses(self, s: str) -> int:
+        stack, n = [-1], len(s)
+        res = 0
+        for i in range(n):
+            if s[i] == '(':
+                stack.append(i)
+            else:
+                stack.pop()
+                if len(stack) == 0:
+                    stack.append(i)
+                else:
+                    res = max(res, i - stack[-1])
+        return res
+
+    # 33. 搜索旋转排序数组
+    def search(self, nums: List[int], target: int) -> int:
+        # 确定 target和nums[0]的大小关系，确定target在左半区还是右半区
+        l, r = 0, len(nums) - 1
+        while l <= r:
+            mid = (l + r) >> 1
+            if nums[mid] == target:
+                return mid
+            # 如果在左半区
+            if nums[0] <= target < nums[mid]:
+                r = mid - 1
+            if nums[0] <= nums[mid] < target:
+                l = mid + 1
+            if nums[mid] < nums[0] and target >= nums[0]:
+                r = mid - 1
+            # 如果在右半区
+            if nums[mid] < target < nums[0]:
+                l = mid + 1
+            if target < nums[mid] < nums[0]:
+                r = mid - 1
+            if nums[mid] >= nums[0] and target < nums[0]:
+                l = mid + 1
+        return -1
+
 
 s = Solution()
 root = TreeNode.createTreeNode([11, 18, 14, 3, 7, None, None, None, None, 18, None, 6])
-print(s.isNStraightHand([2, 1], 2))
+print(s.search([1, 3], 4))
