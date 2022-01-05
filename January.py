@@ -70,10 +70,27 @@ class Solution:
         #     if nums[mid] >= nums[0] and target < nums[0]:
         #         l = mid + 1
         # return -1
+        while l <= r:
+            mid = (l + r) >> 1
+            if nums[mid] == target:
+                return mid
+            # 左半区
+            if target >= nums[0]:
+                if nums[0] <= nums[mid] < target:
+                    l = mid + 1
+                else:
+                    r = mid - 1
+            # 右半区
+            else:
+                if target < nums[mid] < nums[0]:
+                    r = mid - 1
+                else:
+                    l = mid + 1
+        return -1
 
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-ListNode.print(s.mergeKLists([a, b, c]))
+print(s.search([3, 1], 0))
