@@ -14,3 +14,10 @@ class ListNode:
             index.next = ListNode(i)
             index = index.next
         return head.next
+
+    @staticmethod
+    def print(nodes: 'ListNode'):
+        while nodes is not None:
+            print(nodes.val)
+            nodes = nodes.next
+        print("none")
