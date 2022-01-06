@@ -1,4 +1,5 @@
-from typing import List
+import collections
+from typing import Collection, Dict, List
 from NodeHelper.ListNode import ListNode
 
 
@@ -110,6 +111,36 @@ class Solution:
         DFS(candidates, target, 0, [0], res)
         return res
 
+    # 40. 组合总和 II
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        # 题目要求不能选取重复数字，并且不能有重复结果
+        # 需要记录 cur 的状态，如果 cur 状态相同那么就不需要再进入循环了
+        # cur 第一个位置存储数组之和
+        def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
+            # cur 状态已经走过，return
+            if cnt.get("".join(str(i) for i in cur[1:])) is not None:
+                return
+            if cur[0] == target:
+                res.append(cur[1:].copy())
+                return
+            for i in range(index, len(candidates)):
+                if cur[0] < target:
+                    cur[0] += candidates[i]
+                    cur.append(candidates[i])
+                    # 从下一位开始
+                    DFS(candiates, target, i + 1, cur, res)
+                    # 进入一次循环之后更新，状态
+                    cnt["".join(str(j) for j in cur[1:])] = 1
+                    cur[0] -= candidates[i]
+                    cur.pop()
+                if cur[0] > target:
+                    return
+
+        candidates.sort()
+        res, cnt = [], collections.defaultdict(str)
+        DFS(candidates, target, 0, [0], res)
+        return res
+
     # 71. 简化路径
     def simplifyPath(self, path: str) -> str:
         stack, n = [], len(path)
@@ -135,4 +166,4 @@ s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.simplifyPath("//."))
+print(s.combinationSum2([2, 5, 2, 1, 2], 5))
