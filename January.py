@@ -110,9 +110,29 @@ class Solution:
         DFS(candidates, target, 0, [0], res)
         return res
 
+    # 71. 简化路径
+    def simplifyPath(self, path: str) -> str:
+        stack, n = [], len(path)
+        i, j = 0, 0
+        while i < n and j < n:
+            # 移动到目录
+            while j < n and path[j] == '/':
+                j += 1
+            i = j
+            # 移动到目录后一个斜杠
+            while i < n and path[i] != '/':
+                i += 1
+            if j != i and path[j:i] == '..' and stack.__len__() != 0:
+                stack.pop()
+            if j != i and path[j:i] != '..' and path[j:i] != '.':
+                stack.append("".join(path[j:i]))
+            j = i
+        res = "".join(['/' + i for i in stack])
+        return "/" if res == "" else res
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.combinationSum([1], 2))
+print(s.simplifyPath("//."))
