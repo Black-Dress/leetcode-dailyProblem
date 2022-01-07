@@ -208,7 +208,34 @@ class Solution:
 
     # 377. 组合总和 Ⅳ
     def combinationSum4(self, nums: List[int], target: int) -> int:
-        def
+        # 可以重复选取，可以有重复解（顺序不同即可）
+        # DFS 超时
+        # def DFS(nums: List[int], target: int):
+        #     nonlocal cnt, res
+        #     if target > 0 and cnt.get(target) is not None:
+        #         res += cnt[target]
+
+        #     if target == 0:
+        #         res += 1
+        #         return
+        #     if target < 0:
+        #         return
+        #     for num in nums:
+        #         if num <= target:
+        #             DFS(nums, target - num)
+        #         else:
+        #             return
+        # res, cnt = 0, collections.Counter()
+        # nums.sort()
+        # DFS(nums, target)
+        # dp[i] 表示和为i的时候的总和数
+        # dp[i] 的组合数应该等于nums中含有数有的
+        dp = [1] + [0] * target
+        for i in range(1, target + 1):
+            for j in nums:
+                if j <= i:
+                    dp[i] += dp[i - j]
+        return dp[target]
 
     # 71. 简化路径
     def simplifyPath(self, path: str) -> str:
@@ -258,4 +285,4 @@ s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))
+print(s.combinationSum4([4, 2, 1], 32))
