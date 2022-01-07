@@ -92,31 +92,40 @@ class Solution:
 
     # 39. 组合总和
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        # cur 第一个位置存储和
-        def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
-            for i in range(index, len(candidates)):
-                if cur[0] == target:
-                    res.append(cur[1:].copy())
-                    return
-                if cur[0] < target:
-                    cur[0] += candidates[i]
-                    cur.append(candidates[i])
-                    DFS(candiates, target, i, cur, res)
-                    cur[0] -= candidates[i]
-                    cur.pop()
-                if cur[0] > target:
+        # 没有重复数字，可以重复选取，不能有重复解
+        # def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
+        #     for i in range(index, len(candidates)):
+        #         if cur[0] == target:
+        #             res.append(cur[1:].copy())
+        #             return
+        #         if cur[0] < target:
+        #             cur[0] += candidates[i]
+        #             cur.append(candidates[i])
+        #             DFS(candiates, target, i, cur, res)
+        #             cur[0] -= candidates[i]
+        #             cur.pop()
+        #         if cur[0] > target:
+        #             return
+        def DFS(candidates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
+            if target == 0:
+                res.append(cur.copy())
+                return
+            if index == candidates.__len__() or target < candidates[index]:
+                return
+            for i in range(index, candidates.__len__()):
+                if target >= candidates[i]:
+                    DFS(candidates, target - candidates[i], i, cur + [candidates[i]], res)
+                else:
                     return
 
         candidates.sort()
         res = []
-        DFS(candidates, target, 0, [0], res)
+        DFS(candidates, target, 0, [], res)
         return res
 
     # 40. 组合总和 II
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
-        # 题目要求不能选取重复数字，并且不能有重复结果
-        # 需要记录 cur 的状态，如果 cur 状态相同那么就不需要再进入循环了
-        # cur 第一个位置存储数组之和
+        # 有重复数字的情况下要求没有重复解和重复数字利用
         # def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
         #     # cur 状态已经走过，return
         #     if cnt.get("".join(str(i) for i in cur[1:])) is not None:
@@ -181,6 +190,7 @@ class Solution:
 
     # 216. 组合总和 III
     def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        # 限制数量为k，没有重复数字情况下的没有重复解，和重复数字利用
         def DFS(index: int, k: int, n: int, nums: List[int], cur: List[int], res: List[List[int]]):
             if n == 0 and k == 0:
                 res.append(cur.copy())
@@ -195,6 +205,10 @@ class Solution:
         res, nums = [], [i for i in range(1, 10)]
         DFS(0, k, n, nums, [], res)
         return res
+
+    # 377. 组合总和 Ⅳ
+    def combinationSum4(self, nums: List[int], target: int) -> int:
+        def
 
     # 71. 简化路径
     def simplifyPath(self, path: str) -> str:
