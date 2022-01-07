@@ -142,26 +142,58 @@ class Solution:
         # DFS(candidates, target, 0, [0], res)
         # return res
 
-        def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
-            if cur[0] == target:
-                res.append(cur[1:].copy())
+        # def DFS(candiates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
+        #     if cur[0] == target:
+        #         res.append(cur[1:].copy())
+        #         return
+        #     for i in range(index, candiates.__len__()):
+        #         if i > index and candiates[i] == candiates[i - 1]:
+        #             continue
+        #         if cur[0] < target:
+        #             cur[0] += candidates[i]
+        #             cur.append(candidates[i])
+        #             # 从下一位开始
+        #             DFS(candiates, target, i + 1, cur, res)
+        #             # 进入一次循环之后更新，状态
+        #             cur[0] -= candidates[i]
+        #             cur.pop()
+        #         else:
+        #             break
+
+        def DFS(candidates: List[int], target: int, index: int, cur: List[int], res: List[List[int]]):
+            if target == 0:
+                res.append(cur.copy())
                 return
-            for i in range(index, candiates.__len__()):
-                if i > index and candiates[i] == candiates[i - 1]:
+            if target < 0 or index == candidates.__len__() or target < candidates[index]:
+                return
+            for i in range(index, candidates.__len__()):
+                if i > index and candidates[i] == candidates[i - 1]:
                     continue
-                if cur[0] < target:
-                    cur[0] += candidates[i]
-                    cur.append(candidates[i])
-                    # 从下一位开始
-                    DFS(candiates, target, i + 1, cur, res)
-                    # 进入一次循环之后更新，状态
-                    cur[0] -= candidates[i]
-                    cur.pop()
+                if candidates[i] <= target:
+                    DFS(candidates, target - candidates[i], i + 1, cur + [candidates[i]], res)
                 else:
-                    break
+                    return
+
         candidates.sort()
         res = []
-        DFS(candidates, target, 0, [0], res)
+        DFS(candidates, target, 0, [], res)
+        return res
+
+    # 216. 组合总和 III
+    def combinationSum3(self, k: int, n: int) -> List[List[int]]:
+        def DFS(index: int, k: int, n: int, nums: List[int], cur: List[int], res: List[List[int]]):
+            if n == 0 and k == 0:
+                res.append(cur.copy())
+                return
+            if k == 0 or n < 0 or index == nums.__len__() or n < nums[index]:
+                return
+            for i in range(index, nums.__len__()):
+                if nums[i] <= n:
+                    DFS(i + 1, k - 1, n - nums[i], nums, cur + [nums[i]], res)
+                else:
+                    return
+        res, nums = [], [i for i in range(1, 10)]
+        DFS(0, k, n, nums, [], res)
         return res
 
     # 71. 简化路径
@@ -212,5 +244,4 @@ s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.medianSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7],
-                            3))
+print(s.combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))
