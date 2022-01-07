@@ -1,6 +1,7 @@
 import collections
 from typing import Collection, Dict, List, Literal
 from NodeHelper.ListNode import ListNode
+import bisect
 
 
 class Solution:
@@ -194,9 +195,22 @@ class Solution:
             res = max(res, stack.__len__())
         return res
 
+    # 480. 滑动窗口中位数
+    def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
+        # 滑动窗口维持有序，利用二分进行插入和删除
+        def median(s: List[int]): return (s[(s.__len__() - 1) // 2] + s[s.__len__() // 2]) / 2
+        window, res = sorted(nums[:k]), []
+        res.append(median(window))
+        for i, j in zip(nums[:-k], nums[k:]):
+            window.pop(bisect.bisect_left(window, i))
+            window.insert(bisect.bisect_left(window, j), j)
+            res.append(median(window))
+        return res
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.maxDepth("(1)+((2))+(((3)))"))
+print(s.medianSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7],
+                            3))
