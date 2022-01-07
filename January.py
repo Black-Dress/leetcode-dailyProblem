@@ -183,9 +183,20 @@ class Solution:
         res = "".join(['/' + i for i in stack])
         return "/" if res == "" else res
 
+    # 1614. 括号的最大嵌套深度
+    def maxDepth(self, s: str) -> int:
+        stack, res = [], 0
+        for i in range(s.__len__()):
+            if s[i] == '(':
+                stack.append('(')
+            if s[i] == ')' and stack.__len__() != 0:
+                stack.pop()
+            res = max(res, stack.__len__())
+        return res
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.combinationSum2([10, 1, 2, 7, 6, 1, 5], 8))
+print(s.maxDepth("(1)+((2))+(((3)))"))
