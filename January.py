@@ -280,9 +280,23 @@ class Solution:
             res.append(median(window))
         return res
 
+    # 49. 字母异位词分组
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        # 利用n位26进制的数判断是否是异位词
+        def num(s: str) -> tuple:
+            cnt = [0] * 26
+            for i in range(s.__len__()):
+                cnt[ord(s[i]) - ord('a')] += 1
+            return tuple(cnt)
+
+        cnt = collections.defaultdict(list)
+        for s in strs:
+            cnt[num(s)].append(s)
+        return list(cnt.values())
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.combinationSum4([4, 2, 1], 32))
+print(s.groupAnagrams(["a"]))
