@@ -303,9 +303,19 @@ class Solution:
         res = sorted(list(cnt.items()), key=lambda x: (x[1], ord(x[0])), reverse=True)
         return res[0][0]
 
+    # 70.爬楼梯
+    def climbStairs(self, n: int) -> int:
+        # dp[i] 代表爬到第i层的方法
+        # dp[i] = dp[i-1] + dp[i-2]
+        # dp[0] = 1 dp[1] = 1 dp[2] = dp[1] + dp[0]
+        dp = [1, 1] + [0] * (n - 1)
+        for i in range(2, n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        return dp[n]
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.slowestKey([12, 23, 36, 46, 62], "spuda"))
+print(s.climbStairs(3))
