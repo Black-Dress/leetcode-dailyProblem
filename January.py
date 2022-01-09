@@ -294,9 +294,18 @@ class Solution:
             cnt[num(s)].append(s)
         return list(cnt.values())
 
+    # 1629. 按键持续时间最长的键
+    def slowestKey(self, releaseTimes: List[int], keysPressed: str) -> str:
+        cnt, n = collections.defaultdict(int), len(releaseTimes)
+        cnt[keysPressed[0]] = releaseTimes[0]
+        for i in range(1, n):
+            cnt[keysPressed[i]] = max(cnt[keysPressed[i]], releaseTimes[i] - releaseTimes[i - 1])
+        res = sorted(list(cnt.items()), key=lambda x: (x[1], ord(x[0])), reverse=True)
+        return res[0][0]
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.groupAnagrams(["a"]))
+print(s.slowestKey([12, 23, 36, 46, 62], "spuda"))
