@@ -361,9 +361,44 @@ class Solution:
         s.next = s.next.next
         return res.next
 
+    # 45. 跳跃游戏 II
+    def jump(self, nums: List[int]) -> int:
+        k, res, n = 0, 0, len(nums)
+        dis = 0
+        # for i in range(n):
+        #     if k >= n - 1:
+        #         break
+        #     if i > dis:
+        #         res += 1
+        #         dis = k
+        #     k = max(k, i + nums[i])
+        # return res + 1 if n != 1 else 0
+        # n-1 能够避免只有一个的情况
+        for i in range(n - 1):
+            k = max(k, i + nums[i])
+            if i == dis:
+                res += 1
+                dis = k
+        return res
+
+    # LCP 09. 最小跳跃次数
+    def minJump(self, jump: List[int]) -> int:
+        # dp[i] 存储跳跃到i点需要的最少次数
+        n = len(jump)
+        dp = [0] + [n] * (n - 1)
+        res = 0
+        for i in range(n):
+            for j in range(i + 1):
+                x = dp[i] + 2 if j != i else dp[i] + 1
+                if j + jump[j] >= n:
+                    res = x
+                    break
+                dp[j + jump[j]] = min(x, dp[j + jump[j]])
+        return res
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.isAdditiveNumber("1203"))
+print(s.minJump([2, 5, 1, 1, 1, 1]))
