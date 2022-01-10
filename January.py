@@ -280,9 +280,29 @@ class Solution:
             res.append(median(window))
         return res
 
+    # 306. 累加数
+    def isAdditiveNumber(self, num: str) -> bool:
+        def DFS(a: int, b: int, num: str) -> bool:
+            if num.__len__() == 0:
+                return True
+            for i in range(len(num)):
+                c = int(num[:i + 1])
+                if (num[:i + 1].startswith('0') and i > 0) or a + b < c:
+                    break
+                if a + b == c:
+                    return DFS(b, c, num[i + 1:])
+            return False
+
+        for i in range(len(num) - 2):
+            for j in range(i + 1, len(num) - 1):
+                if (num[:i + 1].startswith('0') and i > 0) or (num[i + 1:j + 1].startswith('0') and j > i + 1):
+                    continue
+                if DFS(int(num[:i + 1]), int(num[i + 1:j + 1]), num[j + 1:]):
+                    return True
+        return False
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.combinationSum4([4, 2, 1], 32))
+print(s.isAdditiveNumber("1203"))
