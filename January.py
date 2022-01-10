@@ -1,6 +1,7 @@
 import collections
 from typing import Collection, Dict, List, Literal
 from NodeHelper.ListNode import ListNode
+from NodeHelper.TreeNode import TreeNode
 import bisect
 
 
@@ -335,6 +336,16 @@ class Solution:
                 if DFS(int(num[:i + 1]), int(num[i + 1:j + 1]), num[j + 1:]):
                     return True
         return False
+
+    # 236. 二叉树的最近公共祖先
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        if root is None:
+            return None
+        if root.val == p.val or root.val == q.val:
+            return root
+        l = self.lowestCommonAncestor(root.left, p, q)
+        r = self.lowestCommonAncestor(root.right, p, q)
+        return root if l is not None and r is not None else (l if l is not None else r)
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
