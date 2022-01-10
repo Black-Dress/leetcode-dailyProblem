@@ -281,8 +281,8 @@ class Solution:
             res.append(median(window))
         return res
 
-
     # 1629. 按键持续时间最长的键
+
     def slowestKey(self, releaseTimes: List[int], keysPressed: str) -> str:
         cnt, n = collections.defaultdict(int), len(releaseTimes)
         cnt[keysPressed[0]] = releaseTimes[0]
@@ -291,6 +291,7 @@ class Solution:
         res = sorted(list(cnt.items()), key=lambda x: (x[1], ord(x[0])), reverse=True)
         return res[0][0]
     # 49. 字母异位词分组
+
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         # 利用n位26进制的数判断是否是异位词
         def num(s: str) -> tuple:
@@ -304,9 +305,8 @@ class Solution:
             cnt[num(s)].append(s)
         return list(cnt.values())
 
-
-
     # 70.爬楼梯
+
     def climbStairs(self, n: int) -> int:
         # dp[i] 代表爬到第i层的方法
         # dp[i] = dp[i-1] + dp[i-2]
@@ -346,6 +346,24 @@ class Solution:
         l = self.lowestCommonAncestor(root.left, p, q)
         r = self.lowestCommonAncestor(root.right, p, q)
         return root if l is not None and r is not None else (l if l is not None else r)
+
+    # 19. 删除链表的倒数第 N 个结点
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        if head.next is None:
+            return None
+        f, s = ListNode(0), ListNode(0)
+        res = s
+        f.next = head
+        s.next = head
+        for i in range(n):
+            f = f.next
+        while f is not None and f.next is not None:
+            f = f.next
+            s = s.next
+        s.next = s.next.next
+        return res.next
+
+
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
