@@ -386,19 +386,22 @@ class Solution:
         # dp[i] 存储跳跃到i点需要的最少次数
         n = len(jump)
         dp = [0] + [n] * (n - 1)
-        res = 0
-        for i in range(n):
-            for j in range(i + 1):
-                x = dp[i] + 2 if j != i else dp[i] + 1
-                if j + jump[j] >= n:
-                    res = x
-                    break
-                dp[j + jump[j]] = min(x, dp[j + jump[j]])
-        return res
+        k, res = 0, n
+        while k < n and k + jump[k] < n:
+            dp[k + jump[k]] = min(dp[k] + 1, dp[k + jump[k]])
+            m = k + jump[k]
+            for i in range(k):
+                if n > i + jump[i] > k + jump[k]:
+                    dp[i + jump[i]] = min(dp[k] + 2, dp[i + jump[i]])
+                    m = i + jump[i]
+                if i + jump[i] >= n:
+                    res = min(res, dp[k] + 2)
+            k = m
+        return min(res, dp[k])
 
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.minJump([2, 5, 1, 1, 1, 1]))
+print(s.minJump([4, 6, 10, 8, 3, 5, 3, 5, 7, 8, 6, 10, 3, 7, 3, 10, 7, 10, 10, 9, 1, 4, 7, 4, 8, 6, 9, 8, 8, 2, 7, 2, 4, 5, 4, 3, 3, 2, 2, 2, 3, 4, 4, 1, 1, 5, 6, 8, 1, 2]))
