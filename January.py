@@ -282,7 +282,6 @@ class Solution:
         return res
 
     # 1629. 按键持续时间最长的键
-
     def slowestKey(self, releaseTimes: List[int], keysPressed: str) -> str:
         cnt, n = collections.defaultdict(int), len(releaseTimes)
         cnt[keysPressed[0]] = releaseTimes[0]
@@ -290,8 +289,8 @@ class Solution:
             cnt[keysPressed[i]] = max(cnt[keysPressed[i]], releaseTimes[i] - releaseTimes[i - 1])
         res = sorted(list(cnt.items()), key=lambda x: (x[1], ord(x[0])), reverse=True)
         return res[0][0]
-    # 49. 字母异位词分组
 
+    # 49. 字母异位词分组
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         # 利用n位26进制的数判断是否是异位词
         def num(s: str) -> tuple:
@@ -306,7 +305,6 @@ class Solution:
         return list(cnt.values())
 
     # 70.爬楼梯
-
     def climbStairs(self, n: int) -> int:
         # dp[i] 代表爬到第i层的方法
         # dp[i] = dp[i-1] + dp[i-2]
