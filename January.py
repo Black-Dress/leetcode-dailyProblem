@@ -300,6 +300,40 @@ class Solution:
                 if DFS(int(num[:i + 1]), int(num[i + 1:j + 1]), num[j + 1:]):
                     return True
         return False
+    # 1629. 按键持续时间最长的键
+    def slowestKey(self, releaseTimes: List[int], keysPressed: str) -> str:
+        cnt, n = collections.defaultdict(int), len(releaseTimes)
+        cnt[keysPressed[0]] = releaseTimes[0]
+        for i in range(1, n):
+            cnt[keysPressed[i]] = max(cnt[keysPressed[i]], releaseTimes[i] - releaseTimes[i - 1])
+        res = sorted(list(cnt.items()), key=lambda x: (x[1], ord(x[0])), reverse=True)
+        return res[0][0]
+    # 49. 字母异位词分组
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        # 利用n位26进制的数判断是否是异位词
+        def num(s: str) -> tuple:
+            cnt = [0] * 26
+            for i in range(s.__len__()):
+                cnt[ord(s[i]) - ord('a')] += 1
+            return tuple(cnt)
+
+        cnt = collections.defaultdict(list)
+        for s in strs:
+            cnt[num(s)].append(s)
+        return list(cnt.values())
+
+
+
+    # 70.爬楼梯
+    def climbStairs(self, n: int) -> int:
+        # dp[i] 代表爬到第i层的方法
+        # dp[i] = dp[i-1] + dp[i-2]
+        # dp[0] = 1 dp[1] = 1 dp[2] = dp[1] + dp[0]
+        dp = [1, 1] + [0] * (n - 1)
+        for i in range(2, n + 1):
+            dp[i] = dp[i - 1] + dp[i - 2]
+        return dp[n]
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
