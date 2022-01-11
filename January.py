@@ -399,9 +399,74 @@ class Solution:
             k = m
         return min(res, dp[k])
 
+    # 1036. 逃离大迷宫
+    def isEscapePossible(self, blocked: List[List[int]], source: List[int], target: List[int]) -> bool:
+        # # 洪泛法模拟找到一条通路到达target(超时)
+        # n = pow(10, 6)
+        # # visit 数组太大，利用map记录访问过的节点
+        # visit, que = collections.defaultdict(int), [source]
+        # dx, dy = [0, 0, 1, -1], [1, -1, 0, 0]
+        # # 初始化visit
+        # for block in blocked:
+        #     visit[(block[0], block[1])] = 1
+        # visit[(target[0], target[1])] = 2
+
+        # while que.__len__() != 0:
+        #     cur = que.pop(0)
+        #     for i in range(4):
+        #         x, y = cur[0] + dx[i], cur[1] + dy[i]
+        #         if x < 0 or x >= n or y < 0 or y >= n or visit[(x, y)] == 1:
+        #             continue
+        #         if visit[(x, y)] == 2:
+        #             return True
+        #         if visit[(x, y)] == 0:
+        #             que.append([x, y])
+        #             visit[(x, y)] = 1
+        # return False
+
+        # 带上界的BFS
+        # 通过blocked数组判断是否是否将source 和 target 进行了分割
+        # 两种情况，blocked 自身把 source 或者 target 围起来，通过边界将他们围起来
+        # 带上界的BFS。经过数学证明：一个包围圈内最多有n(n-1)/2个非障碍位，n表示blocked的数量
+        # 如果循环在n(n-1)/2之前停下且没有遇见target 表示不可达，如果超过了n(n-1)/2，则表示可达
+        BOUND = 10**6
+        FOUND, VALID, NOTFOUND = 1, 0, -1
+        hashblock = set((pos[0], pos[1]) for pos in blocked)
+
+        def check(s: List[int], e: List[int]) -> int:
+            dx, dy = [0, 0, 1, -1], [1, -1, 0, 0]
+            visit, que = collections.defaultdict(int), [s]
+            # 计数经过的非障碍物位置
+            n = len(blocked)
+            cnt = n * (n - 1) // 2
+            visit[(e[0], e[1])] = 2
+            visit[(s[0], s[1])] = 1
+            while len(que) > 0 and cnt > 0:
+                cur = que.pop(0)
+                for nx, ny in zip(dx, dy):
+                    x, y = cur[0] + nx, cur[1] + ny
+                    if x < 0 or x >= BOUND or y < 0 or y >= BOUND or visit[(x, y)] == 1 or (x, y) in hashblock:
+                        continue
+                    if visit[(x, y)] == 2:
+                        return FOUND
+                    cnt -= 1
+                    visit[(x, y)] = 1
+                    que.append((x, y))
+
+            return NOTFOUND if cnt > 0 else VALID
+
+        if (res := check(source, target)) == FOUND:
+            return True
+        elif res == NOTFOUND:
+            return False
+        else:
+            res = check(target, source)
+            if res == NOTFOUND:
+                return False
+        return True
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.minJump([4, 6, 10, 8, 3, 5, 3, 5, 7, 8, 6, 10, 3, 7, 3, 10, 7, 10, 10, 9, 1, 4, 7, 4, 8, 6, 9, 8, 8, 2, 7, 2, 4, 5, 4, 3, 3, 2, 2, 2, 3, 4, 4, 1, 1, 5, 6, 8, 1, 2]))
