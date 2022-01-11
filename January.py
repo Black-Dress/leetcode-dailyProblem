@@ -1,4 +1,5 @@
 import collections
+from sys import setprofile, version_info
 from typing import Collection, Dict, List, Literal
 from NodeHelper.ListNode import ListNode
 from NodeHelper.TreeNode import TreeNode
@@ -490,9 +491,52 @@ class Solution:
                 return True
         return False
 
+    # 1345. 跳跃游戏 IV
+    # 每一步，你可以从下标 i 跳到下标：
+    # i + 1 满足：i + 1 < arr.length
+    # i - 1 满足：i - 1 >= 0
+    # j 满足：arr[i] == arr[j] 且 i != j
+    # 请你返回到达数组最后一个元素的下标处所需的 最少操作次数 。
+    def minJumps(self, arr: List[int]) -> int:
+        # 每一个节点i都是从 i+1 , i-1 ,j 三的个地方跳过来的，找到最小值就行了
+        # 如果从i+1跳到i比i小的情况只能时 i+1这个节点在作为j的时候被更新过
+        # 重点在于j，利用 map 记录所有值相同的下标，循环更新
+        # cnt, n = collections.defaultdict(list), len(arr)
+        # dp = [0] + [n] * (n - 1)
+        # for i in range(n):
+        #     cnt[arr[i]].append(i)
+        # for i in range(n):
+        #     if i - 1 >= 0:
+        #         dp[i] = min(dp[i], dp[i - 1] + 1)
+        #     if i + 1 < n:
+        #         dp[i] = min(dp[i + 1] + 1, dp[i])
+        #     for j in cnt[arr[i]]:
+        #         dp[j] = min(dp[j], dp[i] + 1)
+        # return dp[-1]
+        # dp 不行在于 dp 转换公式会产生循环依赖的问题，dp[i+1] 依赖于 dp[i] ,d[i]也依赖于dp[i+1]
+        # BFS
+        # 遍历 i-1 ,i+1 , j 这些数字并且进行step的更新
+        cnt, n = collections.defaultdict(list), len(arr)
+        for i in range(n):
+            cnt[arr[i]].append(i)
+        visit = [True] + [False] * (n - 1)
+        que = collections.deque()
+        que.append((0, 0))
+        while len(que) != 0:
+            i, step = que.popleft()
+            for j in (cnt[arr[i]] + [i - 1, i + 1]):
+                if 0 <= j < n and visit[j] == False:
+                    if j == n - 1:
+                        return step + 1
+                    visit[j] = True
+                    que.append((j, step + 1))
+            # 防止多次遍历
+            cnt[arr[i]].clear()
+        return 0
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.canReach([0, 3, 0, 6, 3, 3, 4], 6))
+print(s.minJumps([11, 22, 7, 7, 7, 7, 7, 7, 7, 22, 13]))
