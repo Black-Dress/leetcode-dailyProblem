@@ -381,24 +381,6 @@ class Solution:
                 dis = k
         return res
 
-    # LCP 09. 最小跳跃次数
-    def minJump(self, jump: List[int]) -> int:
-        # dp[i] 存储跳跃到i点需要的最少次数
-        n = len(jump)
-        dp = [0] + [n] * (n - 1)
-        k, res = 0, n
-        while k < n and k + jump[k] < n:
-            dp[k + jump[k]] = min(dp[k] + 1, dp[k + jump[k]])
-            m = k + jump[k]
-            for i in range(k):
-                if n > i + jump[i] > k + jump[k]:
-                    dp[i + jump[i]] = min(dp[k] + 2, dp[i + jump[i]])
-                    m = i + jump[i]
-                if i + jump[i] >= n:
-                    res = min(res, dp[k] + 2)
-            k = m
-        return min(res, dp[k])
-
     # 1036. 逃离大迷宫
     def isEscapePossible(self, blocked: List[List[int]], source: List[int], target: List[int]) -> bool:
         # # 洪泛法模拟找到一条通路到达target(超时)
