@@ -361,6 +361,44 @@ class Solution:
         s.next = s.next.next
         return res.next
 
+    # 45. 跳跃游戏 II
+    def jump(self, nums: List[int]) -> int:
+        k, res, n = 0, 0, len(nums)
+        dis = 0
+        # for i in range(n):
+        #     if k >= n - 1:
+        #         break
+        #     if i > dis:
+        #         res += 1
+        #         dis = k
+        #     k = max(k, i + nums[i])
+        # return res + 1 if n != 1 else 0
+        # n-1 能够避免只有一个的情况
+        for i in range(n - 1):
+            k = max(k, i + nums[i])
+            if i == dis:
+                res += 1
+                dis = k
+        return res
+
+    # LCP 09. 最小跳跃次数
+    def minJump(self, jump: List[int]) -> int:
+        # dp[i] 存储跳跃到i点需要的最少次数
+        n = len(jump)
+        dp = [0] + [n] * (n - 1)
+        k, res = 0, n
+        while k < n and k + jump[k] < n:
+            dp[k + jump[k]] = min(dp[k] + 1, dp[k + jump[k]])
+            m = k + jump[k]
+            for i in range(k):
+                if n > i + jump[i] > k + jump[k]:
+                    dp[i + jump[i]] = min(dp[k] + 2, dp[i + jump[i]])
+                    m = i + jump[i]
+                if i + jump[i] >= n:
+                    res = min(res, dp[k] + 2)
+            k = m
+        return min(res, dp[k])
+
     # 1036. 逃离大迷宫
     def isEscapePossible(self, blocked: List[List[int]], source: List[int], target: List[int]) -> bool:
         # # 洪泛法模拟找到一条通路到达target(超时)
