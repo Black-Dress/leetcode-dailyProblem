@@ -467,9 +467,32 @@ class Solution:
                 dp[j] = dp[i] + 1
         return dp[0]
 
+    # 1306. 跳跃游戏 III
+    def canReach(self, arr: List[int], start: int) -> bool:
+        # 题目要求能否到达0的任意位置（即指定位置）
+        # 利用BFS 更新能够到达的节点
+        n = len(arr)
+        que = collections.deque()
+        visit = [0] * n
+        que.append(start)
+        visit[start] = 1
+        while len(que) != 0:
+            cur = que.popleft()
+            if cur + arr[cur] < n and visit[cur + arr[cur]] == 0:
+                que.append(cur + arr[cur])
+                visit[cur + arr[cur]] = 1
+            if cur - arr[cur] >= 0 and visit[cur - arr[cur]] == 0:
+                que.append(cur - arr[cur])
+                visit[cur - arr[cur]] = 1
+
+        for i in range(n):
+            if arr[i] == 0 and visit[i] == 1:
+                return True
+        return False
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.minJump([4, 6, 10, 8, 3, 5, 3, 5, 7, 8, 6, 10, 3, 7, 3, 10, 7, 10, 10, 9, 1, 4, 7, 4, 8, 6, 9, 8, 8, 2, 7, 2, 4, 5, 4, 3, 3, 2, 2, 2, 3, 4, 4, 1, 1, 5, 6, 8, 1, 2]))
+print(s.canReach([0, 3, 0, 6, 3, 3, 4], 6))
