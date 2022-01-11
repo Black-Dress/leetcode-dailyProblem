@@ -427,8 +427,29 @@ class Solution:
                 return False
         return True
 
+    # LCP 09. 最小跳跃次数
+    def minJump(self, jump: List[int]) -> int:
+        # 动态规划 dp[i] 表示到达i时要跳出去的最小跳跃次数
+        # i 这个节点可以作为初始节点，也可以作为中间节点，分别讨论并更新dp表
+        # 1. 计算从i节点往右跳，跳出机器需要花费的最小距离
+        #   i+jump[i]>=n -> dp[i] = 1
+        #   i+jump[i]<n -> dp[i] = dp[i+jump[i]]+1
+        # 2. i作为中间节点时（即j节点跳到i节点然后跳出去），更新[i,n-1]的dp表，更新dp表只需要更新dp[j]>=dp[i]+1 的那一部分
+        #   dp[j] = min(dp[i]+1,dp[j]])
+        n = len(jump)
+        dp = [0] * (n - 1) + [1]
+        for i in range(n - 2, -1, -1):
+            # dp[i] 直接更新而不需要判断最小值，因为是从重点遍历到起点，dp[i] 永远是最小跳出次数
+            dp[i] = 1 if i + jump[i] >= n else dp[i + jump[i]] + 1
+            for j in range(i + 1, n):
+                if dp[j] < dp[i] + 1:
+                    break
+                dp[j] = dp[i] + 1
+        return dp[0]
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
+print(s.minJump([4, 6, 10, 8, 3, 5, 3, 5, 7, 8, 6, 10, 3, 7, 3, 10, 7, 10, 10, 9, 1, 4, 7, 4, 8, 6, 9, 8, 8, 2, 7, 2, 4, 5, 4, 3, 3, 2, 2, 2, 3, 4, 4, 1, 1, 5, 6, 8, 1, 2]))
