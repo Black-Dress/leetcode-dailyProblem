@@ -534,9 +534,32 @@ class Solution:
             cnt[arr[i]].clear()
         return 0
 
+    # 334. 递增的三元子序列
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        # 贪心优先贪比start大的最小的那一个
+        n, i = len(nums), 0
+        start, mid, premid = 0, 0, 0
+        while i < n:
+            # 更新start
+            if nums[i] < nums[start]:
+                premid = mid if mid != start else premid
+                start, mid = i, i
+            # 更新mid
+            if (nums[start] == nums[mid] and nums[i] > nums[start]) or nums[start] < nums[i] < nums[mid]:
+                mid = i
+            # 找到end
+            if (nums[i] > nums[mid] and nums[mid] != nums[start]) or (nums[i] > nums[premid] and premid != 0):
+                return True
+            i += 1
+        return False
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.minJumps([11, 22, 7, 7, 7, 7, 7, 7, 7, 22, 13]))
+print(s.increasingTriplet([5, 1, 5, 5, 2, 5, 4]))
+# [5,1,5,5,2,5,4]
+# [2,5,0,6,6]
+# [2,5,0,1,2]
+# [5, 1, 6]
+# [20,100,10,12,5,13]
