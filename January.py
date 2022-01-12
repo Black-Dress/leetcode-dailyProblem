@@ -562,17 +562,25 @@ class Solution:
         dp = [1] * n
         s = [(arr[i], i) for i in range(n)]
         s.sort(key=lambda x: x[0])
+        # 设计哨兵
+        arr.append(0)
         for k, i in s:
-            for j in range(1, d + 1):
-                l = dp[i - j] if i - j >= 0 and max(arr[i - j:i]) < arr[i] else -1
-                r = dp[i + j] if i + j < n and max(arr[i + 1:i + j + 1]) < arr[i] else -1
-                dp[i] = max(dp[i], max(l, r) + 1)
+            # 左右比k小的最大值位置
+            l, r = i - 1, i + 1
+            # 找右边
+            while r < n and arr[r] < arr[i] and r <= i + d:
+                dp[i] = max(dp[r] + 1, dp[i])
+                r += 1
+            # 找左边
+            while l >= 0 and arr[l] < arr[i] and l >= i - d:
+                dp[i] = max(dp[l] + 1, dp[i])
+                l -= 1
         return max(dp)
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.maxJumps([66], 1))
+print(s.maxJumps())
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
