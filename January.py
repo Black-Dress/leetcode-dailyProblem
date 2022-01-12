@@ -553,11 +553,26 @@ class Solution:
             i += 1
         return False
 
+    # 1340. 跳跃游戏 V
+    def maxJumps(self, arr: List[int], d: int) -> int:
+        # 只能跳跃到比自己矮的位置-> 从高位开始跳
+        # dp[i] i 位置最多能够访问的下标数量 dp[i] = max(dp[i+x]+dp[i-x])+1
+        # dp[i+x] dp[i-x] 必须要能够跳到,这一题不会存在相互依赖因为 加入dp[i] 能够跳到 dp[i+x] 那么 dp[i+x] 是无法跳到dp[i]的
+        n = len(arr)
+        dp = [1] * n
+        s = [(arr[i], i) for i in range(n)]
+        s.sort(key=lambda x: x[0])
+        for k, i in s:
+            for j in range(1, d + 1):
+                l = dp[i - j] if i - j >= 0 and max(arr[i - j:i]) < arr[i] else -1
+                r = dp[i + j] if i + j < n and max(arr[i + 1:i + j + 1]) < arr[i] else -1
+                dp[i] = max(dp[i], max(l, r) + 1)
+        return max(dp)
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.increasingTriplet([5, 1, 5, 5, 2, 5, 4]))
+print(s.maxJumps([66], 1))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
