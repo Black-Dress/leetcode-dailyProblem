@@ -1,6 +1,11 @@
 import collections
+from heapq import heapify, heappop, heappush
+import heapq
+from queue import PriorityQueue
 from sys import setprofile, version_info
 from typing import Collection, Dict, List, Literal
+
+from pyparsing import nums
 from NodeHelper.ListNode import ListNode
 from NodeHelper.TreeNode import TreeNode
 import bisect
@@ -560,10 +565,7 @@ class Solution:
         # dp[i+x] dp[i-x] 必须要能够跳到,这一题不会存在相互依赖因为 加入dp[i] 能够跳到 dp[i+x] 那么 dp[i+x] 是无法跳到dp[i]的
         n = len(arr)
         dp = [1] * n
-        s = [(arr[i], i) for i in range(n)]
-        s.sort(key=lambda x: x[0])
-        # 设计哨兵
-        arr.append(0)
+        s = sorted([(arr[i], i) for i in range(n)], key=lambda x: x[0])
         for k, i in s:
             # 左右比k小的最大值位置
             l, r = i - 1, i + 1
@@ -576,11 +578,55 @@ class Solution:
                 dp[i] = max(dp[l] + 1, dp[i])
                 l -= 1
         return max(dp)
+
+    # 1696. 跳跃游戏 VI
+    def maxResult(self, nums: List[int], k: int) -> int:
+        # dp[i]表示到达i位置时能够得到的最大分数之和
+        # dp[i] = max(dp[i-k-1:i])+nums[i]
+        # stack 维护 [i-k-1:i]内的最大值
+        # return dp[n-1]
+        n = len(nums)
+        dp = [nums[0]] + [-float('inf')] * (n - 1)
+        stack = collections.deque()
+        for i in range(n):
+
+            while len(stack) != 0 and dp[i] > stack[-1]:
+                stack.pop()
+            stack.append()
+
+        return dp[-1]
+
+    # 373. 查找和最小的K对数字
+    def kSmallestPairs(self, nums1: List[int], nums2: List[int], k: int) -> List[List[int]]:
+        # k^2 解法
+        # que = list()
+        # heapq.heapify(que)
+        # i = 0
+        # while i < len(nums1) and i < k:
+        #     j = 0
+        #     while j < len(nums2) and j < k:
+        #         heapq.heappush(que, [nums1[i] + nums2[j], [nums1[i], nums2[j]]])
+        #         j += 1
+        #     i += 1
+        # return [heapq.heappop(que)[1] for i in range(min(k, len(que)))]
+        # 多路归并
+        # 假设 (i,j)是答案的点，那么(i+1,j),(i,j+1)是后续的待选点,(0,0)是必选点
+        # 优先把(0,[1,k])放入备选点,之后的循环加入j就可以防止重复加入
+        m, n = len(nums1), len(nums2)
+        res = list()
+        que = [(nums1[i] + nums2[0], i, 0) for i in range(min(k, m))]
+        while que and len(res) < k:
+            _, i, j = heappop(que)
+            res.append([nums1[i], nums2[j]])
+            if j + 1 < n:
+                heappush(que, (nums1[i] + nums2[j + 1], i, j + 1))
+        return res
+
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.maxJumps())
+print(s.kSmallestPairs([1, 1, 2], [1, 2, 3], 2))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
