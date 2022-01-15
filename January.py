@@ -589,11 +589,15 @@ class Solution:
         dp = [nums[0]] + [-float('inf')] * (n - 1)
         stack = collections.deque()
         for i in range(n):
-
-            while len(stack) != 0 and dp[i] > stack[-1]:
+            # 弹出越界元素
+            while len(stack) != 0 and stack[-1][0] < i - k:
                 stack.pop()
-            stack.append()
-
+            # 更新dp
+            dp[i] = max(dp[i], stack[0][1])
+            # 压栈
+            while len(stack) != 0 and dp[i] >= stack[-1][1]:
+                stack.pop()
+            stack.append((i, dp[i]))
         return dp[-1]
 
     # 373. 查找和最小的K对数字
