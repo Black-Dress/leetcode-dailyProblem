@@ -4,8 +4,6 @@ import heapq
 from queue import PriorityQueue
 from sys import setprofile, version_info
 from typing import Collection, Dict, List, Literal
-
-from pyparsing import nums
 from NodeHelper.ListNode import ListNode
 from NodeHelper.TreeNode import TreeNode
 import bisect
@@ -626,12 +624,22 @@ class Solution:
                 heappush(que, (nums1[i] + nums2[j + 1], i, j + 1))
         return res
 
+    # 1716. 计算力扣银行的钱
+    def totalMoney(self, n: int) -> int:
+        # 计算有几周 -> 计算剩余几天
+        if n <= 7:
+            return int((1 + n) * n / 2)
+        weeks, rest = n // 7, n % 7
+        a = (1 + 7) * 7 / 2 * weeks + (1 + weeks - 1) * (weeks - 1) / 2 * 7
+        b = (weeks + 1 + weeks + 1 + rest - 1) * rest / 2
+        return int(a + b)
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.kSmallestPairs([1, 1, 2], [1, 2, 3], 2))
+print(s.totalMoney(1000))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
