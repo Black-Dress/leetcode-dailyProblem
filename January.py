@@ -1,6 +1,7 @@
 import collections
 from heapq import heapify, heappop, heappush
 import heapq
+from pickletools import long1
 from queue import PriorityQueue
 from sys import setprofile, version_info
 from typing import Collection, Dict, List, Literal
@@ -634,12 +635,44 @@ class Solution:
         b = (weeks + 1 + weeks + 1 + rest - 1) * rest / 2
         return int(a + b)
 
+    # 1220. 统计元音字母序列的数目
+    def countVowelPermutation(self, n: int) -> int:
+        # 该问题可以转换成在指定矩阵中长度为n的路径有多少条
+        # dp[i][j] 表示从i点开始，长度为j的路径有 dp[i][j] 条
+        # dp[i][j] = sum(dp[k][j-1]) k in vowels[i]
+        # vowels = [
+        #     [1],
+        #     [0, 2],
+        #     [0, 1, 3, 4],
+        #     [2, 4],
+        #     [0]
+        # ]
+        # dp = [[0 for i in range(n + 1)] for j in range(vowels.__len__())]
+        # # 初始化长度为一的时候的情况
+        # for i in range(5):
+        #     dp[i][1] = 1
+        # res = 0
+        # for j in range(1, n + 1):
+        #     for i in range(vowels.__len__()):
+        #         for k in range(vowels[i].__len__()):
+        #             dp[i][j] += dp[vowels[i][k]][j - 1]
+        # for i in range(vowels.__len__()):
+        #     res += dp[i][n]
+        #     res = res % (pow(10, 9) + 7)
+        # return res
+        # 简单dp
+        mod = pow(10, 9) + 7
+        dp = (1, 1, 1, 1, 1)
+        for i in range(1, n):
+            dp = (dp[1] % mod, (dp[0] + dp[2]) % mod, (dp[0] + dp[1] + dp[3] + dp[4]) % mod, (dp[2] + dp[4]) % mod, (dp[0]) % mod)
+        return sum(dp) % mod
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.totalMoney(1000))
+print(s.countVowelPermutation(5))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
