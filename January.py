@@ -4,6 +4,7 @@ import heapq
 from pickletools import long1
 from queue import PriorityQueue
 from sys import setprofile, version_info
+from time import time
 from typing import Collection, Dict, List, Literal
 from NodeHelper.ListNode import ListNode
 from NodeHelper.TreeNode import TreeNode
@@ -667,12 +668,43 @@ class Solution:
             dp = (dp[1] % mod, (dp[0] + dp[2]) % mod, (dp[0] + dp[1] + dp[3] + dp[4]) % mod, (dp[2] + dp[4]) % mod, (dp[0]) % mod)
         return sum(dp) % mod
 
+    # 539. 最小时间差
+    def findMinDifference(self, timePoints: List[str]) -> int:
+        times = sorted([int(time[:2]) * 60 + int(time[3:]) for time in timePoints])
+        res = 2400
+        for i in range(1, times.__len__()):
+            res = min(res, times[i] - times[i - 1])
+        res = min(times[-1] - times[0], res, times[0] + 1440 - times[-1])
+        return res
+
+    # 219. 存在重复元素 II
+    def containsNearbyDuplicate(self, nums: List[int], k: int) -> bool:
+        i, n = 0, len(nums)
+        j = 1
+        cnt = collections.defaultdict(int)
+        while i < n and i <= k:
+            if cnt[nums[i]] == 0:
+                cnt[nums[i]] += 1
+            else:
+                return True
+            i += 1
+        cnt[nums[0]] -= 1
+        while i < n:
+            if cnt[nums[i]] == 0:
+                cnt[nums[i]] += 1
+            else:
+                return True
+            cnt[nums[j]] -= 1
+            i += 1
+            j += 1
+        return False
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.countVowelPermutation(5))
+print(s.containsNearbyDuplicate([1, 1, 3, 1, 2, 3], 1))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
