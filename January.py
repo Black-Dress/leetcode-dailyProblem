@@ -711,6 +711,29 @@ class Solution:
                 nums[i], nums[idx] = nums[idx], nums[i]
         return -1
 
+    # 2029. 石子游戏 IX
+    def stoneGameIX(self, stones: List[int]) -> bool:
+        # alice 获胜条件：
+        #   bob移除石头后，石头总价值能够被三整除
+        # bob获胜条件：
+        #   alice 移除石头之后，石头价值能够被三整除
+        #   价值一直不能被三整除，直到所有石头被移除
+        # 移除的石头的价值可以被归类为三种 0,1,2 (stones[i]%3)
+        # 为了不出现移除石头之后的价值能够被三整除，那么1,2是不能先后被移除的。
+        # 所以两者都安全的序列为 112121，221212
+        # 为了能让alice获胜在两个序列中得到的条件就是 cnt2>=cnt1>0 , cnt1>=cnt2>0
+        # 综合两个条件 -> cnt2>0 and cnt1>0
+        # 先后手交换情况下，即在安全序列下，后手的alice需要赢则要满足 cnt1>cnt2+2 cnt2>cnt1+2
+        # 综合cnt0的先后手交换情况，就可以通过cnt数量来进行判断
+        cnt = [0, 0, 0]
+        for i in stones:
+            cnt[i % 3] += 1
+        # 先后手未交换
+        if cnt[0] % 2 == 0:
+            return cnt[2] >= cnt[1] > 0 or cnt[1] >= cnt[2] > 0
+        # 先后手交换
+        return cnt[1] > cnt[2] + 2 or cnt[2] > cnt[1] + 2
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
