@@ -6,6 +6,7 @@ from queue import PriorityQueue
 from sys import setprofile, version_info
 from time import time
 from typing import Collection, Dict, List, Literal
+from xml.dom import INDEX_SIZE_ERR
 from NodeHelper.ListNode import ListNode
 from NodeHelper.TreeNode import TreeNode
 import bisect
@@ -699,12 +700,23 @@ class Solution:
             j += 1
         return False
 
+    # 剑指 Offer 03. 数组中重复的数字
+    def findRepeatNumber(self, nums: List[int]) -> int:
+        n = len(nums)
+        for i in range(n):
+            while nums[i] != i:
+                if nums[i] == nums[nums[i]]:
+                    return nums[i]
+                idx = nums[i]
+                nums[i], nums[idx] = nums[idx], nums[i]
+        return -1
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.containsNearbyDuplicate([1, 1, 3, 1, 2, 3], 1))
+print(s.findRepeatNumber([2, 3, 1, 0, 2, 5, 3]))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
