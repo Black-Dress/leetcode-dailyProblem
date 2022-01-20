@@ -734,12 +734,45 @@ class Solution:
         # 先后手交换
         return cnt[1] > cnt[2] + 2 or cnt[2] > cnt[1] + 2
 
+    # 剑指 Offer 04. 二维数组中的查找
+    def findNumberIn2DArray(self, matrix: List[List[int]], target: int) -> bool:
+        # 利用二分查找，二分查找按区间进行查找
+        # 若小于mid 则向左上半区进行查询，若大于mid则向右半区和下半区进行查询
+        # bound 存储的是左上角和右下角的位置，用来指代半区
+        def binarySerach(matrix: List[List[int]], bound: List[int], target: int) -> bool:
+            a, b, c, d = bound
+            if a > c or b > d:
+                return False
+            mid = [(a + c) >> 1, (b + d) >> 1]
+            if target == matrix[mid[0]][mid[1]]:
+                return True
+            if target > matrix[mid[0]][mid[1]]:
+                x = binarySerach(matrix, [a, mid[1] + 1, c, d], target)
+                y = binarySerach(matrix, [mid[0] + 1, b, c, mid[1]], target)
+                return x or y
+            else:
+                x = binarySerach(matrix, [a, b, c, mid[1] - 1], target)
+                y = binarySerach(matrix, [a, mid[1], mid[0] - 1, d], target)
+                return x or y
+
+        if len(matrix) == 0 or len(matrix[0]) == 0:
+            return False
+        return binarySerach(matrix, [0, 0, len(matrix) - 1, len(matrix[0]) - 1], target)
+
 
 s = Solution()
 a = ListNode.createListNode([1, 4, 5])
 b = ListNode.createListNode([1, 3, 4])
 c = ListNode.createListNode([2, 6])
-print(s.findRepeatNumber([2, 3, 1, 0, 2, 5, 3]))
+print(s.findNumberIn2DArray(
+    [
+        [1, 2, 3, 4, 5],
+        [6, 7, 8, 9, 10],
+        [11, 12, 13, 14, 15],
+        [16, 17, 18, 19, 20],
+        [21, 22, 23, 24, 25]
+    ],
+    5))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
