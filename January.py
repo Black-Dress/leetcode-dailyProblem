@@ -7,6 +7,8 @@ from sys import setprofile, version_info
 from time import time
 from typing import Collection, Dict, List, Literal
 from xml.dom import INDEX_SIZE_ERR
+
+from pkg_resources import EggMetadata
 from NodeHelper.ListNode import ListNode
 from NodeHelper.TreeNode import TreeNode
 import bisect
@@ -791,6 +793,35 @@ class Solution:
         if len(alpha.items()) == 0:
             return ' '
         return alpha.popitem(False)[0]
+
+    # 2045. 到达目的地的第二短时间
+    def secondMinimum(self, n: int, edges: List[List[int]], time: int, change: int) -> int:
+        # 构建无向图,节点值从1开始
+        graph = [[] for i in range(n + 1)]
+        for i in edges:
+            x, y = i[0], i[1]
+            graph[x].append(y)
+            graph[y].append(x)
+        que = collections.deque([(1, 0)])
+        dis = [[float('inf'), float('inf')] for i in range(n + 1)]
+        dis[1][0] = 0
+        # 只要找到到达n节点的最短路，就可以找到开销最小的时间
+        while dis[n][1] == float('inf'):
+            cur = que.popleft()
+            for i in graph[cur[0]]:
+                d = cur[1] + 1
+                if d < dis[i][0]:
+                    dis[i][0] = d
+                    que.append((i, d))
+                elif dis[i][0] < d < dis[i][1]:
+                    dis[i][1] = d
+                    que.append((i, d))
+        res = 0
+        for i in range(dis[n][1]):
+            if res % (change * 2) >= change:
+                res += 2 * change - res % (2 * change)
+            res += time
+        return res
 
 
 s = Solution()
