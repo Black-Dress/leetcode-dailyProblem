@@ -773,14 +773,35 @@ class Solution:
                 l = mid + 1
         return numbers[l]
 
+    # 剑指 Offer 50. 第一个只出现一次的字符
+    def firstUniqChar(self, s: str) -> str:
+        # 一定要遍历所有的字符才能知道哪些节点是不重复的
+        # 在遍历过程中利用有序map 存储所有的节点，
+        # 如果有重复的数字则不添加到map中，并且将map中的元素删除，同时也得确保，之后不再被添加进来
+        alpha = collections.OrderedDict()
+        cnt = [0] * 26
+        for i in s:
+            index = ord(i) - ord('a')
+            if cnt[index] == 0:
+                alpha[i] = 1
+                cnt[index] += 1
+            else:
+                if alpha.get(i) is not None:
+                    alpha.pop(i)
+        if len(alpha.items()) == 0:
+            return ' '
+        return alpha.popitem(False)[0]
+
 
 s = Solution()
-a = ListNode.createListNode([1, 4, 5])
-b = ListNode.createListNode([1, 3, 4])
-c = ListNode.createListNode([2, 6])
-print(s.minArray([3, 4, 5, 1, 2]))
+# print(s.firstUniqChar("abaccdeff"))
 # [5,1,5,5,2,5,4]
 # [2,5,0,6,6]
 # [2,5,0,1,2]
 # [5, 1, 6]
 # [20,100,10,12,5,13]
+a = dict()
+a[1] = 2
+a[4] = 2
+a[3] = 2
+print(list(a.keys())[-1])
