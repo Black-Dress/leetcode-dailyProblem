@@ -823,6 +823,49 @@ class Solution:
             res += time
         return res
 
+    # 剑指 Offer 46. 把数字翻译成字符串
+    def translateNum(self, num: int) -> int:
+        # 动态规划
+        # dp[i] 表示 [0,i] 最多有dp[i]个组合，dp[0] = 1, dp[1] = 2或1(需要判断能不能转换成字母)
+        # i位置的数字可以自身翻译成一个字母,其得到的组合数:dp[i-1]
+        # i 位置的数字还可以和前一个字母结合起来两个翻译成一个字母其组合数: dp[i-2]
+        # 转换方程：
+        # dp[i] = dp[i-1] + dp[i-2]  if num[i-1:i+1]<26
+        # dp[i] = dp[i-1]
+        nums = str(num)
+        n = len(nums)
+        if n < 2:
+            return 1
+        dp = [1] + [0] * (n - 1)
+        dp[1] = 2 if int(nums[:2]) < 26 else 1
+        for i in range(2, n):
+            if nums[i - 1] != '0' and int(nums[i - 1:i + 1]) < 26:
+                dp[i] = dp[i - 1] + dp[i - 2]
+            else:
+                dp[i] = dp[i - 1]
+        return dp[-1]
+
+    # 剑指 Offer 48. 最长不含重复字符的子字符串
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # 双指针，区间内部是没有重复数字的子串
+        # map 记录区间内部所有元素的位置
+        # 每次右指针向右移动，判断是否重复
+        #   若无重复或者重复元素的位置小于左指针，更新元素位置，更新最大长度
+        #   若重复元素在区间内，更新左指针位置到重复元素位置的右侧
+        i, j = 0, 1
+        res = 1
+        cnt = dict()
+        cnt[s[i]] = i
+        while j < len(s):
+            # 移动右指针
+            if cnt.get(s[j]) is None or cnt[s[j]] < i:
+                cnt[s[j]] = j
+                res = max(res, j - i + 1)
+                j += 1
+            else:
+                i = cnt[s[j]] + 1
+        return res
+
 
 s = Solution()
 # print(s.firstUniqChar("abaccdeff"))
@@ -831,8 +874,4 @@ s = Solution()
 # [2,5,0,1,2]
 # [5, 1, 6]
 # [20,100,10,12,5,13]
-a = dict()
-a[1] = 2
-a[4] = 2
-a[3] = 2
-print(list(a.keys())[-1])
+print(s.lengthOfLongestSubstring("pwwkew"))
