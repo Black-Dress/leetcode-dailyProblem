@@ -2,6 +2,7 @@ import collections
 from heapq import heapify, heappop, heappush
 import heapq
 from pickletools import long1
+from pydoc import text
 from queue import PriorityQueue
 from sys import setprofile, version_info
 from time import time
@@ -868,6 +869,32 @@ class Solution:
                 i = cnt[s[j]] + 1
         return res
 
+    # 剑指 Offer II 095. 最长公共子序列
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        # dp[i][j] 表示 text1[i] 与 text2[j] 的最长公共子序列的长度
+        # dp[i][j] = dp[i-1][j-1]+1  text1[i]==text2[j]
+        # dp[i][j] = max(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]) text1[i]!=text2[j]
+        m, n = len(text1), len(text2)
+        dp = [[0 for j in range(n)] for i in range(m)]
+        dp[0][0] = 1 if text1[0] == text2[0] else 0
+        for i in range(1, m):
+            if text1[i] == text2[0]:
+                dp[i][0] = 1
+            else:
+                dp[i][0] = dp[i - 1][0]
+        for j in range(1, n):
+            if text1[0] == text2[j]:
+                dp[0][j] = 1
+            else:
+                dp[0][j] = dp[0][j - 1]
+        for i in range(1, m):
+            for j in range(1, n):
+                if text1[i] == text2[j]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = max(dp[i][j - 1], dp[i - 1][j - 1], dp[i - 1][j])
+        return dp[m - 1][n - 1]
+
 
 s = Solution()
 # print(s.firstUniqChar("abaccdeff"))
@@ -876,4 +903,5 @@ s = Solution()
 # [2,5,0,1,2]
 # [5, 1, 6]
 # [20,100,10,12,5,13]
-print(s.lengthOfLongestSubstring("pwwkew"))
+print(s.longestCommonSubsequence("abc",
+                                 "abe"))
