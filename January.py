@@ -895,6 +895,40 @@ class Solution:
                     dp[i][j] = max(dp[i][j - 1], dp[i - 1][j])
         return dp[m - 1][n - 1]
 
+    # 1996. 游戏中弱角色的数量
+    def numberOfWeakCharacters(self, properties: List[List[int]]) -> int:
+        # 对攻击力进行单独排序
+        # 若存在 i 的防御力 大于 [0,i-1]区间内的防御力，那么就存在一个弱角色
+        # 问题转变成判断位置i之前有多少个小于defense[i]的元素，并求最大的个数
+        # 利用单调栈进行计算
+        # properties = sorted(properties, key=lambda x: (x[0], x[1]))
+        # stack = [(-1, collections.deque())]
+        # res = 0
+        # for i in range(len(properties)):
+        #     a, d = properties[i][0], properties[i][1]
+        #     index = len(stack) - 2 if stack[-1][0] == a else len(stack) - 1
+        #     while index >= 0 and len(stack[index][1]) > 0 and d > stack[index][1][0]:
+        #         stack[index][1].popleft()
+        #         res += 1
+        #         if len(stack[index][1]) == 0:
+        #             index -= 1
+        #             stack.pop(index + 1)
+        #     if stack[-1][0] == a:
+        #         stack[-1][1].append(d)
+        #     else:
+        #         stack.append((a, collections.deque([d])))
+        # return res
+        # 防御力从大到小进行排列就不会在攻击力相同时也进行res的计数了
+        properties = sorted(properties, key=lambda x: (x[0], -x[1]))
+        stack = []
+        res = 0
+        for a, d in properties:
+            while len(stack) != 0 and stack[-1] < d:
+                stack.pop()
+                res += 1
+            stack.append(d)
+        return res
+
 
 s = Solution()
 # print(s.firstUniqChar("abaccdeff"))
@@ -903,5 +937,4 @@ s = Solution()
 # [2,5,0,1,2]
 # [5, 1, 6]
 # [20,100,10,12,5,13]
-print(s.longestCommonSubsequence("abc",
-                                 "abe"))
+print(s.numberOfWeakCharacters([[7, 7], [1, 2], [9, 7], [7, 3], [3, 10], [9, 8], [8, 10], [4, 3], [1, 5], [1, 5]]))
