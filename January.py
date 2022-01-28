@@ -955,6 +955,24 @@ class Solution:
                     res += 1
         return res
 
+    # 75. 颜色分类
+    def sortColors(self, nums: List[int]) -> None:
+        """
+        Do not return anything, modify nums in-place instead.
+        """
+        # 原地算法，利用两个标志位，i,j 标识红色和蓝色的长度
+        i, j = 0, len(nums) - 1
+        k = 0
+        while i < j and i <= k <= j and k < len(nums):
+            while j >= k and nums[k] == 2:
+                nums[j], nums[k] = nums[k], nums[j]
+                j -= 1
+            while i <= k and nums[k] == 0:
+                nums[i], nums[k] = nums[k], nums[i]
+                i += 1
+            k += 1
+        k = 1
+
 
 s = Solution()
 # print(s.firstUniqChar("abaccdeff"))
@@ -963,4 +981,4 @@ s = Solution()
 # [2,5,0,1,2]
 # [5, 1, 6]
 # [20,100,10,12,5,13]
-print(s.movingCount(1, 2, 1))
+print(s.sortColors([2, 2, 2]))
