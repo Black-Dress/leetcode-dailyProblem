@@ -929,6 +929,32 @@ class Solution:
             stack.append(d)
         return res
 
+    def movingCount(self, m: int, n: int, k: int) -> int:
+        # bfs 洪泛法
+        def sumNum(i: int, j: int) -> int:
+            res = 0
+            while i != 0:
+                res += i % 10
+                i = i // 10
+            while j != 0:
+                res += j % 10
+                j = j // 10
+            return res
+
+        que = collections.deque([[0, 0]])
+        res = 1
+        while len(que) > 0:
+            cur = que.popleft()
+            d = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+            for dx, dy in d:
+                x, y = cur[0] + dx, cur[1] + dy
+                a = 0 <= x < m
+                b = 0 <= y < n
+                if a and b and sumNum(x, y) <= k:
+                    que.append([x, y])
+                    res += 1
+        return res
+
 
 s = Solution()
 # print(s.firstUniqChar("abaccdeff"))
@@ -937,4 +963,4 @@ s = Solution()
 # [2,5,0,1,2]
 # [5, 1, 6]
 # [20,100,10,12,5,13]
-print(s.numberOfWeakCharacters([[7, 7], [1, 2], [9, 7], [7, 3], [3, 10], [9, 8], [8, 10], [4, 3], [1, 5], [1, 5]]))
+print(s.movingCount(1, 2, 1))
