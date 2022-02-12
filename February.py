@@ -31,12 +31,13 @@ class Solution:
             if nums[i - k] <= -l[0]:
                 l.remove(-nums[i - k])
                 heapify(l)
+                while len(l) - len(r) < 0:
+                    heappush(l, -heappop(r))
             else:
                 r.remove(nums[i - k])
                 heapify(r)
-
-            while len(l) - len(r) > 1 or len(l) - len(r) < 0:
-                heappush(r, -heappop(l))
+                while len(l) - len(r) > 1:
+                    heappush(r, -heappop(l))
             # 入栈
             inStack(l, r, nums[i])
             res.append(mid(l, r))
