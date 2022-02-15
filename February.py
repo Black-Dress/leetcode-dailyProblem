@@ -1,3 +1,4 @@
+from cmath import pi
 from heapq import *
 from typing import List
 
@@ -93,8 +94,22 @@ class Solution:
                 return dfs(l, mid - 1, nums)
         return dfs(0, len(nums) - 1, nums)
 
+    # 快排
+    def quick_sort(self, nums: List[int]) -> List[int]:
+        if not nums:
+            return []
+        i, j = 0, len(nums) - 1
+        while i < j:
+            while i < j and nums[i] <= nums[-1]:
+                i += 1
+            while i < j and nums[j] >= nums[-1]:
+                j -= 1
+            nums[i], nums[j] = nums[j], nums[i]
+        nums[i], nums[-1] = nums[-1], nums[i]
+        return self.quick_sort(nums[:i]) + [nums[i]] + self.quick_sort(nums[i + 1:])
+
 
 s = Solution()
-print(s.singleNonDuplicate([3, 3, 7, 7, 10, 11, 11]))
+print(s.quick_sort([1, 6, 2, 4, 1, 2, 9, 6, 4, 5, 7]))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
