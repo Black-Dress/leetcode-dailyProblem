@@ -108,8 +108,48 @@ class Solution:
         nums[i], nums[-1] = nums[-1], nums[i]
         return self.quick_sort(nums[:i]) + [nums[i]] + self.quick_sort(nums[i + 1:])
 
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # 双指针，区间内部是没有重复数字的子串
+        # map 记录区间内部所有元素的位置
+        # 每次右指针向右移动，判断是否重复
+        #   若无重复或者重复元素的位置小于左指针，更新元素位置，更新最大长度
+        #   若重复元素在区间内，更新左指针位置到重复元素位置的右侧
+        i, res = -1, 0
+        cnt = dict()
+        for j in range(len(s)):
+            # 移动右指针
+            if s[j] in cnt:
+                i = max(i, cnt[s[j]])
+            res = max(res, j - i)
+            cnt[s[j]] = j
+        return res
+
+    # 440. 字典序的第K小数字
+    def findKthNumber(self, n: int, k: int) -> int:
+
+        # 前缀为cur的时候子树大小
+        def getCount(n: int, cur: int) -> int:
+            res, next = 0, cur + 1
+            while cur <= n:
+                res += min(next, n + 1) - cur
+                cur *= 10
+                next *= 10
+            return res
+
+        res = 1
+        k -= 1
+        while k > 0:
+            nums = getCount(n, res)
+            if k >= nums:
+                k -= nums
+                res += 1
+            else:
+                res *= 10
+                k -= 1
+        return res
+
 
 s = Solution()
-print(s.quick_sort([1, 6, 2, 4, 1, 2, 9, 6, 4, 5, 7]))
+print(s.findKthNumber(19, 2))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
