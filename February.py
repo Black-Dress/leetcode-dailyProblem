@@ -148,8 +148,29 @@ class Solution:
                 k -= 1
         return res
 
+    # 969. 煎饼排序
+    def pancakeSort(self, arr: List[int]) -> List[int]:
+        def help(arr: List[int], r: int) -> List[int]:
+            arr[0:r + 1] = arr[r::-1]
+            res = [r + 1]
+            if r < 2:
+                return res
+            while r > 0 and arr[0] < arr[1]:
+                i = 1
+                while i <= r and arr[i] > arr[0]:
+                    i += 1
+                arr[0:i] = arr[i - 1::-1]
+                res.append(i)
+            arr[0:r + 1] = arr[r::-1]
+            return res + [r + 1]
+        res = []
+        for i in range(len(arr) - 1):
+            if arr[i] > arr[i + 1]:
+                res.extend(help(arr, i + 1))
+        return res
+
 
 s = Solution()
-print(s.findKthNumber(19, 2))
+print(s.pancakeSort([1, 4, 2, 3]))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
