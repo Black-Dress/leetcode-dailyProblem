@@ -1,5 +1,9 @@
 from cmath import pi
+from collections import Counter
+# from curses.ascii import isalpha
 from heapq import *
+from operator import le
+
 from typing import List
 
 
@@ -169,8 +173,53 @@ class Solution:
                 res.extend(help(arr, i + 1))
         return res
 
+    # 76. 最小覆盖子串
+    def minWindow(self, s: str, t: str) -> str:
+        # 滑动窗口，找到一个解很简单，找到最优解且是O(n)
+        window, i, j, index, n = [], 0, 0, Counter(t), len(t)
+        # 初始化window
+        while i < len(s) - len(t) + 1 and s[i] not in index:
+            i += 1
+        j = i
+        while n > 0 and j < len(s):
+            if s[j] not in index:
+                j += 1
+                continue
+            index[s[j]] -= 1
+            window.append(j)
+            n -= 1 if index[s[j]] >= 0 else 0
+            if n == 0:
+                break
+            j += 1
+        res = s[i:j + 1] if j < len(s) else ""
+        # 滑动窗口
+        while window and i < len(s) - len(t) + 1 and j < len(s):
+            # 动右指针
+            if index[s[i]] <= -1:
+                index[s[i]] += 1
+            else:
+                j += 1
+                while j < len(s):
+                    if s[j] in index:
+                        window.append(j)
+                        index[s[j]] -= 1
+                    if s[j] == s[i]:
+                        index[s[j]] += 1
+                        break
+                    j += 1
+            if j == len(s):
+                break
+            # 动左指针
+            window.pop(0)
+            i = window[0] if window else i
+            # 更新结果
+            if len(res) > len(s[i:j + 1]):
+                res = s[i:j + 1]
+        return res
+
 
 s = Solution()
-print(s.pancakeSort([1, 4, 2, 3]))
+print(s.minWindow("cabefgecdaecf",
+                  "cae"))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
