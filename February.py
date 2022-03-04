@@ -111,7 +111,7 @@ class Solution:
             # 弹出
             while que and que[0] <= i - k:
                 que.pop(0)
-            res.append(null if not que else nums[que[0]])
+            res.append(None if not que else nums[que[0]])
         return res
 
 
