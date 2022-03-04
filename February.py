@@ -1,3 +1,4 @@
+import bisect
 from heapq import *
 from typing import List
 
@@ -93,8 +94,28 @@ class Solution:
                 return dfs(l, mid - 1, nums)
         return dfs(0, len(nums) - 1, nums)
 
+    # 239. 滑动窗口最大值
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        que = []
+        # 初始化
+        for i in range(k):
+            while que and nums[que[-1]] < nums[i]:
+                que.pop()
+            que.append(i)
+        res = [nums[que[0]]]
+        for i in range(k, len(nums)):
+            # 插入
+            while que and nums[que[-1]] < nums[i]:
+                que.pop()
+            que.append(i)
+            # 弹出
+            while que and que[0] <= i - k:
+                que.pop(0)
+            res.append(null if not que else nums[que[0]])
+        return res
+
 
 s = Solution()
-print(s.singleNonDuplicate([3, 3, 7, 7, 10, 11, 11]))
+print(s.maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
