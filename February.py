@@ -1,6 +1,10 @@
+<< << << < HEAD
 from cmath import pi
 from collections import Counter
 # from curses.ascii import isalpha
+== == == =
+import bisect
+>>>>>> > f196c7beceffa189d4b2164f731a74626e780423
 from heapq import *
 from operator import le
 
@@ -215,11 +219,29 @@ class Solution:
             # 更新结果
             if len(res) > len(s[i:j + 1]):
                 res = s[i:j + 1]
+    # 239. 滑动窗口最大值
+
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        que = []
+        # 初始化
+        for i in range(k):
+            while que and nums[que[-1]] < nums[i]:
+                que.pop()
+            que.append(i)
+        res = [nums[que[0]]]
+        for i in range(k, len(nums)):
+            # 插入
+            while que and nums[que[-1]] < nums[i]:
+                que.pop()
+            que.append(i)
+            # 弹出
+            while que and que[0] <= i - k:
+                que.pop(0)
+            res.append(None if not que else nums[que[0]])
         return res
 
 
 s = Solution()
-print(s.minWindow("cabefgecdaecf",
-                  "cae"))
+print(s.minWindow("cabefgecdaecf", "cae"))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
