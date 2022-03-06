@@ -1,10 +1,7 @@
-<< << << < HEAD
 from cmath import pi
-from collections import Counter
+from collections import Counter, defaultdict
 # from curses.ascii import isalpha
-== == == =
 import bisect
->>>>>> > f196c7beceffa189d4b2164f731a74626e780423
 from heapq import *
 from operator import le
 
@@ -240,8 +237,28 @@ class Solution:
             res.append(None if not que else nums[que[0]])
         return res
 
+    # 207. 课程表
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        # 有向图判断是否成环
+        cnt_out, cnt_in = defaultdict(list), defaultdict(int)
+        for i in prerequisites:
+            cnt_out[i[1]].append(i[0])
+            cnt_in[i[0]] += 1
+            cnt_in[i[1]] += 0
+        que = [k for k, v in cnt_in.items() if v == 0]
+        # 减去没有前置也没有后置的课程数量,减去入度为0的课程
+        numCourses = numCourses - (numCourses - len(cnt_in)) - len(que)
+        while que:
+            cur = que.pop(0)
+            for i in cnt_out[cur]:
+                cnt_in[i] -= 1
+                if cnt_in[i] == 0:
+                    numCourses -= 1
+                    que.append(i)
+        return numCourses == 0
+
 
 s = Solution()
-print(s.minWindow("cabefgecdaecf", "cae"))
+print(s.canFinish(5, [[1, 4], [2, 4], [3, 1], [3, 2]]))
 # print(sorted([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
 # print(min([1, 2, 3, 4, 5, 6], key=lambda x: (x == 1, x - 1)))
