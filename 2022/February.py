@@ -216,8 +216,9 @@ class Solution:
             # 更新结果
             if len(res) > len(s[i:j + 1]):
                 res = s[i:j + 1]
-
+        return res
     # 239. 滑动窗口最大值
+
     def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
         que = []
         # 初始化
