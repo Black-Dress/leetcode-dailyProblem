@@ -59,6 +59,31 @@ class Solution:
             res.append(0 if x < 0 or y < 0 else max(y - x - (candles[y] - candles[x]), 0))
         return res
 
+    # 798. 得分最高的最小轮调
+    def bestRotation(self, nums: List[int]) -> int:
+        n, diff = len(nums), [0] * (len(nums) + 1)
+        for i in range(n):
+            if nums[i] > i:
+                # [i+1,i+1+n-nums[i]-1]
+                l, r = i + 1, i + 1 + n - nums[i]
+                diff[l] += 1
+                diff[r] -= 1
+            else:
+                # [0,i-nums[i]]
+                diff[0] += 1
+                diff[i - nums[i] + 1] -= 1
+                # [i+1,n]
+                diff[i + 1] += 1
+                diff[n] -= 1
+        for i in range(1, n):
+            diff[i] += diff[i - 1]
+        res, score = 0, 0
+        for i in range(n):
+            if diff[i] > score:
+                res = i
+                score = diff[i]
+        return res
+
 
 s = Solution()
-print(s.platesBetweenCandles("*|||*", [[1, 4]]))
+print(s.bestRotation([2, 3, 1, 4, 0]))
