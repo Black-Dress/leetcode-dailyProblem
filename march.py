@@ -118,8 +118,20 @@ class Solution:
             que = cur
         return res
 
+    # 416. 分割等和子集
+    def canPartition(self, nums: List[int]) -> bool:
+        # dp[i] 表示值为i的时候能否通过nums的元素构成
+        a = sum(nums)
+        if a % 2 != 0:
+            return False
+        dp = [True] + [False] * (a // 2)
+        for num in nums:
+            for i in range(a // 2, num - 1, -1):
+                dp[i] = dp[i] or dp[i - num]
+        return dp[-1]
+
 
 s = Solution()
-print(s.removeInvalidParentheses("()())()(()(()(("))
+print(s.canPartition([1, 2, 5]))
 # ()())()
 # (()(()((
