@@ -1,4 +1,7 @@
-from typing import List
+from calendar import c
+from ctypes.wintypes import tagRECT
+import tarfile
+from typing import List, Literal, Set
 
 
 class Solution:
@@ -16,9 +19,8 @@ class Solution:
         # return [check(i) for i in queries]
 
         # 存储所有蜡烛位置，利用二分查找离边界最近的蜡烛位置
-        cnt = [i for i in range(len(s)) if s[i] == '|']
-
         # 二分查找最近的蜡烛
+        # cnt = [i for i in range(len(s)) if s[i] == '|']
         # def index(i: int, l: int, r: int, isL: bool) -> int:
         #     while l <= r:
         #         mid = (l + r) >> 1
@@ -84,6 +86,40 @@ class Solution:
                 score = diff[i]
         return res
 
+    # 301. 删除无效的括号
+    def removeInvalidParentheses(self, s: str) -> List[str]:
+        # BFS 搜索
+        def check(s: str) -> bool:
+            cnt = 0
+            for i in s:
+                if i == '(':
+                    cnt += 1
+                elif i == ')':
+                    cnt -= 1
+                    if cnt < 0:
+                        return False
+            return cnt == 0
+        # BFS
+        que, res = set([s]), []
+        while que:
+            for ss in que:
+                if check(ss):
+                    res.append(ss)
+            if res:
+                break
+            cur = set()
+            for ss in que:
+                for i in range(len(ss)):
+                    # 去除重复删除
+                    if i > 0 and ss[i] == s[i - 1]:
+                        continue
+                    if ss[i] == ')' or ss[i] == '(':
+                        cur.add(ss[:i] + ss[i + 1:])
+            que = cur
+        return res
+
 
 s = Solution()
-print(s.bestRotation([2, 3, 1, 4, 0]))
+print(s.removeInvalidParentheses("()())()(()(()(("))
+# ()())()
+# (()(()((
