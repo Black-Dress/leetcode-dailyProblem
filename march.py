@@ -1,4 +1,6 @@
+from ast import parse
 from calendar import c
+from collections import defaultdict
 from ctypes.wintypes import tagRECT
 import tarfile
 from typing import List, Literal, Set
@@ -147,8 +149,59 @@ class Solution:
 
         return max(dp[-1][1], dp[-1][2])
 
+    # 2049. 统计最高分的节点数目
+    def countHighestScoreNodes(self, parents: List[int]) -> int:
+        # 移除某一节点,res = 左子树*右子树*(整棵树-当前树)
+        # cnt[i] 表示 i节点表示的树包含的节点数量,children[i]=[l,r] 表示i节点的左节点和右节点的位置
+        # 通过并查集思想进行子树节点的统计
+        # cnt, children, n, res, num = defaultdict(int), defaultdict(list), len(parents), 1, 0
+        # for i in range(n):
+        #     index = i
+        #     while index != 0:
+        #         cnt[parents[index]] += 1
+        #         index = parents[index]
+        #     children[parents[i]].append(i)
+        #     cnt[i] += 1
+        # for i in range(n):
+        #     l = cnt[children[i][0]] if children[i] else 1
+        #     r = cnt[children[i][1]] if len(children[i]) > 1 else 1
+        #     parent = max(cnt[0] - cnt[i], 1)
+        #     temp = parent * l * r
+        #     if temp > num:
+        #         num = temp
+        #         res = 0
+        #     if temp == num:
+        #         res += 1
+        # return res
+        # 先建立一颗树，利用dfs遍历的时候进行score的计算
+        children, n, res, num = defaultdict(list), len(parents), 0, 0
+        for i, parent in enumerate(parents):
+            children[parent].append(i)
+
+        def check(t: int):
+            nonlocal num, res
+            if t > num:
+                num = t
+                res = 0
+            if t == num:
+                res += 1
+
+        def dfs(index: int) -> int:
+            if not children[index]:
+                check(n - 1)
+                return 1
+            child = [dfs(i) for i in children[index]]
+            a, b = child[0], n - child[0] - 1
+            for i in range(1, len(child)):
+                a *= child[i]
+                b -= child[i]
+            check(a * max(1, b))
+            return sum(child) + 1
+        dfs(0)
+        return res
+
 
 s = Solution()
-print(s.maxProfit([1, 2, 3, 0, 2]))
+print(s.countHighestScoreNodes([-1, 2, 0, 2, 0]))
 # ()())()
 # (()(()((
