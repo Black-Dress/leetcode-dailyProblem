@@ -130,8 +130,25 @@ class Solution:
                 dp[i] = dp[i] or dp[i - num]
         return dp[-1]
 
+    # 309. 最佳买卖股票时机含冷冻期
+    def maxProfit(self, prices: List[int]) -> int:
+        # dp[i][0] 表示持股最大收益
+        # dp[i][1] 不持股且在冷冻期的最大收益
+        # dp[i][2] 不持股且不在冷冻期的最大收益
+        n = len(prices)
+        dp = [[-prices[0], 0, 0]] + [[0] * 3 for i in range(n - 1)]
+        for i in range(1, n):
+            # 买
+            dp[i][0] = max(dp[i - 1][0], dp[i - 1][2] - prices[i])
+            # 卖
+            dp[i][1] = dp[i - 1][0] + prices[i]
+            # 冷冻
+            dp[i][2] = max(dp[i - 1][1], dp[i - 1][2])
+
+        return max(dp[-1][1], dp[-1][2])
+
 
 s = Solution()
-print(s.canPartition([1, 2, 5]))
+print(s.maxProfit([1, 2, 3, 0, 2]))
 # ()())()
 # (()(()((
