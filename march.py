@@ -1,6 +1,6 @@
 from ast import parse
 from calendar import c
-from collections import defaultdict
+from collections import Counter, defaultdict
 from ctypes.wintypes import tagRECT
 import tarfile
 from typing import List, Literal, Set
@@ -219,8 +219,38 @@ class Solution:
         dfs(0)
         return res
 
+    # 438. 找到字符串中所有字母异位词
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        # 滑动窗口,初始化窗口之后 需要判断区间是否是异位词
+        # if s[j] not in p -> i=j
+        m, n, target, cnt = len(s), len(p), Counter(p), 0
+        res = []
+        i, j = 0, 0
+        # 初始化
+        while j < n:
+            if s[j] in target:
+                target[s[j]] -= 1
+                cnt += 1 if target[s[j]] >= 0 else -1
+            j += 1
+        if cnt == n:
+            res.append(i)
+        # 滑动窗口
+        while j < m:
+            if s[j] in target:
+                target[s[j]] -= 1
+                cnt += 1 if target[s[j]] >= 0 else -1
+            if s[i] in target:
+                target[s[i]] += 1
+                cnt += 1 if target[s[i]] <= 0 else -1
+            j += 1
+            i += 1
+            if cnt == n:
+                res.append(i)
+        return res
+
 
 s = Solution()
-print(s.countHighestScoreNodes([-1, 2, 0, 2, 0]))
+print(s.findAnagrams("baa",
+                     "aa"))
 # ()())()
 # (()(()((
