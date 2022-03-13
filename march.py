@@ -245,9 +245,26 @@ class Solution:
                 res.append(i)
         return res
 
+    # 448. 找到所有数组中消失的数字
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        for i in range(len(nums)):
+            index = nums[i]
+            while nums[i] != nums[index - 1]:
+                nums[i], nums[index - 1] = nums[index - 1], nums[i]
+                index = nums[i]
+        return [i + 1 for i in range(len(nums)) if nums[i] - 1 != i]
+
+    # 461. 汉明距离
+    def hammingDistance(self, x: int, y: int) -> int:
+        res = 0
+        while x != 0 or y != 0:
+            res += (x & 1) ^ (y & 1)
+            x >>= 1
+            y >>= 1
+        return res
+
 
 s = Solution()
-print(s.findAnagrams("baa",
-                     "aa"))
+print(s.hammingDistance(1, 4))
 # ()())()
 # (()(()((
