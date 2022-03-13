@@ -228,20 +228,17 @@ class Solution:
         i, j = 0, 0
         # 初始化
         while j < n:
-            if s[j] in target:
-                target[s[j]] -= 1
-                cnt += 1 if target[s[j]] >= 0 else -1
+            target[s[j]] -= 1
+            cnt += 1 if target[s[j]] >= 0 else -1
             j += 1
         if cnt == n:
             res.append(i)
         # 滑动窗口
         while j < m:
-            if s[j] in target:
-                target[s[j]] -= 1
-                cnt += 1 if target[s[j]] >= 0 else -1
-            if s[i] in target:
-                target[s[i]] += 1
-                cnt += 1 if target[s[i]] <= 0 else -1
+            target[s[j]] -= 1
+            cnt += 1 if target[s[j]] >= 0 else -1
+            target[s[i]] += 1
+            cnt += 1 if target[s[i]] <= 0 else -1
             j += 1
             i += 1
             if cnt == n:
