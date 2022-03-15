@@ -200,8 +200,19 @@ class Solution:
         dfs(0)
         return res
 
+    # 312. 戳气球
+    def maxCoins(self, nums: List[int]) -> int:
+        # dp[i][j] 表示区间i,j的最大金币数
+        n, nums = len(nums), [1] + nums + [1]
+        dp = [[0] * (n + 2) for i in range(n + 2)]
+        for i in range(n, -1, -1):
+            for j in range(i + 2, n + 2):
+                for k in range(i + 1, j):
+                    dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + nums[i] * nums[j] * nums[k])
+        return dp[0][-1]
+
 
 s = Solution()
-print(s.countHighestScoreNodes([-1, 2, 0, 2, 0]))
+print(s.maxCoins([1, 0, 2, 8]))
 # ()())()
 # (()(()((
