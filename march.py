@@ -1,12 +1,31 @@
 from ast import parse
 from calendar import c
-from collections import defaultdict
+from collections import Counter, defaultdict
 from ctypes.wintypes import tagRECT
 import tarfile
 from typing import List, Literal, Set
 
 
 class Solution:
+    # 165. 比较版本号
+    def compareVersion(self, version1: str, version2: str) -> int:
+        a, b, i = version1.split('.'), version2.split('.'), 0
+        while i < len(a) and i < len(b):
+            if int(a[i]) > int(b[i]):
+                return 1
+            if int(a[i]) < int(b[i]):
+                return -1
+            i += 1
+        while i < len(a):
+            if int(a[i]) > 0:
+                return 1
+            i += 1
+        while i < len(b):
+            if int(b[i]) > 0:
+                return -1
+            i += 1
+        return 0
+
     # 2055. 蜡烛之间的盘子
     def platesBetweenCandles(self, s: str, queries: List[List[int]]) -> List[int]:
         # 利用栈可以轻松得到查询的结果
@@ -211,8 +230,52 @@ class Solution:
                     dp[i][j] = max(dp[i][j], dp[i][k] + dp[k][j] + nums[i] * nums[j] * nums[k])
         return dp[0][-1]
 
+    # 438. 找到字符串中所有字母异位词
+    def findAnagrams(self, s: str, p: str) -> List[int]:
+        # 滑动窗口,初始化窗口之后 需要判断区间是否是异位词
+        # if s[j] not in p -> i=j
+        m, n, target, cnt = len(s), len(p), Counter(p), 0
+        res = []
+        i, j = 0, 0
+        # 初始化
+        while j < n:
+            target[s[j]] -= 1
+            cnt += 1 if target[s[j]] >= 0 else -1
+            j += 1
+        if cnt == n:
+            res.append(i)
+        # 滑动窗口
+        while j < m:
+            target[s[j]] -= 1
+            cnt += 1 if target[s[j]] >= 0 else -1
+            target[s[i]] += 1
+            cnt += 1 if target[s[i]] <= 0 else -1
+            j += 1
+            i += 1
+            if cnt == n:
+                res.append(i)
+        return res
+
+    # 448. 找到所有数组中消失的数字
+    def findDisappearedNumbers(self, nums: List[int]) -> List[int]:
+        for i in range(len(nums)):
+            index = nums[i]
+            while nums[i] != nums[index - 1]:
+                nums[i], nums[index - 1] = nums[index - 1], nums[i]
+                index = nums[i]
+        return [i + 1 for i in range(len(nums)) if nums[i] - 1 != i]
+
+    # 461. 汉明距离
+    def hammingDistance(self, x: int, y: int) -> int:
+        res = 0
+        while x != 0 or y != 0:
+            res += (x & 1) ^ (y & 1)
+            x >>= 1
+            y >>= 1
+        return res
+
 
 s = Solution()
-print(s.maxCoins([1, 0, 2, 8]))
+print(s.hammingDistance(1, 4))
 # ()())()
 # (()(()((
