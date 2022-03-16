@@ -274,8 +274,71 @@ class Solution:
             y >>= 1
         return res
 
+    # 2044. 统计按位或能得到最大值的子集数目
+    def countMaxOrSubsets(self, nums: List[int]) -> int:
+        # len(nums)<=16 -> dfs 搜索
+        # def dfs(target: int, cur: int, nums: List[int]) -> int:
+        #     res = 1 if cur == target else 0
+        #     if not nums:
+        #         return res
+        #     for i in range(len(nums)):
+        #         res += dfs(target, cur | nums[i], nums[i + 1:])
+        #     return res
+
+        # # 得到最大值
+        # target = 0
+        # for i in range(len(nums)):
+        #     target |= nums[i]
+        # return dfs(target, 0, nums)
+
+        # dp 统计所有计算的中间结果 dp[i] 表示按位或的值为i的情况有 dp[i]个
+        # dp[num|i] += dp[i]
+        dp = Counter([0])
+        for num in nums:
+            # dp[k] 会因为 dp 的改变而改变，kv的v则不会改变
+            for k, v in dp.copy().items():
+                dp[num | k] += v
+        return dp[max(dp)]
+
+    # 581. 最短无序连续子数组
+    def findUnsortedSubarray(self, nums: List[int]) -> int:
+        # 双指针
+        # nums = nums
+        # n = len(nums)
+        # if n == 1:
+        #     return 0
+        # l, r = 1, n - 2
+        # while l < n and nums[l] >= nums[l - 1]:
+        #     l += 1
+        # while r > 0 and nums[r] <= nums[r + 1]:
+        #     r -= 1
+        # # # 整体有序
+        # if l == n:
+        #     return 0
+        # # 存在 l==r l<r l>r
+        # minnum, maxnum = min(nums[l - 1:r + 2]), max(nums[l - 1: r + 2])
+        # # 更新边界
+        # while l > 0 and nums[l - 1] > minnum:
+        #     l -= 1
+        # while r + 1 < n and nums[r + 1] < maxnum:
+        #     r += 1
+        # return r - l + 1
+        n = len(nums)
+        maxnum, minnum = nums[0], nums[n - 1]
+        l, r = 0, -1
+        for i in range(n):
+            if nums[i] >= maxnum:
+                maxnum = nums[i]
+            else:
+                r = i
+            if nums[n - i - 1] <= minnum:
+                minnum = nums[n - i - 1]
+            else:
+                l = n - i - 1
+        return r - l + 1
+
 
 s = Solution()
-print(s.hammingDistance(1, 4))
+print(s.solve(5, 2, 15, [3, -7, 8, -5, 9]))
 # ()())()
 # (()(()((
