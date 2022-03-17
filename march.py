@@ -5,6 +5,8 @@ from ctypes.wintypes import tagRECT
 import tarfile
 from typing import List, Literal, Set
 
+from pyparsing import WordStart
+
 
 class Solution:
     # 165. 比较版本号
@@ -337,8 +339,18 @@ class Solution:
                 l = n - i - 1
         return r - l + 1
 
+    # 720. 词典中最长的单词
+    def longestWord(self, words: List[str]) -> str:
+        index, res = {""}, ""
+        words = sorted(words)
+        for word in words:
+            if word[:-1] in index:
+                index.add(word)
+                res = word if len(word) > len(res) else res
+        return res
+
 
 s = Solution()
-print(s.solve(5, 2, 15, [3, -7, 8, -5, 9]))
+print(s.longestWord(["a", "banana", "app", "appl", "ap", "apply", "apple"]))
 # ()())()
 # (()(()((
