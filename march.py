@@ -2,8 +2,11 @@ from ast import parse
 from calendar import c
 from collections import Counter, defaultdict
 from ctypes.wintypes import tagRECT
+from math import gcd
+from multiprocessing.sharedctypes import RawValue
 import tarfile
 from typing import List, Literal, Set
+
 
 
 
@@ -348,8 +351,37 @@ class Solution:
                 res = word if len(word) > len(res) else res
         return res
 
+    def solve(self, nums:List[List[int]]):
+
+        cnt,s = defaultdict(int),0
+        for num in nums:
+            pivot = gcd(num[0],num[1])
+            key = str(num[0]//pivot) +"/"+str(num[1]//pivot)
+            cnt[key]+=1
+        index = sorted(list(cnt.values()),reverse=True)
+        # w,b = [],[]
+        # p,q = 0,0
+        # p,q代表w,b的和
+        # for i in range(len(index)):
+        #     if p>=q:
+        #         b.append(index[i])
+        #         q+=index[i]
+        #     else:
+        #         w.append(index[i])
+        #         p+=index[i]
+        target = sum(index)//2
+        dp,vist = [1]+[0]*target,set()
+        res = 0
+        for i in range(1,target+1):
+            for j in index:
+                if j not in vist and dp[i-j] ==1:
+                    dp[i] = 1
+                    res = max(res,i)
+        return res*(sum(index)-res)
+
+
 
 s = Solution()
-print(s.longestWord(["a", "banana", "app", "appl", "ap", "apply", "apple"]))
+print(s.solve([[1,1,0],[1,2,0],[1,2,1],[2,1,0],[2,1,1],[1,3,0],[1,3,1],[1,3,2]]))
 # ()())()
 # (()(()((
