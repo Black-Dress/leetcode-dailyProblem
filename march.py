@@ -263,8 +263,25 @@ class Solution:
             y >>= 1
         return res
 
+    # 682. 棒球比赛
+    def calPoints(self, ops: List[str]) -> int:
+        points = []
+        for i in ops:
+            cur = 0
+            if i == '+':
+                cur = points[-1] + points[-2]
+            elif i == 'D':
+                cur = points[-1] * 2
+            elif i == 'C':
+                points.pop()
+                continue
+            else:
+                cur = int(i)
+            points.append(cur)
+        return sum(points)
+
 
 s = Solution()
-print(s.hammingDistance(1, 4))
+print(s.calPoints(["5", "2", "C", "D", "+"]))
 # ()())()
 # (()(()((
