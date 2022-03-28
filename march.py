@@ -4,7 +4,9 @@ from collections import Counter, defaultdict
 from ctypes.wintypes import tagRECT
 from math import gcd
 from multiprocessing.sharedctypes import RawValue
+from pickletools import markobject
 import tarfile
+from time import time
 from typing import List, Literal, Set
 
 
@@ -356,7 +358,7 @@ class Solution:
             pivot = gcd(num[0], num[1])
             key = str(num[0] // pivot) + "/" + str(num[1] // pivot)
             cnt[key] += 1
-        index = sorted(list(cnt.values()), reverse=True)
+        index = list(cnt.values())
         # w,b = [],[]
         # p,q = 0,0
         # p,q代表w,b的和
@@ -377,8 +379,64 @@ class Solution:
                     res = max(res, i)
         return res * (sum(index) - res)
 
+    def findminimumDays(self, times: List[int]) -> int:
+        # 每一轮次从times挑选k个数字组成一个小于=3的数
+        # 直到times中不再剩余数字，求最少的轮次n,尽量让大小数字相互结合才能得到最小的轮次n
+        # 只可能看两部电影
+        # 双指针，i,j分别指向0，len(times)
+        # 若 times[i]+times[j] < 3 i+=1
+        # times[i]+times[j] == 3 res+=1 i+=1 j-=1
+        # times[i]+time[j] > 3 res+=1 j-=1
+        times.sort()
+        i, j = 0, len(times) - 1
+        res = 0
+        while i < j:
+            if times[i] + times[j] <= 3:
+                i += 1
+            j -= 1
+            res += 1
+        return res + 1 if i == j else res
+
+    def findmaximumKnowledge(self, d: int, n: int, k: int, s: List[int], e: List[int], a: List[int]) -> List[int]:
+        gain = [[] for i in range(max(d, max(e)) + 2)]
+        # 差分数组
+        for i in range(len(s)):
+            gain[s[i]].append(a[i])
+            gain[e[i] + 1].append(-a[i])
+        for i in range(1, d + 2):
+            gain[i].extend(gain[i - 1])
+            for j in gain[i]:
+                if j < 0:
+                    gain[i].remove(-j)
+                    gain[i].remove(j)
+        # 判断res
+        res = 0
+        for i in gain:
+            res = max(res, sum(sorted(i, reverse=True)[:k]))
+        return res
+
+    # start
+    def notifySpy(matrix: List[List[int]], start: int) -> int:
+        # 从出度最大的节点开始通知
+        # 每次通知都更新下一轮的可访问节点和当前已经访问的节点
+        # 队列存储下一轮的可访问节点，vist 数组存储已经访问的节点
+        que, res, vist = [start], 1, [0] * len(matrix)
+        index = 1
+        vist[start] = 1
+        while que:
+            cur = que.pop(0)
+            index -= 1
+            for i in range(len(matrix[cur])):
+                if vist[i] != 1 and matrix[cur][i] == 1:
+                    que.append(i)
+                    vist[i] = 1
+            if index == 0:
+                res += 1
+                index = len(que)
+        return res if sum(vist) == len(matrix) else 0
+
 
 s = Solution()
-print(s.solve([[1, 1, 0], [1, 2, 0], [1, 2, 1], [2, 1, 0], [2, 1, 1], [1, 3, 0], [1, 3, 1], [1, 3, 2]]))
+print(s.findmaximumKnowledge(1, 1, 2, [1], [10], [100]))
 # ()())()
 # (()(()((
