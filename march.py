@@ -435,8 +435,27 @@ class Solution:
                 index = len(que)
         return res if sum(vist) == len(matrix) else 0
 
+    # 2024. 考试的最大困扰度
+    def maxConsecutiveAnswers(self, answerKey: str, k: int) -> int:
+        # 因为只有两个字符，只需要找到最长包含k个T或者包含k个F的区间就是结果
+        # 循环两遍 第一次找最长包含K个T的区间，第二遍找最长包含K个F的区间
+        f, t, res, n = 0, 0, 0, len(answerKey)
+        tcnt = 1 if answerKey[0] == 'T' else 0
+        fcnt = 1 if answerKey[0] == 'F' else 0
+        for i in range(1, n):
+            tcnt += 1 if answerKey[i] == 'T' else 0
+            fcnt += 1 if answerKey[i] == 'F' else 0
+            while t <= i and tcnt > k:
+                tcnt -= 1 if answerKey[t] == 'T' else 0
+                t += 1
+            while f <= i and fcnt > k:
+                fcnt -= 1 if answerKey[f] == 'F' else 0
+                f += 1
+            res = max(res, i - t + 1, i - f + 1)
+        return res
+
 
 s = Solution()
-print(s.findmaximumKnowledge(1, 1, 2, [1], [10], [100]))
+print(s.maxConsecutiveAnswers("TTFF", 0))
 # ()())()
 # (()(()((
