@@ -1,10 +1,17 @@
 from ast import parse
+from bisect import bisect, bisect_left
 from calendar import c
 from collections import Counter, defaultdict
 from ctypes.wintypes import tagRECT
+from heapq import heapify, heappop, heappush
+import heapq
+from lib2to3.pgen2.token import MINUS
 from math import gcd
 from multiprocessing.sharedctypes import RawValue
 from pickletools import markobject
+from queue import PriorityQueue
+from re import A
+from sys import maxunicode
 import tarfile
 from time import time
 from typing import List, Literal, Set
@@ -454,8 +461,40 @@ class Solution:
             res = max(res, i - t + 1, i - f + 1)
         return res
 
+    # 1606. 找到处理最多请求的服务器
+    def busiestServers(self, k: int, arrival: List[int], load: List[int]) -> List[int]:
+        # 可以维护一个 end-> (endtime,index)的最小堆，表示最先完成任务的时刻和服务器下标
+        # 每次任务到达可以判断是否有空闲服务器，以及更新最小堆
+        if k >= len(arrival):
+            return [i for i in range(len(arrival))]
+        # 初始化
+        end = PriorityQueue()
+        for i in range(k):
+            end.put((arrival[i] + load[i], i))
+        res, idle = [1] * k, []
+        for i in range(k, len(arrival)):
+            # 更新空闲服务器
+            temp = []
+            while end.queue and end.queue[0][0] <= arrival[i]:
+                temp.append(end.get())
+                idle.insert(bisect_left(idle, temp[-1][1]), temp[-1][1])
+            if not idle:
+                continue
+            # 从空闲服务器找到一个下标比 i%k 大的最小值，如果没有则找那个最小值
+            index = bisect_left(idle, i % k)
+            index = index if index < len(idle) else 0
+            # 将选中的服务器进入工作服务器,并在空闲服务器中进行移除
+            res[idle[index]] += 1
+            end.put((arrival[i] + load[i], idle[index]))
+            idle = idle[:index] + idle[index + 1:]
+        maxnum = max(res)
+        return [i for i, v in enumerate(res) if v == maxnum]
+
 
 s = Solution()
-print(s.maxConsecutiveAnswers("TTFF", 0))
+print(s.busiestServers(3,
+                       [1],
+                       [1000000000]
+                       ))
 # ()())()
 # (()(()((
