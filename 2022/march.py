@@ -492,9 +492,6 @@ class Solution:
 
 
 s = Solution()
-print(s.busiestServers(3,
-                       [1],
-                       [1000000000]
-                       ))
+print(s.busiestServers(3, [1], [1000000000]))
 # ()())()
 # (()(()((
