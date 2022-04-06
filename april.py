@@ -1,3 +1,5 @@
+from collections import defaultdict
+from platform import node
 from re import A
 from typing import Counter, List
 
@@ -17,6 +19,31 @@ class Solution:
             cnt[2 * i] -= cnt[i]
         return True
 
+    # 310. 最小高度树
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n < 3:
+            return [i for i in range(n)]
+        # 利用队列，每一轮都删除度为一的节点，最后留下的一个或者两个节点就是答案
+        nodes, matrix = defaultdict(int), [[] for i in range(n)]
+        for s, e in edges:
+            nodes[s] += 1
+            nodes[e] += 1
+            matrix[s].append(e)
+            matrix[e].append(s)
+        # 每一轮都只删除度为一的点
+        que = [k for k, v in nodes.items() if v == 1]
+        remain = n
+        while remain > 2:
+            temp = []
+            for i in que:
+                for j in matrix[i]:
+                    nodes[j] -= 1
+                    if nodes[j] == 1:
+                        temp.append(j)
+            remain -= len(que)
+            que = temp
+        return que
+
 
 s = Solution()
-print(s.canReorderDoubled([0, 1]))
+print(s.findMinHeightTrees(6, [[0, 1], [0, 2], [0, 3], [3, 4], [4, 5]]))
