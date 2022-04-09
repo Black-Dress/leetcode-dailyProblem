@@ -1,7 +1,6 @@
 from collections import defaultdict
 import collections
 from typing import Collection, List
-import scipy.special
 
 
 class Solution:
@@ -72,18 +71,7 @@ class Solution:
     # 552. 学生出勤记录 II
     # 未完成
     def checkRecord2(self, n: int) -> int:
-        mod = 10**9 + 7
-        maxL = n // 3 * 2 + n % 3
-        # 计算只有a和p的情况或者没有a
-        res = 1 + n
-        for i in range(1, maxL + 1):
-            # 从maxl中选出i个位置用来替换成L
-            a = scipy.special.comb(maxL, i) % mod
-            # 将 一个 p 替换成 a 和不替换的情况数量
-            b = n - i + 1
-            # 计算总数
-            res += (a * b) % mod
-        return res
+        pass
 
     # 345. 反转字符串中的元音字母
     def reverseVowels(self, s: str) -> str:
