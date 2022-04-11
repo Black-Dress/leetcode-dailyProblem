@@ -285,6 +285,57 @@ class Solution:
             y >>= 1
         return res
 
+    # 682. 棒球比赛
+    def calPoints(self, ops: List[str]) -> int:
+        points = []
+        for i in ops:
+            cur = 0
+            if i == '+':
+                cur = points[-1] + points[-2]
+            elif i == 'D':
+                cur = points[-1] * 2
+            elif i == 'C':
+                points.pop()
+                continue
+            else:
+                cur = int(i)
+            points.append(cur)
+        return sum(points)
+
+    # 2028. 找出缺失的观测数据
+    def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
+        # (a+sum(rolls))//(m+n) = mean -> a = mean*(m+n)-sum(rolls)
+        # a 由 n 个 [1,6] 数字组成 只要  n<=a<=n*6 就可以得到一个解
+        # 找到第一个可行解可以通过dfs+剪枝的方法
+        # 如何快速得到可行解
+        target = mean * (len(rolls) + n) - sum(rolls)
+
+        # def dfs(target:int,times:int,upbound:int,cur:List[int])->List[int]:
+        #     if target == 0 and times == 0:
+        #         return cur
+        #     if times > target or target > times * upbound:
+        #         return []
+        #     while upbound > 0 and target <= times * upbound:
+        #         upbound -= 1
+        #     return dfs(target - upbound - 1, times - 1, upbound + 1, cur + [upbound + 1])
+        if target > 6 * n or target < n:
+            return []
+        res, i, times = [0] * (n + 1), 0, n
+        while i < 6 and target != 0:
+            if target > times:
+                target -= times
+            else:
+                times = target
+                target = 0
+            res[0] += 1
+            res[times] -= 1
+            i += 1
+
+        for j in range(1, n + 1):
+            res[j] += res[j - 1]
+
+        return res[:-1]
+
     # 2044. 统计按位或能得到最大值的子集数目
     def countMaxOrSubsets(self, nums: List[int]) -> int:
         # len(nums)<=16 -> dfs 搜索
