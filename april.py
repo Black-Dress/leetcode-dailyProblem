@@ -1,6 +1,7 @@
-from collections import defaultdict
+from collections import defaultdict, deque
+from itertools import combinations, permutations, product
 from platform import node
-from re import A
+import queue
 from typing import Counter, List
 
 
@@ -44,6 +45,15 @@ class Solution:
             que = temp
         return que
 
+    # 357. 统计各位数字都不同的数字个数
+    def countNumbersWithUniqueDigits(self, n: int) -> int:
+        num = 0
+        for i in range(1, n + 1):
+            num += 9 * list(permutations(range(9), i - 1)).__len__()
+        return num + 1
+
 
 s = Solution()
-print(s.findMinHeightTrees(6, [[0, 1], [0, 2], [0, 3], [3, 4], [4, 5]]))
+print(s.countNumbersWithUniqueDigits(0))
+# print(list(permutations(range(9), 0)).__len__())
+# print(list(combinations(range(4), 2)))
