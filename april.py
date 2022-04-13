@@ -17,6 +17,32 @@ class Solution:
             cnt[2 * i] -= cnt[i]
         return True
 
+    # 780. 到达终点
+    def reachingPoints(self, sx: int, sy: int, tx: int, ty: int) -> bool:
+        # dp
+        # dp[i][j] 可以到达 dp[i+j][j] dp[i][j+i] 从前往后进行循环遍历
+        # if sx > tx or sy > ty:
+        #     return False
+        # dp = [[0] * (ty + 1) for i in range(tx + 1)]
+        # dp[sx][sy] = 1
+        # for i in range(sx, tx + 1):
+        #     for j in range(sy, ty + 1):
+        #         if i + j <= tx:
+        #             dp[i + j][j] = max(dp[i + j][j], dp[i][j])
+        #         if i + j <= ty:
+        #             dp[i][i + j] = max(dp[i][i + j], dp[i][j])
+        # return dp[tx][ty] == 1
+        # 倒序求解，若tx>ty -> 说明上一个状态是 (tx-ty,ty) 同时为了优化时间需要进行模运算
+        # 若出现整除情况，那么需要判断另一个数字能不能由整除情况构成
+        while tx > sx and ty > sy:
+            if tx > ty:
+                tx %= ty
+            else:
+                ty %= tx
+        if tx < sx or ty < sy:
+            return False
+        return (ty - sy) % tx == 0 if tx == sx else (tx - sx) % ty == 0
+
 
 s = Solution()
-print(s.canReorderDoubled([0, 1]))
+print(s.reachingPoints(1, 1, 1, 5))
