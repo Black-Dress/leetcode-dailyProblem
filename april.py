@@ -1,5 +1,6 @@
 from re import A
 from typing import Counter, List
+from NodeHelper.ListNode import ListNode
 
 
 class Solution:
@@ -43,6 +44,19 @@ class Solution:
             return False
         return (ty - sy) % tx == 0 if tx == sx else (tx - sx) % ty == 0
 
+    # 面试题 02.01. 移除重复节点
+    def removeDuplicateNodes(self, head: ListNode) -> ListNode:
+        # 通过移位和与运算判断元素是否重复
+        index, num, pre = head.next, 1 << head.val, head
+        while index:
+            while index and num & (1 << index.val) != 0:
+                pre.next = index.next
+                index = index.next
+            num |= (1 << index.val)
+            pre = index
+            index = index.next
+        return head
+
 
 s = Solution()
-print(s.reachingPoints(1, 1, 1, 5))
+print(s.removeDuplicateNodes(ListNode.createListNode([1, 1, 1, 5])))
