@@ -52,8 +52,33 @@ class Solution:
             num += 9 * list(permutations(range(9), i - 1)).__len__()
         return num + 1
 
+    # 386. 字典序排数
+    def lexicalOrder(self, n: int) -> List[int]:
+        # res = []
+
+        # def dfs(pre: str) -> List[int]:
+        #     if int(pre) > n:
+        #         return []
+        #     res = [int(pre)]
+        #     for i in range(10):
+        #         res.extend(dfs(pre + str(i)))
+        #     return res
+        # for i in range(1, 10):
+        #     res.extend(dfs(str(i)))
+        # return res
+        res, num = [0] * (n + 1), 1
+        for i in range(1, n + 1):
+            res[i] = num
+            if num * 10 <= n:
+                num *= 10
+            else:
+                while num % 10 == 9 or num + 1 > n:
+                    num //= 10
+                num += 1
+        return res[1:]
+
 
 s = Solution()
-print(s.countNumbersWithUniqueDigits(0))
+print(s.lexicalOrder(103))
 # print(list(permutations(range(9), 0)).__len__())
 # print(list(combinations(range(4), 2)))
