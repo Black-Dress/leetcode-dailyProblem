@@ -77,8 +77,27 @@ class Solution:
                 num += 1
         return res[1:]
 
+    def shortestToChar(self, s: str, c: str) -> List[int]:
+        def update(res: List[int], start: int):
+            # 向左
+            i = start
+            while i >= 0 and start - i < res[i]:
+                res[i] = start - i
+                i -= 1
+            # 向右
+            i = start + 1
+            while i < len(s) and s[i] != c:
+                res[i] = i - start
+                i += 1
+        n = len(s)
+        res = [n] * n
+        for i in range(n):
+            if s[i] == c:
+                update(res, i)
+        return res
+
 
 s = Solution()
-print(s.lexicalOrder(103))
+print(s.shortestToChar("loveleetcode", "e"))
 # print(list(permutations(range(9), 0)).__len__())
 # print(list(combinations(range(4), 2)))
