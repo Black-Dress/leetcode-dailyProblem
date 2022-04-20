@@ -135,6 +135,24 @@ class Solution:
             index = index.next
         return head
 
+    # 388. 文件的最长绝对路径
+    def lengthLongestPath(self, input: str) -> int:
+        res, files, i, n = [], defaultdict(str), 0, len(input)
+        while i < n:
+            num = 0
+            while i < n and input[i] == '\t':
+                num += 1
+                i += 1
+            c = ''
+            while i < n and input[i] != '\n':
+                c += input[i]
+                i += 1
+            files[num] = c
+            if '.' in c:
+                res.append(sum([len(files[i]) for i in range(num + 1)]) + num)
+            i += 1
+        return 0 if not res else max(res)
+
 
 s = Solution()
-print(s.removeDuplicateNodes(ListNode.createListNode([1, 1, 1, 5])))
+print(s.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"))
