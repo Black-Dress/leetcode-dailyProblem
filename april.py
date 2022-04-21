@@ -153,6 +153,17 @@ class Solution:
             i += 1
         return 0 if not res else max(res)
 
+    # 824. 山羊拉丁文
+    def toGoatLatin(self, sentence: str) -> str:
+        vowel = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+        s = sentence.split(' ')
+        for i in range(len(s)):
+            if s[i][0] not in vowel:
+                s[i] = s[i][1:] + s[i][0]
+            s[i] += "ma"
+            s[i] += "a" * (i + 1)
+        return " ".join(s)
+
 
 s = Solution()
-print(s.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"))
+print(s.toGoatLatin("I speak Goat Latin"))
