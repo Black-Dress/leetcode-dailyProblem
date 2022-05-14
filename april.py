@@ -199,6 +199,50 @@ class Solution:
 
         return [trees[i] for i in hull]
 
+    # 691. 贴纸拼词
+    def minStickers(self, stickers: List[str], target: str) -> int:
+        # 每一个贴纸相当于字典库，使用最少的字典库能够组成target
+        # 采用dfs 搜索出所有的可行组合
+        # n = len(stickers)
+
+        # def intersection(a: str, b: str) -> str:
+        #     b_ = Counter(b)
+        #     for i in a:
+        #         b_[i] -= 1
+        #     return ''.join([k * v for k, v in b_.items() if v > 0])
+
+        # def dfs(target: str, cur: int) -> List[int]:
+        #     if target == '':
+        #         return [cur]
+        #     res = []
+        #     for i in range(n):
+        #         nxt = intersection(stickers[i], target)
+        #         if nxt != target:
+        #             res += dfs(nxt, cur + 1)
+        #     return res
+        # res = dfs(target, 0)
+        # return -1 if not res else min(res)
+
+        # 状态压缩
+
+        m = len(target)
+
+        def dp(mask: int) -> int:
+            if mask == 0:
+                return 0
+            res = m + 1
+            for sticker in stickers:
+                left, cnt = mask, Counter(sticker)
+                for i, c in enumerate(target):
+                    if mask >> i & 1 and cnt[c]:
+                        cnt[c] -= 1
+                        left ^= 1 << i
+                if left < mask:
+                    res = min(res, dp(left) + 1)
+            return res
+        res = dp((1 << m) - 1)
+        return res if res <= m else -1
+
 
 s = Solution()
-print(s.outerTrees([[3, 7], [6, 8], [7, 8], [11, 10], [4, 3], [8, 5], [7, 13], [4, 13]]))
+print(s.minStickers(["with", "example", "science"], "thehat"))
