@@ -5,6 +5,7 @@ from platform import node
 from re import L
 from typing import Counter, List
 from NodeHelper.ListNode import ListNode
+from NodeHelper.TreeNode import TreeNode
 
 
 class Solution:
@@ -242,6 +243,25 @@ class Solution:
             return res
         res = dp((1 << m) - 1)
         return res if res <= m else -1
+
+    # 面试题 04.06. 后继者
+    def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> TreeNode:
+        index = 1
+
+        def dfs(root: TreeNode) -> TreeNode:
+            nonlocal index
+            if not root:
+                return None
+            # 左 根 右
+            l = dfs(root.left)
+            if index == 0:
+                index -= 1
+                return root
+            if root == p:
+                index -= 1
+            r = dfs(root.right)
+            return l if l else r
+        return dfs(root)
 
 
 s = Solution()
