@@ -263,6 +263,23 @@ class Solution:
             return l if l else r
         return dfs(root)
 
+    # 953. 验证外星语词典
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        sequence = {e: i for i, e in enumerate(order)}
+
+        def check(a: str, b: str) -> bool:
+            m, n = len(a), len(b)
+            for i in range(min(m, n)):
+                if sequence[a[i]] > sequence[b[i]]:
+                    return False
+                if sequence[a[i]] < sequence[b[i]]:
+                    return True
+            return False if m > n else True
+        for i in range(1, len(words)):
+            if not check(words[i - 1], words[i]):
+                return False
+        return True
+
 
 s = Solution()
-print(s.minStickers(["with", "example", "science"], "thehat"))
+print(s.isAlienSorted(["hello", "leetcode"], "hlabcdefgijkmnopqrstuvwxyz"))
