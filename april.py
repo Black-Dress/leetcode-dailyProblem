@@ -280,6 +280,20 @@ class Solution:
                 return False
         return True
 
+    # 668. 乘法表中第k小的数
+    def findKthNumber(self, m: int, n: int, k: int) -> int:
+        # 讨论小于x的有多少个，x可以用二分来进行查询
+        def count(x: int) -> int:
+            return sum(min(x // i, n) for i in range(1, m + 1))
+        l, r = 1, m * n
+        while l < r:
+            mid, cnt = (l + r) >> 1, count((l + r) >> 1)
+            if cnt >= k:
+                r = mid
+            else:
+                l = mid + 1
+        return l
+
 
 s = Solution()
-print(s.isAlienSorted(["hello", "leetcode"], "hlabcdefgijkmnopqrstuvwxyz"))
+print(s.findKthNumber(3, 4, 6))
