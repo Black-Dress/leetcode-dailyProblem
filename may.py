@@ -1,4 +1,4 @@
-from typing import List
+from typing import Counter, List
 from collections import defaultdict
 
 
@@ -64,6 +64,22 @@ class Solution:
             pre = i
         return res
 
+    # 467. 环绕字符串中唯一的子字符串
+    def findSubstringInWraproundString(self, p: str) -> int:
+        # 找到p中按照字典序排列的子串
+        def ord_(s: str) -> int:
+            return ord(s) - ord('a')
+        k, n = 1, len(p)
+        dp = defaultdict(int)
+        dp[p[0]] = 1
+        for i in range(1, n):
+            if ord_(p[i]) == (ord_(p[i - 1]) + 1) % 26:
+                k += 1
+            else:
+                k = 1
+            dp[p[i]] = max(k, dp[p[i]])
+        return sum(dp.values())
+
 
 s = Solution()
-print(s.cutOffTree([[7, 9, 3, 12], [16, 8, 11, 14], [10, 19, 18, 20], [15, 2, 5, 6], [17, 1, 4, 13]]))
+print(s.findSubstringInWraproundString("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"))
