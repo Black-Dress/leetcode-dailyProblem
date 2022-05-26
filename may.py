@@ -80,6 +80,43 @@ class Solution:
             dp[p[i]] = max(k, dp[p[i]])
         return sum(dp.values())
 
+    # 699. 掉落的方块
+    def fallingSquares(self, positions: List[List[int]]) -> List[int]:
+        # 用一个数组表示 i 位置的高度，时间复杂度
+        # n = max([i[0] + i[1] for i in positions])
+        # height = [0] * (n + 1)
+        # res = [positions[0][1]]
+        # height[positions[0][0]], height[positions[0][0] + positions[0][1]] = positions[0][1], -positions[0][1]
+
+        # def check(pos: int, bound: List[int]) -> bool:
+        #     return pos in range(bound[0], bound[0] + bound[1])
+        # for i in range(1, len(positions)):
+        #     pos, h = positions[i][0], positions[i][1]
+        #     if check(pos, positions[i - 1]) or check(pos + h - 1, positions[i - 1]):
+        #         r = positions[i - 1][0] + positions[i - 1][1]
+        #         if r < pos + h:
+        #             preh = height[r]
+        #             height[r] = 0
+        #             height[pos + h] = preh
+        #         else:
+        #             pass
+        #     height[pos] += h
+        #     height[pos + h] -= h
+        #     res.append(max(res[-1], sum(height[:pos + h])))
+        # return res
+        n = len(positions)
+        heights = [0] * n
+        for i, (left1, side1) in enumerate(positions):
+            right1 = left1 + side1 - 1
+            heights[i] = side1
+            for j in range(i):
+                left2, right2 = positions[j][0], positions[j][0] + positions[j][1] - 1
+                if right1 >= left2 and right2 >= left1:
+                    heights[i] = max(heights[i], heights[j] + side1)
+        for i in range(1, n):
+            heights[i] = max(heights[i], heights[i - 1])
+        return heights
+
 
 s = Solution()
-print(s.findSubstringInWraproundString("abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"))
+print(s.fallingSquares([[9, 7], [1, 9], [3, 1]]))
