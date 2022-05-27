@@ -1,6 +1,8 @@
 from typing import Counter, List
 from collections import defaultdict
 
+from pkg_resources import working_set
+
 
 class Solution:
     def findRightInterval(self, intervals: List[List[int]]) -> List[int]:
@@ -117,6 +119,18 @@ class Solution:
             heights[i] = max(heights[i], heights[i - 1])
         return heights
 
+    # 面试题 17.11. 单词距离
+    def findClosest(self, words: List[str], word1: str, word2: str) -> int:
+        a, b, res = 0, 0, len(words)
+        for i in range(len(words)):
+            if words[i] == word1:
+                a = i
+            if words[i] == word2:
+                b = i
+            if words[a] == word1 and words[b] == word2:
+                res = min(res, abs(a - b))
+        return res
+
 
 s = Solution()
-print(s.fallingSquares([[9, 7], [1, 9], [3, 1]]))
+print(s.findClosest())
