@@ -1,3 +1,4 @@
+from cmath import pi
 import heapq
 from typing import List
 
@@ -37,6 +38,28 @@ class Solution:
         #     res = res and i == m
         # return res and sum(idx) == total
 
+    # 875. 爱吃香蕉的珂珂
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        # 先找到那两堆香蕉 a,b b香蕉堆的个数能够满足条件，然后在 a,b之间选择一个合理的数字
+        # 查找过程可以使用二分查找
+        def check(piles: List[int], h: int) -> int:
+            res = 0
+            for i in piles:
+                res += i // h
+                res += 1 if i % h != 0 else 0
+            return res
+        piles.sort()
+        l, r, res = 1, piles[-1], 0
+        while l <= r:
+            res = (l + r) >> 1
+            num = check(piles, res)
+            if num > h:
+                l = res + 1
+            if num <= h:
+                r = res - 1
+        return res if check(piles, res) <= h else res + 1
+
 
 s = Solution()
-print(s.makesquare([10, 6, 5, 5, 5, 3, 3, 3, 2, 2, 2, 2]))
+print(s.minEatingSpeed([30, 11, 23, 4, 20],
+                       6))
