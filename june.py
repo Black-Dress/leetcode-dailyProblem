@@ -59,7 +59,20 @@ class Solution:
                 r = res - 1
         return res if check(piles, res) <= h else res + 1
 
+    # 926. 将字符串翻转到单调递增
+    def minFlipsMonoIncr(self, s: str) -> int:
+        # 每个位置只有反转和不反转两种状态，
+        # dp[i][0] 表示 0-i 在 i 位置为0的时候构成递增字符串的最小反转次数
+        # dp[i][1] 表示 0-i 在 i 位置为1的时候构成递增字符串的最小反转次数
+        # dp[i][0] = dp[i-1][0] + 1 if s[i] == 1 else 0
+        # dp[i][1] = min(dp[i-1][1] ,dp[i-1][0]) + 1 if s[i] == 0 else 1
+        n = len(s)
+        dp = [[1 if s[0] == '1' else 0, 1 if s[0] == '0' else 0]] + [[0, 0] for i in range(n - 1)]
+        for i in range(1, n):
+            dp[i][0] = dp[i - 1][0] + (1 if s[i] == '1' else 0)
+            dp[i][1] = min(dp[i - 1][0], dp[i - 1][1]) + (1 if s[i] == '0' else 0)
+        return min(dp[-1][0], dp[-1][1])
+
 
 s = Solution()
-print(s.minEatingSpeed([30, 11, 23, 4, 20],
-                       6))
+print(s.minFlipsMonoIncr("11011"))
