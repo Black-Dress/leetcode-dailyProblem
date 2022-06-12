@@ -73,6 +73,27 @@ class Solution:
             dp[i][1] = min(dp[i - 1][0], dp[i - 1][1]) + (1 if s[i] == '0' else 0)
         return min(dp[-1][0], dp[-1][1])
 
+    # 890. 查找和替换模式
+    def findAndReplacePattern(self, words: List[str], pattern: str) -> List[str]:
+        # 利用 hash表存储映射
+        # 映射字母必须是一一对应的关系，不能多对一或者一对多
+
+        def check(word: str, pattern: str) -> bool:
+            ptw, wtp = dict(), dict()
+            for i in range(n):
+                if pattern[i] in ptw and ptw[pattern[i]] != word[i]:
+                    return False
+                if word[i] in wtp and wtp[word[i]] != pattern[i]:
+                    return False
+                ptw[pattern[i]] = word[i]
+                wtp[word[i]] = pattern[i]
+            return True
+
+        n = len(pattern)
+        res = [word for word in words if check(word, pattern)]
+        return res
+
 
 s = Solution()
-print(s.minFlipsMonoIncr("11011"))
+print(s.findAndReplacePattern(["ef", "fq", "ao", "at", "lx"],
+                              "ya"))
