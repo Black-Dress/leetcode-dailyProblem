@@ -1,6 +1,8 @@
 from cmath import pi
+from collections import defaultdict
+from email.policy import default
 import heapq
-from typing import List
+from typing import Counter, List
 
 
 class Solution:
@@ -93,7 +95,19 @@ class Solution:
         res = [word for word in words if check(word, pattern)]
         return res
 
+    # 532. 数组中的 k-diff 数对
+    def findPairs(self, nums: List[int], k: int) -> int:
+        cnt, n, res = Counter(nums), len(nums), set()
+        if k == 0:
+            return len([k for k, v in cnt.items() if v >= 2])
+        for i in range(n):
+            if nums[i] - k in cnt:
+                res.add((nums[i] - k, nums[i]))
+            if nums[i] + k in cnt:
+                res.add((nums[i], nums[i] + k))
+        return len(res)
+
 
 s = Solution()
-print(s.findAndReplacePattern(["ef", "fq", "ao", "at", "lx"],
-                              "ya"))
+print(s.findPairs([1, 3, 1, 5, 4],
+                  0))
