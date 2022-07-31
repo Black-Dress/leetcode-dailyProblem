@@ -1,7 +1,8 @@
 from collections import defaultdict, deque
 from itertools import combinations, permutations, product
 from platform import node
-from typing import Counter, List
+from typing import Counter, List, Optional
+from NodeHelper.TreeNode import TreeNode
 from NodeHelper.ListNode import ListNode
 
 
@@ -152,6 +153,26 @@ class Solution:
                 res.append(sum([len(files[i]) for i in range(num + 1)]) + num)
             i += 1
         return 0 if not res else max(res)
+
+    # 1161. 最大层内元素和
+    def maxLevelSum(self, root: Optional[TreeNode]) -> int:
+        size, temp, index = 1, 0, 1
+        nums, res = [root], [1, root.val]
+        while len(nums):
+            cur = nums.pop(0)
+            temp += cur.val
+            if cur.right:
+                nums.append(cur.right)
+            if cur.left:
+                nums.append(cur.left)
+            size -= 1
+            if size == 0:
+                if res[1] < temp:
+                    res = [index, temp]
+                size = len(nums)
+                index += 1
+                temp = 0
+        return res[0]
 
 
 s = Solution()
