@@ -1,9 +1,13 @@
 from collections import defaultdict, deque
 from itertools import combinations, permutations, product
+from math import tan
 from platform import node
 from typing import Counter, List, Optional
 from NodeHelper.TreeNode import TreeNode
+from re import L
+from typing import Counter, List
 from NodeHelper.ListNode import ListNode
+from NodeHelper.TreeNode import TreeNode
 
 
 class Solution:
@@ -173,7 +177,145 @@ class Solution:
                 index += 1
                 temp = 0
         return res[0]
+    # 824. 山羊拉丁文
+
+    def toGoatLatin(self, sentence: str) -> str:
+        vowel = ['a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U']
+        s = sentence.split(' ')
+        for i in range(len(s)):
+            if s[i][0] not in vowel:
+                s[i] = s[i][1:] + s[i][0]
+            s[i] += "ma"
+            s[i] += "a" * (i + 1)
+        return " ".join(s)
+
+    # 587. 安装栅栏
+    def outerTrees(self, trees: List[List[int]]) -> List[List[int]]:
+        def cross(p: List[int], q: List[int], r: List[int]) -> int:
+            return (q[0] - p[0]) * (r[1] - q[1]) - (q[1] - p[1]) * (r[0] - q[0])
+
+        n = len(trees)
+        if n < 4:
+            return trees
+
+        # 按照 x 从小到大排序，如果 x 相同，则按照 y 从小到大排序
+        trees.sort()
+
+        hull = [0]  # hull[0] 需要入栈两次，不标记
+        used = [False] * n
+        # 求凸包的下半部分
+        for i in range(1, n):
+            while len(hull) > 1 and cross(trees[hull[-2]], trees[hull[-1]], trees[i]) < 0:
+                used[hull.pop()] = False
+            used[i] = True
+            hull.append(i)
+        # 求凸包的上半部分
+        m = len(hull)
+        for i in range(n - 2, -1, -1):
+            if not used[i]:
+                while len(hull) > m and cross(trees[hull[-2]], trees[hull[-1]], trees[i]) < 0:
+                    used[hull.pop()] = False
+                used[i] = True
+                hull.append(i)
+        # hull[0] 同时参与凸包的上半部分检测，因此需去掉重复的 hull[0]
+        hull.pop()
+
+        return [trees[i] for i in hull]
+
+    # 691. 贴纸拼词
+    def minStickers(self, stickers: List[str], target: str) -> int:
+        # 每一个贴纸相当于字典库，使用最少的字典库能够组成target
+        # 采用dfs 搜索出所有的可行组合
+        # n = len(stickers)
+
+        # def intersection(a: str, b: str) -> str:
+        #     b_ = Counter(b)
+        #     for i in a:
+        #         b_[i] -= 1
+        #     return ''.join([k * v for k, v in b_.items() if v > 0])
+
+        # def dfs(target: str, cur: int) -> List[int]:
+        #     if target == '':
+        #         return [cur]
+        #     res = []
+        #     for i in range(n):
+        #         nxt = intersection(stickers[i], target)
+        #         if nxt != target:
+        #             res += dfs(nxt, cur + 1)
+        #     return res
+        # res = dfs(target, 0)
+        # return -1 if not res else min(res)
+
+        # 状态压缩
+
+        m = len(target)
+
+        def dp(mask: int) -> int:
+            if mask == 0:
+                return 0
+            res = m + 1
+            for sticker in stickers:
+                left, cnt = mask, Counter(sticker)
+                for i, c in enumerate(target):
+                    if mask >> i & 1 and cnt[c]:
+                        cnt[c] -= 1
+                        left ^= 1 << i
+                if left < mask:
+                    res = min(res, dp(left) + 1)
+            return res
+        res = dp((1 << m) - 1)
+        return res if res <= m else -1
+
+    # 面试题 04.06. 后继者
+    def inorderSuccessor(self, root: TreeNode, p: TreeNode) -> TreeNode:
+        index = 1
+
+        def dfs(root: TreeNode) -> TreeNode:
+            nonlocal index
+            if not root:
+                return None
+            # 左 根 右
+            l = dfs(root.left)
+            if index == 0:
+                index -= 1
+                return root
+            if root == p:
+                index -= 1
+            r = dfs(root.right)
+            return l if l else r
+        return dfs(root)
+
+    # 953. 验证外星语词典
+    def isAlienSorted(self, words: List[str], order: str) -> bool:
+        sequence = {e: i for i, e in enumerate(order)}
+
+        def check(a: str, b: str) -> bool:
+            m, n = len(a), len(b)
+            for i in range(min(m, n)):
+                if sequence[a[i]] > sequence[b[i]]:
+                    return False
+                if sequence[a[i]] < sequence[b[i]]:
+                    return True
+            return False if m > n else True
+        for i in range(1, len(words)):
+            if not check(words[i - 1], words[i]):
+                return False
+        return True
+
+    # 668. 乘法表中第k小的数
+    def findKthNumber(self, m: int, n: int, k: int) -> int:
+        # 讨论小于x的有多少个，x可以用二分来进行查询
+        def count(x: int) -> int:
+            return sum(min(x // i, n) for i in range(1, m + 1))
+        l, r = 1, m * n
+        while l < r:
+            mid, cnt = (l + r) >> 1, count((l + r) >> 1)
+            if cnt >= k:
+                r = mid
+            else:
+                l = mid + 1
+        return l
 
 
 s = Solution()
-print(s.lengthLongestPath("dir\n\tsubdir1\n\tsubdir2\n\t\tfile.ext"))
+print(s.findKthNumber(3, 4, 6))
