@@ -316,6 +316,17 @@ class Solution:
                 l = mid + 1
         return l
 
+    # 1408. 数组中的字符串匹配
+    def stringMatching(self, words: List[str]) -> List[str]:
+        words.sort(key=lambda x: len(x))
+        res = set()
+        for i in range(len(words)):
+            for j in range(i + 1, len(words)):
+                if words[j].count(words[i]) != 0:
+                    res.add(words[i])
+                    break
+        return list(res)
+
 
 s = Solution()
-print(s.findKthNumber(3, 4, 6))
+print(s.stringMatching(["leetcoder", "leetcode", "od", "hamlet", "am"]))
