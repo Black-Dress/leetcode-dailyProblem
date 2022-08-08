@@ -131,6 +131,24 @@ class Solution:
                 res = min(res, abs(a - b))
         return res
 
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        # O(n^2) 确定l 然后 m r进行滑动窗口移动
+        res = 100000
+        nums.sort()
+        for l in range(len(nums) - 2):
+            m, r = l + 1, len(nums) - 1
+            while m < r:
+                s = nums[l] + nums[m] + nums[r]
+                if abs(res - target) > abs(s - target):
+                    res = s
+                if s > target:
+                    r -= 1
+                elif s < target:
+                    m += 1
+                else:
+                    return target
+        return res
+
 
 s = Solution()
-print(s.findClosest())
+print(s.threeSumClosest([-1, 2, 1, -4], 1))
