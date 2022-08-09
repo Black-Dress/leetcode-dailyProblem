@@ -1,6 +1,7 @@
+import imp
 from typing import Counter, List
 from collections import defaultdict
-
+from NodeHelper.TreeNode import TreeNode
 from pkg_resources import working_set
 
 
@@ -149,6 +150,34 @@ class Solution:
                     return target
         return res
 
+    def BSTSequences(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return [[]]
+        l = self.BSTSequences(root.left)
+        r = self.BSTSequences(root.right)
+        res = [[]]
+        if l[0] and r[0]:
+            res = self.mearge(l[0], r[0], [])
+        if not l[0] and r[0]:
+            res = r
+        if not r[0] and l[0]:
+            res = l
+        m = [[root.val] + i for i in res]
+        print(m)
+        return m
+
+    def mearge(self, a: List[int], b: List[int], cur: List[int]) -> List[List[int]]:
+        if not a and not b:
+            return [cur]
+        if not a:
+            return [cur + b]
+        if not b:
+            return [cur + a]
+        res = []
+        res.extend(self.mearge(a[1:], b, cur + [a[0]]))
+        res.extend(self.mearge(a, b[1:], cur + [b[0]]))
+        return res
+
 
 s = Solution()
-print(s.threeSumClosest([-1, 2, 1, -4], 1))
+print(s.mearge([1, 0], [4, 3], []))
