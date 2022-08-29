@@ -2,7 +2,9 @@ from collections import defaultdict
 from curses.ascii import isdigit
 from email.policy import default
 from operator import eq
+import re
 from sys import stdin
+from typing import List
 
 
 class Solution:
@@ -113,8 +115,46 @@ class Solution:
                     dp[i][j] = dp[i][j] or dp[i][j - 1] and s2[j - 1] == s3[i + j - 1]
         return dp[len(s1)][len(s2)]
 
+    def wangyi01(self):
+        # 可以将程序化成3个部分
+        t = int(stdin.readline())
+        for tt in range(t):
+            if tt > 0:
+                stdin.readline()
+            s = stdin.readline().strip("\n")
+            n, m = list(map(int, s.split(" ")))
+            graph, res = [], []
+            for i in range(n):
+                graph.append(stdin.readline().strip('\n'))
+            if n == m:
+                for i in graph:
+                    print(i)
+                return
+            # 如果是偶数
+            q = m // n
+            # 如果边角料是奇数
+            if (m % n) % 2 != 0:
+                q = (m // n) - 1
+            p = (m - q * n) // 2
+            # 第一部分1
+            for y in range(n - p, n):
+                res.append("".join([graph[y][n - p:n]] + [graph[y] * q] + [graph[y][:p]]))
+            # 第二部分
+            for k in range(q):
+                if k == 0:
+                    for y in range(n):
+                        res.append("".join([graph[y][n - p: n]] + [graph[y] * q] + [graph[y][:p]]))
+                else:
+                    for i in range(n):
+                        res.append(res[-n])
+            # 第三部分
+            for y in range(p):
+                res.append("".join([graph[y][n - p:n]] + [graph[y] * q] + [graph[y][:p]]))
+            # 输出
+            for i in res:
+                print(i)
+            print("")
+
 
 s = Solution()
-print(s.isInterleave("a",
-                     "b",
-                     "a"))
+s.wangyi01()
