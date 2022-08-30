@@ -1,10 +1,19 @@
-from collections import defaultdict
+from collections import Counter, defaultdict
 from curses.ascii import isdigit
 from email.policy import default
-from operator import eq
+import graphlib
+import numbers
+from operator import eq, truediv
+from posixpath import split
 import re
 from sys import stdin
 from typing import List
+
+
+class node:
+    def __init__(self, color: str) -> None:
+        self.color = color
+        self.children = []
 
 
 class Solution:
@@ -155,6 +164,125 @@ class Solution:
                 print(i)
             print("")
 
+    def minWindow(self, s: str, t: str) -> str:
+        def check(cnt: dict()) -> bool:
+            res = 0
+            for i in cnt.values():
+                if i > 0:
+                    return False
+                res += i
+            return res <= 0
+        cnt, res, l = Counter(t), s, 0
+        for r in range(len(s)):
+            if s[r] in cnt:
+                cnt[s[r]] -= 1
+            # 窗口内多引入了数据，需要保证窗口内所有字符都存在，并且删除多余的数据
+            if check(cnt):
+                while l < r:
+                    if s[l] in cnt and cnt[s[l]] >= 0:
+                        break
+                    if s[l] in cnt and cnt[s[l]] < 0:
+                        cnt[s[l]] += 1
+                    l += 1
+                res = min(res, s[l:r + 1], key=lambda x: len(x))
+        return res if check(cnt) else ""
+
+    def trap(self, height: List[int]) -> int:
+        stack, res = [[0, height[0]]], 0
+        for i in range(1, len(height)):
+            val = height[i]
+            while stack and val > stack[-1][1]:
+                pre = stack.pop()
+                if stack:
+                    res += (i - stack[-1][0] - 1) * (min(val, stack[-1][1]) - pre[1])
+            stack.append([i, val])
+        return res
+
+    def gcd(self, a: int, b: int) -> int:
+        a, b = max(a, b), min(a, b)
+        if b == 0:
+            return a
+        return self.gcd(b, a % b)
+
+    def xiecheng01(self):
+        n = int(stdin.readline())
+        for _ in range(n):
+            num = list(stdin.readline().strip("\n"))
+            if num[-1] == '0' or int(num[-1]) % 2 == 0:
+                print("".join(num))
+                continue
+            flag = False
+            for i, val in enumerate(num):
+                if int(val) % 2 == 0:
+                    num[-1], num[i] = num[i], num[-1]
+                    flag = True
+                    break
+            if flag:
+                print("".join(num))
+            else:
+                print("-1")
+
+    def xiecheng03(self):
+        # 删除一条边能够得到两块区域，不含重边和环，那么代表所有的边都能够降节点划分成两块
+        # 会不会存在删除一条边无法划分成两块的情况（不会，那样就意味着存在环）
+        # 通过输入判断按照顺序的情况下颜色是怎么排列的
+        # 可能是一颗多叉树的情况
+        # 如何判断删除哪一条边
+        # dfs 查询到某一个节点的时候记录到达目前为止的颜色，如果多于三个颜色，并且外部颜色也满足条件的话就删除他的子节点的边
+
+        def check(cnt: dict, colors: dict) -> bool:
+            for k, v in cnt.items():
+                if v <= 0:
+                    return False
+                if colors[k] - v <= 0:
+                    return False
+            return True
+
+        def dfs(graph: List[List[int]], index: int, visit: set, color: str, cnt: dict, colors: dict) -> int:
+            res = 0
+            if check(cnt, colors):
+                res += 1
+            cnt[color[index]] += 1
+            for i in graph[index]:
+                if i not in visit:
+                    visit.add(i)
+                    res += dfs(graph, i, visit, color, cnt, colors)
+                    visit.remove(i)
+            cnt[color[index]] -= 1
+            return res
+
+        n = int(stdin.readline())
+        color = stdin.readline().strip("\n")
+        colors = Counter(color)
+        graph = [[] for i in range(n)]
+        for i in range(n - 1):
+            a, b = list(map(int, stdin.readline().strip("\n").split(" ")))
+            graph[a - 1].append(b - 1)
+            graph[b - 1].append(a - 1)
+        visit = set()
+        visit.add(0)
+        cnt = {'r': 0, 'g': 0, 'b': 0}
+        res = dfs(graph, 0, visit, color, cnt, colors)
+        print(res)
+
+    def xiecheng04(self):
+        # 找到前二的平滑值
+        n = int(stdin.readline().strip("\n"))
+        nums = list(map(int, stdin.readline().strip("\n").split(" ")))
+        res = [0, 0]
+        index = 0
+        for i in range(1, n):
+            val = abs(nums[i] - nums[i - 1])
+            if val > res[0]:
+                res[0] = val
+                index = i
+            if res[0] > val > res[1]:
+                res[1] = val
+        a = res[1]
+        if index + 1 < n:
+            a = abs(nums[index + 1] - nums[index - 1])
+        print(min(a, res[1]))
+
 
 s = Solution()
-s.wangyi01()
+s.xiecheng04()
