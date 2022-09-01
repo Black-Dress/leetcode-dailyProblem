@@ -283,6 +283,57 @@ class Solution:
             a = abs(nums[index + 1] - nums[index - 1])
         print(min(a, res[1]))
 
+    def guanglianda01(self):
+        n = int(stdin.readline())
+        a = list(stdin.readline().strip("\n").split(" "))
+        b = list(stdin.readline().strip("\n").split(" "))
+        cnt = defaultdict(int)
+        i, j = 0, 0
+        while i < n and j < n:
+            if a[i] in cnt:
+                i += 1
+                continue
+            while j < n and b[j] != a[i]:
+                cnt[b[j]] = 1
+                j += 1
+            j += 1
+            i += 1
+
+        print(len(cnt))
+
+    def guanglianda02(self):
+        n, m = list(map(int, stdin.readline().strip("\n").split(" ")))
+        res, pr = 0, 0
+        nums, res = [], [0] * (n + 1)
+        for i in range(m):
+            nums.append(list(map(int, stdin.readline().strip("\n").split(" "))))
+        nums.sort()
+        for i in range(m):
+            l, r, x = nums[i]
+            if i == 0:
+                while l <= r and x > 0:
+                    res[l] = 1
+                    l += 1
+                    x -= 1
+            else:
+                while pr < l:
+                    res[pr] = 1
+                    pr += 1
+                j = l
+                while j <= pr:
+                    if res[j] == 1 and sum(res[j:pr + 1] > x):
+                        res[l] = 0
+                    l += 1
+                if l < pr + 1:
+                    x -= sum(res[l:pr + 1])
+                while j <= r and x > 0:
+                    res[j] = 1
+                    j += 1
+                    x -= 1
+            pr = r
+
+        print(sum(res))
+
 
 s = Solution()
-s.xiecheng04()
+s.guanglianda02()
