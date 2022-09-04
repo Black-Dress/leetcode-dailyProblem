@@ -40,6 +40,7 @@
 
 from collections import defaultdict
 from operator import truediv
+from sys import stdin
 from typing import Counter, List
 
 
@@ -62,20 +63,36 @@ def solution(messages: List[str], senders: List[str]):
     return name
 
 
-def solution2(s: str) -> bool:
+def splitString(s: str) -> bool:
     def dfs(start: int, s: str) -> bool:
         if s == "":
             return True
-        for i in range(len(s)):
-            if int(s[:i + 1]) == start - 1:
-                return dfs(int(s[:i + 1]), s[i + 1:])
-        return False
+        res = False
+        for i in range(1, len(s) + 1):
+            if int(s[:i]) == start - 1:
+                res = (res or dfs(int(s[:i]), s[i:]))
+        return res
 
-    for i in range(len(s) - 1):
-        start = int(s[:i + 1])
-        if dfs(start, s[i + 1:]):
+    for i in range(1, len(s)):
+        start = int(s[:i])
+        if dfs(start, s[i:]):
             return True
     return False
 
 
-print(solution2("050043"))
+def bilibili():
+    # dp[i] 表示最小的和
+    # dp[i] = for j in range(i) if i%j == 0 min(dp[i//j]+j,dp[j]+i//j)
+    #
+    #
+    n = int(stdin.readline().strip("\n"))
+    dp = [i for i in range(n + 1)]
+    for i in range(2, n + 1):
+        for j in range(2, i):
+            if i % j == 0:
+                dp[i] = min(dp[i], dp[i // j] + j, dp[j] + i // j, j + i // j, dp[j] + dp[i // j])
+    return dp[n]
+
+
+# print(splitString("200100"))
+print(bilibili())
