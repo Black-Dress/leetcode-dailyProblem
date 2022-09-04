@@ -1,6 +1,8 @@
 from collections import defaultdict
 import math
+from operator import le
 from sys import stdin
+from tracemalloc import start
 from typing import List
 
 
@@ -63,4 +65,49 @@ def jindong03() -> int:
     return size
 
 
-print(jindong02())
+def didi01() -> int:
+    # 桃子最多能装多少个，先排序，然后往里面添加，直到达到上限
+    # 应该是找到最平均的一段
+    n, k = list(map(int, stdin.readline().strip("\n").split(" ")))
+    nums = list(map(int, stdin.readline().strip("\n").split(' ')))
+    nums.sort()
+    sum_, res, j = 0, 1, 0
+    for i in range(n):
+        sum_ += nums[i]
+        while j > 0 and k * sum_ / (i - j + 1) < nums[i]:
+            j -= 1
+            sum_ += nums[j]
+        while j < i and k * sum_ / (i - j + 1) < nums[i]:
+            sum_ -= nums[j]
+            j += 1
+        res = max(res, i - j + 1)
+    return res
+
+
+def didi02() -> List[int]:
+    n = int(stdin.readline().strip("\n"))
+    l = list(map(int, stdin.readline().strip("\n").split(" ")))
+    r = list(map(int, stdin.readline().strip("\n").split(" ")))
+    t = list(map(int, stdin.readline().strip("\n").split(" ")))
+
+    def check(a: int) -> int:
+        s = str(a)
+        temp = int(s[0])
+        for i in s[1:]:
+            temp ^= int(i)
+        return temp
+
+    maxnum = max(r)
+    nums, res = [0] * (maxnum + 1), []
+    for i in range(len(nums)):
+        nums[i] = check(i)
+    for i in range(n):
+        res.append(0)
+        for j in range(l[i], r[i] + 1):
+            if nums[j] == t[i]:
+                res[-1] += 1
+    return res
+
+
+res = didi01()
+print(res)
