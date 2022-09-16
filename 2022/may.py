@@ -1,6 +1,7 @@
+import imp
 from typing import Counter, List
 from collections import defaultdict
-
+from NodeHelper.TreeNode import TreeNode
 from pkg_resources import working_set
 
 
@@ -131,6 +132,52 @@ class Solution:
                 res = min(res, abs(a - b))
         return res
 
+    def threeSumClosest(self, nums: List[int], target: int) -> int:
+        # O(n^2) 确定l 然后 m r进行滑动窗口移动
+        res = 100000
+        nums.sort()
+        for l in range(len(nums) - 2):
+            m, r = l + 1, len(nums) - 1
+            while m < r:
+                s = nums[l] + nums[m] + nums[r]
+                if abs(res - target) > abs(s - target):
+                    res = s
+                if s > target:
+                    r -= 1
+                elif s < target:
+                    m += 1
+                else:
+                    return target
+        return res
+
+    def BSTSequences(self, root: TreeNode) -> List[List[int]]:
+        if not root:
+            return [[]]
+        l = self.BSTSequences(root.left)
+        r = self.BSTSequences(root.right)
+        res = [[]]
+        if l[0] and r[0]:
+            res = self.mearge(l[0], r[0], [])
+        if not l[0] and r[0]:
+            res = r
+        if not r[0] and l[0]:
+            res = l
+        m = [[root.val] + i for i in res]
+        print(m)
+        return m
+
+    def mearge(self, a: List[int], b: List[int], cur: List[int]) -> List[List[int]]:
+        if not a and not b:
+            return [cur]
+        if not a:
+            return [cur + b]
+        if not b:
+            return [cur + a]
+        res = []
+        res.extend(self.mearge(a[1:], b, cur + [a[0]]))
+        res.extend(self.mearge(a, b[1:], cur + [b[0]]))
+        return res
+
 
 s = Solution()
-print(s.findClosest())
+print(s.mearge([1, 0], [4, 3], []))
